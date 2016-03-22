@@ -9,8 +9,8 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 
-import orar.dlfragment.DLConstructor;
-import orar.dlfragment.DLFragment;
+import orar.dlfragmentvalidator.DLConstructor;
+import orar.dlfragmentvalidator.DLFragment;
 
 /**
  * Internal representation of an ontology.
@@ -168,4 +168,5 @@ public interface OrarOntology {
 
 	public boolean addManySameAsAssertions(OWLNamedIndividual individual, Set<OWLNamedIndividual> equalIndividuals);
 
+	
 }

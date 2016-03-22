@@ -10,8 +10,8 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 
-import orar.dlfragment.DLConstructor;
-import orar.dlfragment.DLFragment;
+import orar.dlfragmentvalidator.DLConstructor;
+import orar.dlfragmentvalidator.DLFragment;
 import orar.modeling.conceptassertion.ConceptAssertionBox;
 import orar.modeling.conceptassertion.MapbasedConceptAssertionBox;
 import orar.modeling.roleassertion.MapbasedRoleAssertionBox;

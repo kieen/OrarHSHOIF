@@ -1,0 +1,88 @@
+package orar.io.aboxstreamreader;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
+
+import orar.modeling.ontology.OrarOntology;
+
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.system.StreamRDFBase;
+import org.apache.log4j.Logger;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLOntology;
+
+public class JenaABoxStreamReader implements ABoxStreamReader {
+
+	private final StreamRDFBase streamRDFReader;
+	private final Set<String> aboxList;
+	private boolean aboxesAreParsed = false;
+	private final static Logger logger = Logger.getLogger(JenaABoxStreamReader.class);
+
+	public JenaABoxStreamReader(Set<OWLObjectProperty> definedObjectProperties, Set<OWLClass> definedClasses,
+			String aboxListFile, OrarOntology internalOntology) {
+
+		this.streamRDFReader = new JenaStreamRDF2InternalModel(definedObjectProperties, definedClasses,
+				internalOntology);
+		this.aboxList = getABoxList(aboxListFile);
+
+	}
+
+	public JenaABoxStreamReader(Set<OWLObjectProperty> definedObjectProperties, Set<OWLClass> definedClasses,
+			String aboxListFile, OWLOntology owlOntology) {
+
+		this.streamRDFReader = new JenaStreamRDF2OWLAPI(definedObjectProperties, definedClasses, owlOntology);
+		this.aboxList = getABoxList(aboxListFile);
+
+	}
+
+	private Set<String> getABoxList(String aboxListFile) {
+		Set<String> aboxList = new HashSet<>();
+
+		File file = new File(aboxListFile);
+		try {
+			FileInputStream inputStream = new FileInputStream(file);
+			BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream));
+
+			String eachLine;
+			while ((eachLine = buffer.readLine()) != null) {
+				/*
+				 * ignore comments
+				 */
+				if (eachLine.startsWith("#"))
+					continue;
+				String strimLine = eachLine;
+				/*
+				 * ignore empty lines
+				 */
+				if (strimLine.trim().equals(""))
+					continue;
+				aboxList.add(eachLine);
+
+			}
+			buffer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return aboxList;
+	}
+
+	@Override
+	public void readABoxes() {
+		int count = 1;
+		for (String aboxFile : this.aboxList) {
+			logger.info("ABox " + count++ + ":" + aboxFile);
+			RDFDataMgr.parse(this.streamRDFReader, aboxFile);
+		}
+
+		this.aboxesAreParsed = true;
+
+	}
+
+}
