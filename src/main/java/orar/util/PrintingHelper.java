@@ -14,8 +14,7 @@ import org.apache.log4j.Logger;
 public class PrintingHelper {
 	static Logger loggerOfHelper = Logger.getLogger(PrintingHelper.class);
 
-	public static <K, V> void printMapToFile(FileWriter fileWriter,
-			Map<K, V> map) throws IOException {
+	public static <K, V> void printMapToFile(FileWriter fileWriter, Map<K, V> map) throws IOException {
 
 		Iterator<Map.Entry<K, V>> iterator = map.entrySet().iterator();
 
@@ -100,5 +99,13 @@ public class PrintingHelper {
 
 	public static void printString(String str) {
 		loggerOfHelper.info(str);
+	}
+
+	public static void printString(Logger logger, String str) {
+		logger.info(str);
+	}
+
+	public static void printString(String classThatPrints, String str) {
+		System.out.println(classThatPrints + ": " + str);
 	}
 }

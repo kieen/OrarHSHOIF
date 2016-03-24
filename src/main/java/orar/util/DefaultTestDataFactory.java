@@ -53,15 +53,31 @@ public class DefaultTestDataFactory {
 		return dataFactory.getOWLClass(IRI.create(IRIString + name));
 	}
 
+	public Set<OWLClassAssertionAxiom> getSetOfConceptAssertions(OWLClassAssertionAxiom... conceptAssertions) {
+		HashSet<OWLClassAssertionAxiom> setOfCA = new HashSet<>();
+		for (OWLClassAssertionAxiom axiom : conceptAssertions) {
+			setOfCA.add(axiom);
+		}
+		return setOfCA;
+	}
+
+	public Set<OWLObjectPropertyAssertionAxiom> getSetOfRoleAssertions(
+			OWLObjectPropertyAssertionAxiom... roleAssertions) {
+		HashSet<OWLObjectPropertyAssertionAxiom> setOfCA = new HashSet<>();
+		for (OWLObjectPropertyAssertionAxiom axiom : roleAssertions) {
+			setOfCA.add(axiom);
+		}
+		return setOfCA;
+	}
+
 	/**
 	 * @param indName
 	 * @return OWLNamedIndividual with IRI string: IRI#name. The default IRI
 	 *         =http://www.test.org/af#
 	 */
-	public OWLNamedIndividual getIndivdual(String indName) {
+	public OWLNamedIndividual getIndividual(String indName) {
 
-		return dataFactory.getOWLNamedIndividual(IRI
-				.create(IRIString + indName));
+		return dataFactory.getOWLNamedIndividual(IRI.create(IRIString + indName));
 	}
 
 	/**
@@ -70,43 +86,35 @@ public class DefaultTestDataFactory {
 	 *         =http://www.test.org/af#
 	 */
 	public OWLObjectProperty getRole(String propertyName) {
-		return dataFactory.getOWLObjectProperty(IRI.create(IRIString
-				+ propertyName));
+		return dataFactory.getOWLObjectProperty(IRI.create(IRIString + propertyName));
 	}
 
-	public OWLClassAssertionAxiom getConceptAssertion(String conceptName,
-			String indName) {
+	public OWLClassAssertionAxiom getConceptAssertion(String conceptName, String indName) {
 		OWLClass aClass = getConcept(conceptName);
-		OWLNamedIndividual anInd = getIndivdual(indName);
+		OWLNamedIndividual anInd = getIndividual(indName);
 		return dataFactory.getOWLClassAssertionAxiom(aClass, anInd);
 	}
 
-	public OWLClassAssertionAxiom getConceptAssertion(OWLClass conceptName,
-			OWLNamedIndividual indName) {
+	public OWLClassAssertionAxiom getConceptAssertion(OWLClass conceptName, OWLNamedIndividual indName) {
 
 		return dataFactory.getOWLClassAssertionAxiom(conceptName, indName);
 	}
 
-	public OWLObjectPropertyAssertionAxiom getRoleAssertion(
-			OWLNamedIndividual subject, OWLObjectProperty property,
+	public OWLObjectPropertyAssertionAxiom getRoleAssertion(OWLNamedIndividual subject, OWLObjectProperty property,
 			OWLNamedIndividual object) {
 
-		return dataFactory.getOWLObjectPropertyAssertionAxiom(property,
-				subject, object);
+		return dataFactory.getOWLObjectPropertyAssertionAxiom(property, subject, object);
 	}
 
-	public OWLObjectPropertyAssertionAxiom getRoleAssertion(String subject,
-			String property, String object) {
+	public OWLObjectPropertyAssertionAxiom getRoleAssertion(String subject, String property, String object) {
 
-		OWLNamedIndividual subjectInd = getIndivdual(subject);
-		OWLNamedIndividual objectInd = getIndivdual(object);
+		OWLNamedIndividual subjectInd = getIndividual(subject);
+		OWLNamedIndividual objectInd = getIndividual(object);
 		OWLObjectProperty objectProperty = getRole(property);
-		return dataFactory.getOWLObjectPropertyAssertionAxiom(objectProperty,
-				subjectInd, objectInd);
+		return dataFactory.getOWLObjectPropertyAssertionAxiom(objectProperty, subjectInd, objectInd);
 	}
 
-	public OWLObjectIntersectionOf getConjunctionOfConcepts(String concept1,
-			String concept2) {
+	public OWLObjectIntersectionOf getConjunctionOfConcepts(String concept1, String concept2) {
 		OWLClass owlConcept1 = getConcept(concept1);
 		OWLClass owlConcept2 = getConcept(concept2);
 		Set<OWLClass> c12Set = new HashSet<>();
@@ -115,8 +123,7 @@ public class DefaultTestDataFactory {
 		return dataFactory.getOWLObjectIntersectionOf(c12Set);
 	}
 
-	public OWLObjectIntersectionOf getConjunctionOfConcepts(OWLClass owlClass1,
-			OWLClass owlClass2) {
+	public OWLObjectIntersectionOf getConjunctionOfConcepts(OWLClass owlClass1, OWLClass owlClass2) {
 
 		Set<OWLClass> c12Set = new HashSet<>();
 		c12Set.add(owlClass1);
@@ -124,8 +131,7 @@ public class DefaultTestDataFactory {
 		return dataFactory.getOWLObjectIntersectionOf(c12Set);
 	}
 
-	public OWLObjectUnionOf getDisjunctionOfConcepts(OWLClass owlClass1,
-			OWLClass owlClass2) {
+	public OWLObjectUnionOf getDisjunctionOfConcepts(OWLClass owlClass1, OWLClass owlClass2) {
 
 		Set<OWLClass> c12Set = new HashSet<>();
 		c12Set.add(owlClass1);
@@ -133,8 +139,7 @@ public class DefaultTestDataFactory {
 		return dataFactory.getOWLObjectUnionOf(c12Set);
 	}
 
-	public OWLObjectUnionOf getDisjunctionOfConcepts(String owlClass1,
-			String owlClass2) {
+	public OWLObjectUnionOf getDisjunctionOfConcepts(String owlClass1, String owlClass2) {
 
 		Set<OWLClass> c12Set = new HashSet<>();
 		c12Set.add(getConcept(owlClass1));
@@ -151,11 +156,10 @@ public class DefaultTestDataFactory {
 		return setOfConcepts;
 	}
 
-	public Set<OWLNamedIndividual> getSetOfIndividuals(
-			String... individualNames) {
+	public Set<OWLNamedIndividual> getSetOfIndividuals(String... individualNames) {
 		Set<OWLNamedIndividual> setOfIndividuals = new HashSet<>();
 		for (String name : individualNames) {
-			OWLNamedIndividual individual = getIndivdual(name);
+			OWLNamedIndividual individual = getIndividual(name);
 			setOfIndividuals.add(individual);
 		}
 		return setOfIndividuals;
@@ -179,16 +183,14 @@ public class DefaultTestDataFactory {
 	}
 
 	public OWLNamedIndividual getAbstractIndividual(String name) {
-		return dataFactory
-				.getOWLNamedIndividual(IRI.create(abstractIRI + name));
+		return dataFactory.getOWLNamedIndividual(IRI.create(abstractIRI + name));
 	}
 
 	public OWLClass getNormTBoxConcept(int i) {
 		return dataFactory.getOWLClass(IRI.create(normIRIC + i));
 	}
 
-	public OWLObjectSomeValuesFrom getExistentialAxiom(String role,
-			String concept) {
+	public OWLObjectSomeValuesFrom getExistentialAxiom(String role, String concept) {
 		OWLObjectProperty R = getRole(role);
 		OWLClass A = getConcept(concept);
 		return dataFactory.getOWLObjectSomeValuesFrom(R, A);
@@ -221,8 +223,7 @@ public class DefaultTestDataFactory {
 	// succOWLRoles);
 	// }
 
-	public Map<OWLObjectProperty, Set<OWLClass>> getMapFromRoleToConcepts(
-			String role, String... concepts) {
+	public Map<OWLObjectProperty, Set<OWLClass>> getMapFromRoleToConcepts(String role, String... concepts) {
 		OWLObjectProperty owlRole = getRole(role);
 		Set<OWLClass> owlConcepts = getSetOfConcepts(concepts);
 		Map<OWLObjectProperty, Set<OWLClass>> map = new HashMap<OWLObjectProperty, Set<OWLClass>>();

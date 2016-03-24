@@ -37,6 +37,7 @@ public class MapbasedSameAsBox implements SameAsBox {
 			existingEqualIndividuals = new HashSet<>();
 		}
 		boolean hasNewElement = existingEqualIndividuals.add(equalIndividual);
+		this.sameAsMap.put(individual, existingEqualIndividuals);
 		return hasNewElement;
 	}
 
@@ -48,6 +49,7 @@ public class MapbasedSameAsBox implements SameAsBox {
 			existingEqualIndividuals = new HashSet<>();
 		}
 		boolean hasNewElement = existingEqualIndividuals.addAll(manyEqualIndividuals);
+		this.sameAsMap.put(individual, existingEqualIndividuals);
 		return hasNewElement;
 	}
 

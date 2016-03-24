@@ -17,8 +17,6 @@ import orar.modeling.roleassertion.RoleAssertionBox;
  */
 public interface ConceptAssertionBox {
 
-	public Set<OWLNamedIndividual> getAllIndividuals();
-
 	/**
 	 * @param individual
 	 * @return - A (possibly empty) set of concept names occurring in concept
@@ -33,6 +31,13 @@ public interface ConceptAssertionBox {
 	 * @return true if this assertion is NEWLY added, false otherwise.
 	 */
 	public boolean addConceptAssertion(OWLNamedIndividual individual, OWLClass concept);
+
+	/**
+	 * @param concept
+	 * @param individual
+	 * @return true if this assertion is NEWLY added, false otherwise.
+	 */
+	public boolean addConceptAssertion(OWLClass concept, OWLNamedIndividual individual);
 
 	/**
 	 * Add many concept assertions.
@@ -51,8 +56,8 @@ public interface ConceptAssertionBox {
 	public Set<OWLClassAssertionAxiom> getOWLAPIConceptAssertions();
 
 	/**
-	 * @return the number of concept assertions when the ontology is first
-	 *         created.
+	 * @return the up-to-date number of concept assertions occurring in the
+	 *         ontology.
 	 */
-	public int getNumberOfInitialConceptAssertions();
+	public int getNumberOfConceptAssertions();
 }

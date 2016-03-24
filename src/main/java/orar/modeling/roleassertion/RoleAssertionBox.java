@@ -16,6 +16,11 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 public interface RoleAssertionBox {
 
 	/**
+	 * @return a set of all individuals occurring in role assertions.
+	 */
+	public Set<OWLNamedIndividual> getAllIndividuals();
+
+	/**
 	 * add an assertion: role(subject,object)
 	 * 
 	 * @param subject
@@ -23,10 +28,12 @@ public interface RoleAssertionBox {
 	 * @param object
 	 * @return true if the assertion is NEWLY added, false otherwise
 	 */
-	boolean addRoleAssertion(OWLNamedIndividual subject, OWLObjectProperty role, OWLNamedIndividual object);
+	public boolean addRoleAssertion(OWLNamedIndividual subject, OWLObjectProperty role, OWLNamedIndividual object);
 
 	/**
 	 * @return the number of role assertions when the ontology is first created.
+	 *         This number is computed directly from the up-to-date maps storing
+	 *         role assertions.
 	 */
 	public int getNumberOfRoleAssertions();
 
@@ -37,5 +44,19 @@ public interface RoleAssertionBox {
 	 *         assertion due to inefficiency.
 	 */
 	public Set<OWLObjectPropertyAssertionAxiom> getOWLAPIRoleAssertions();
+
+	/**
+	 * @param role
+	 * @return a set of subjects occurring in all role assertions of the
+	 *         {@code role}
+	 */
+	public Set<OWLNamedIndividual> getSubjectsInRoleAssertions(OWLObjectProperty role);
+
+	/**
+	 * @param role
+	 * @return a set of objects occurring in all role assertions of the
+	 *         {@code role}
+	 */
+	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role);
 
 }

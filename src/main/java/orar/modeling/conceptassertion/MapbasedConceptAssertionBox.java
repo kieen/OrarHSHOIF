@@ -17,13 +17,10 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 
 	private final Map<OWLNamedIndividual, Set<OWLClass>> conceptAssertionMap;
-	private int numberOfConceptAssertions; // Note that it will be increased
-											// only when adding one by one
-											// assertion.
 
 	public MapbasedConceptAssertionBox() {
 		this.conceptAssertionMap = new HashMap<OWLNamedIndividual, Set<OWLClass>>();
-		this.numberOfConceptAssertions = 0;
+
 	}
 
 	@Override
@@ -35,11 +32,6 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 		}
 		return new HashSet<>();
 
-	}
-
-	@Override
-	public Set<OWLNamedIndividual> getAllIndividuals() {
-		return this.conceptAssertionMap.keySet();
 	}
 
 	@Override
@@ -82,15 +74,23 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 		}
 		boolean hasNewElement = existingClasses.add(concept);
 		this.conceptAssertionMap.put(individual, existingClasses);
-		if (hasNewElement)
-			this.numberOfConceptAssertions++;
 		return hasNewElement;
 	}
 
 	@Override
-	public int getNumberOfInitialConceptAssertions() {
+	public int getNumberOfConceptAssertions() {
+		int numberOfCocneptAssertions = 0;
+		Iterator<Entry<OWLNamedIndividual, Set<OWLClass>>> iterator = conceptAssertionMap.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<OWLNamedIndividual, Set<OWLClass>> entry = iterator.next();
+			numberOfCocneptAssertions += entry.getValue().size();
+		}
+		return numberOfCocneptAssertions;
+	}
 
-		return this.numberOfConceptAssertions;
+	@Override
+	public boolean addConceptAssertion(OWLClass concept, OWLNamedIndividual individual) {
+		return addConceptAssertion(individual, concept);
 	}
 
 }

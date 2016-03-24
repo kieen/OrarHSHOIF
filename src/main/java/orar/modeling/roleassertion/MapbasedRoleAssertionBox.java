@@ -52,10 +52,7 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 	// TODO: maps from role to individuals should be restricted for using in
 	// role-hierarchy rule, trans rule, and functionality rule.
 
-	private int numberOfRoleAssertions;
-
 	public MapbasedRoleAssertionBox() {
-		this.numberOfRoleAssertions = 0;
 		this.roleAssertionMapWithSubjectAsKey = new HashMap<>();
 		this.roleAssertionMapWithObjectAsKey = new HashMap<>();
 		this.roleAssertionMapWithRoleAsKeyAndObjectAsValue = new HashMap<>();
@@ -68,10 +65,7 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 				this.roleAssertionMapWithSubjectAsKey);
 		addRoleAssertionToMapWithIndividualAsKey(object, role, subject, this.roleAssertionMapWithObjectAsKey);
 		addRoleAssertionToMapWithRoleAsKey(role, subject, this.roleAssertionMapWithRoleAsKeyAndSubjectAsValue);
-		addRoleAssertionToMapWithRoleAsKey(role, subject, this.roleAssertionMapWithRoleAsKeyAndObjectAsValue);
-		if (hasNewElement) {
-			this.numberOfRoleAssertions++;
-		}
+		addRoleAssertionToMapWithRoleAsKey(role, object, this.roleAssertionMapWithRoleAsKeyAndObjectAsValue);
 		return hasNewElement;
 
 	}
@@ -115,7 +109,24 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 
 	@Override
 	public int getNumberOfRoleAssertions() {
-		return this.numberOfRoleAssertions;
+		int numberOfRoleAssertions = 0;
+
+		Iterator<Entry<OWLNamedIndividual, Map<OWLObjectProperty, Set<OWLNamedIndividual>>>> iteratorOfRoleAssertionMap = this.roleAssertionMapWithSubjectAsKey
+				.entrySet().iterator();
+		while (iteratorOfRoleAssertionMap.hasNext()) {
+			Entry<OWLNamedIndividual, Map<OWLObjectProperty, Set<OWLNamedIndividual>>> entry = iteratorOfRoleAssertionMap
+					.next(); // e.g. a ---><R -->{b1,b2}, S -->{c1,c2}
+
+			Map<OWLObjectProperty, Set<OWLNamedIndividual>> successorMap = entry.getValue();
+			Iterator<Entry<OWLObjectProperty, Set<OWLNamedIndividual>>> iteratorForSuccessorMap = successorMap
+					.entrySet().iterator();
+			while (iteratorForSuccessorMap.hasNext()) {
+				Entry<OWLObjectProperty, Set<OWLNamedIndividual>> successorMapEntry = iteratorForSuccessorMap.next();
+				// e.g R -->{b1,b2}
+				numberOfRoleAssertions += successorMapEntry.getValue().size();
+			}
+		}
+		return numberOfRoleAssertions;
 	}
 
 	@Override
@@ -141,6 +152,34 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 			}
 		}
 		return assertions;
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getSubjectsInRoleAssertions(OWLObjectProperty role) {
+		Set<OWLNamedIndividual> subjects = this.roleAssertionMapWithRoleAsKeyAndSubjectAsValue.get(role);
+		if (subjects != null) {
+			return subjects;
+		} else {
+			return new HashSet<>();
+		}
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role) {
+		Set<OWLNamedIndividual> subjects = this.roleAssertionMapWithRoleAsKeyAndObjectAsValue.get(role);
+		if (subjects != null) {
+			return subjects;
+		} else {
+			return new HashSet<>();
+		}
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getAllIndividuals() {
+		Set<OWLNamedIndividual> allIndividuals = new HashSet<>();
+		allIndividuals.addAll(this.roleAssertionMapWithSubjectAsKey.keySet());
+		allIndividuals.addAll(this.roleAssertionMapWithObjectAsKey.keySet());
+		return allIndividuals;
 	}
 
 }
