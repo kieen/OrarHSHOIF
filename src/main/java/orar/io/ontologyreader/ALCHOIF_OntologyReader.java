@@ -3,16 +3,16 @@ package orar.io.ontologyreader;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import orar.dlfragmentvalidator.OWLOntologyValidator;
-import orar.dlfragmentvalidator.HornALCHOIF.HornALCHOIF_OWLOntology_Validator;
+import orar.dlfragmentvalidator.ALCHOIF.ALCHOIF_OWLOntology_Validator;
 import orar.normalization.Normalizer;
 import orar.normalization.ALCHOIF.ALCHOIF_Normalizer;
 
-public class HornALCHOIF_Ontology_Reader extends OntologyReaderTemplate {
+public class ALCHOIF_OntologyReader extends OntologyReaderTemplate {
 
 	@Override
 	protected OWLOntologyValidator getOntologyValidator(OWLOntology owlOntology) {
 
-		return new HornALCHOIF_OWLOntology_Validator(owlOntology);
+		return new ALCHOIF_OWLOntology_Validator(owlOntology);
 	}
 
 	@Override

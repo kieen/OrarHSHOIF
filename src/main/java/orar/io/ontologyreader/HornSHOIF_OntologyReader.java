@@ -18,7 +18,7 @@ public class HornSHOIF_OntologyReader extends OntologyReaderTemplate {
 	@Override
 	protected Normalizer getNormalizer(OWLOntology owlOntology) {
 		/*
-		 * As transitivity is already "normalized", we use ALCHOIF normalizer
+		 * As transitivity is "normalized" separately, we use ALCHOIF normalizer
 		 */
 		return new ALCHOIF_Normalizer(owlOntology);
 	}
