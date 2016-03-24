@@ -93,7 +93,6 @@ public class MapbasedConceptAssertionBoxTest {
 		CSet.add(C);
 		Assert.assertEquals(CSet, conceptAssertionBox.getAssertedConcepts(c));
 
-		Assert.assertEquals(expectedAssertions, conceptAssertionBox.getOWLAPIConceptAssertions());
 	}
 
 	@Test

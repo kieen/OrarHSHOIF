@@ -2,6 +2,13 @@ package orar.io.ontologyreader;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.AxiomType;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+
 import orar.config.Configuration;
 import orar.config.DebugLevel;
 import orar.config.LogInfo;
@@ -12,18 +19,12 @@ import orar.normalization.transitivityelimination.TransitivityNormalizer;
 import orar.normalization.transitivityelimination.TransitivityNormalizerWithHermit;
 import orar.util.OntologyInfo;
 
-import org.apache.log4j.Logger;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.AxiomType;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-
 public abstract class OntologyReaderTemplate implements OntologyReader {
-	// protected OWLOntologyValidator profiledOntCreator;
 	protected Normalizer normalizer;
+	protected OWLOntologyValidator profileValidator;
 	private Logger logger = Logger.getLogger(OntologyReaderTemplate.class);
 	private Configuration config = Configuration.getInstance();
+	private OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 
 	protected abstract OWLOntologyValidator getOntologyValidator(OWLOntology owlOntology);
 
@@ -31,105 +32,78 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 
 	@Override
 	public OrarOntology getNormalizedOrarOntology(String ontologyFileName) {
+
+		long startParsing = System.currentTimeMillis();
+		/*
+		 * Get a normalized OWLAPI ontology
+		 */
+		OWLOntology normalizedOWLAPIOntology = getNormalizedOWLAPIOntology(ontologyFileName);
+
+		/*
+		 * Convert to AromaOntology
+		 */
+		OntologyConverter converter = new OntologyConverter(normalizedOWLAPIOntology);
+
+		OrarOntology internalOntology = converter.getInternalOntology();
+		internalOntology.setActualDLConstructors(profileValidator.getDLConstructors());
+
+		if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
+			logger.info("Information of the input ontology.");
+			logger.info("Ontology file:" + ontologyFileName);
+
+			logger.info("Number of individuals:" + internalOntology.getIndividualsInSignature().size());
+			long numberOfCA = internalOntology.getNumberOfInputConceptAssertions();
+			logger.info("Number of concept assertions:" + numberOfCA);
+			long numberOfRA = internalOntology.getNumberOfInputRoleAssertions();
+			logger.info("Number of role assertions:" + numberOfRA);
+			long totalOfAssertions = numberOfCA + numberOfRA;
+			logger.info("Number of concept assertions + role asesrtions:" + totalOfAssertions);
+		}
+
+		long endParsing = System.currentTimeMillis();
+		long parsingTimeInSecond = (endParsing - startParsing) / 1000;
+
+		if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
+			logger.info("Time (in second) for loading ontology: " + parsingTimeInSecond);
+		}
+		return internalOntology;
+
+	}
+
+	/**
+	 * Read a file containing an OWLAPI ontology (could be both TBox and ABox);
+	 * normalize it and return the normalized one.
+	 * 
+	 * @param fileNameToOWLAPIOntology
+	 * @return the normalized OWLAPI ontology
+	 */
+	private OWLOntology getNormalizedOWLAPIOntology(String fileNameToOWLAPIOntology) {
 		try {
-			long startParsing = System.currentTimeMillis();
 			/*
 			 * Read the tboxFile
 			 */
-			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-			logger.info("Using OWLAPI to read the ontology:" + ontologyFileName + " ...");
-			OWLOntology inputOntology;
-			inputOntology = manager.loadOntologyFromOntologyDocument(new File(ontologyFileName));
-			/*
-			 * Logging:start
-			 */
-			if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
-				logger.info("Statistic of the input ontology:" + ontologyFileName);
-				OntologyInfo.printSize(inputOntology);
-			}
-			/*
-			 * Logging:end
-			 */
+			OWLOntology inputOntology = getInputOWLAPIOntology(fileNameToOWLAPIOntology);
 
 			/*
-			 * Get ontology in desired DL fragment: SHOIF
+			 * Get ontology in target DL fragment
 			 */
 
-			OWLOntologyValidator profileValidator = getOntologyValidator(inputOntology);
-			profileValidator.validateOWLOntology();
-			OWLOntology ontologyInDesiredDLFragment = profileValidator.getOWLOntologyInTheTargetedDLFragment();
-			logger.info("Number of max cardinality axioms:" + profileValidator.getNumberOfMaxCardinalityAxioms());
-			// logger.info("Number of class assertions in Horn ALCHOIF
-			// Ontology:"
-			// + profiledOntology.getAxioms(AxiomType.CLASS_ASSERTION,
-			// true).size());
+			OWLOntology ontologyInDesiredDLFragment = getOntologyInTargetDLFragment(inputOntology);
 
 			/*
 			 * Normalize the ontology into normal form
 			 */
-			Normalizer normalizer = getNormalizer(ontologyInDesiredDLFragment);
-			OWLOntology ontologyInNormalForm = normalizer.getNormalizedOntology();
-			logger.info("Number of class assertions in Normalized Ontology:"
-					+ ontologyInNormalForm.getAxioms(AxiomType.CLASS_ASSERTION, true).size());
+
+			OWLOntology ontologyInNormalForm = getOntologyInTheNormalForm(ontologyInDesiredDLFragment);
 
 			/*
-			 * eliminate transitivity
+			 * adding auxiliary axioms w.r.t transitivity
 			 */
-			TransitivityNormalizer tranEliminator = new TransitivityNormalizerWithHermit(ontologyInNormalForm);
-			tranEliminator.normalizeTransitivity();
-			OWLOntology normalizedOntology = tranEliminator.getResultingOntology();
 
-			/*
-			 * Debug
-			 */
-			if (config.getDebuglevels().contains(DebugLevel.NORMALIZATION)) {
-				logger.info("");
-				logger.info("***DEBUG: Normalized Ontology");
+			OWLOntology ontologyInNormalFormWithAddedAuxiliaryAxiomsForTransitivity = getOntologyWithAuxiliaryAxiomsForTransitivity(
+					ontologyInNormalForm);
 
-				OntologyInfo.printTBoxAxioms(normalizedOntology);
-
-				OntologyInfo.printABoxAxioms(normalizedOntology);
-				logger.info("***DEBUG: End");
-				logger.info("");
-			}
-
-			/*
-			 * Convert to AromaOntology
-			 */
-			OntologyConverter converter = new OntologyConverter(normalizedOntology);
-
-			OrarOntology internalOntology = converter.getInternalOntology();
-			internalOntology.setActualDLConstructors(profileValidator.getDLConstructors());
-
-			if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
-				logger.info("Information of the input ontology.");
-				logger.info("Ontology file:" + ontologyFileName);
-
-				logger.info("Number of individuals:" + internalOntology.getIndividualsInSignature().size());
-				long numberOfCA = internalOntology.getNumberOfInputConceptAssertions();
-				logger.info("Number of concept assertions:" + numberOfCA);
-				long numberOfRA = internalOntology.getNumberOfInputRoleAssertions();
-				logger.info("Number of role assertions:" + numberOfRA);
-				long totalOfAssertions = numberOfCA + numberOfRA;
-				logger.info("Number of concept assertions + role asesrtions:" + totalOfAssertions);
-			}
-
-			/*
-			 * Remove unused ontololgies
-			 */
-			manager.removeOntology(inputOntology);
-			inputOntology = null;
-			manager.removeOntology(ontologyInDesiredDLFragment);
-			ontologyInDesiredDLFragment = null;
-			manager.removeOntology(normalizedOntology);
-			normalizedOntology = null;
-			long endParsing = System.currentTimeMillis();
-			long parsingTimeInSecond = (endParsing - startParsing) / 1000;
-
-			if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
-				logger.info("Time (in second) for loading ontology: " + parsingTimeInSecond);
-			}
-			return internalOntology;
+			return ontologyInNormalFormWithAddedAuxiliaryAxiomsForTransitivity;
 		} catch (OWLOntologyCreationException e) {
 
 			e.printStackTrace();
@@ -137,68 +111,113 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		return null;
 	}
 
+	/**
+	 * @param owlOntologyFileName
+	 * @return an OWLAPI Ontology
+	 * @throws OWLOntologyCreationException
+	 */
+	private OWLOntology getInputOWLAPIOntology(String owlOntologyFileName) throws OWLOntologyCreationException {
+		logger.info("Using OWLAPI to read the ontology:" + owlOntologyFileName + " ...");
+		OWLOntology inputOntology;
+		inputOntology = manager.loadOntologyFromOntologyDocument(new File(owlOntologyFileName));
+		/*
+		 * Logging:start
+		 */
+		if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
+			logger.info("Statistic of the input ontology:" + owlOntologyFileName);
+			OntologyInfo.printSize(inputOntology);
+		}
+		/*
+		 * Logging:end
+		 */
+
+		return inputOntology;
+	}
+
+	/**
+	 * @param inputOntology
+	 * @return an ontology in the target DL Fragment
+	 */
+	private OWLOntology getOntologyInTargetDLFragment(OWLOntology inputOntology) {
+		profileValidator = getOntologyValidator(inputOntology);
+		profileValidator.validateOWLOntology();
+		OWLOntology ontologyInTargetDLFragment = profileValidator.getOWLOntologyInTheTargetedDLFragment();
+		manager.removeOntology(inputOntology);
+		return ontologyInTargetDLFragment;
+	}
+
+	/**
+	 * @param ontologyInTargetDLFragment
+	 * @return the normalized ontology
+	 */
+	private OWLOntology getOntologyInTheNormalForm(OWLOntology ontologyInTargetDLFragment) {
+		normalizer = getNormalizer(ontologyInTargetDLFragment);
+		OWLOntology ontologyInNormalForm = normalizer.getNormalizedOntology();
+		logger.info("Number of class assertions in Normalized Ontology:"
+				+ ontologyInNormalForm.getAxioms(AxiomType.CLASS_ASSERTION, true).size());
+		manager.removeOntology(ontologyInTargetDLFragment);
+		return ontologyInNormalForm;
+	}
+
+	/**
+	 * @param ontologyInNormalForm
+	 * @return ontology with added auxiliary axioms wrt transitivity
+	 */
+	private OWLOntology getOntologyWithAuxiliaryAxiomsForTransitivity(OWLOntology ontologyInNormalForm) {
+		TransitivityNormalizer transNormalizer = new TransitivityNormalizerWithHermit(ontologyInNormalForm);
+		transNormalizer.normalizeTransitivity();
+		OWLOntology ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity = transNormalizer.getResultingOntology();
+		/*
+		 * Debug
+		 */
+		if (config.getDebuglevels().contains(DebugLevel.NORMALIZATION)) {
+			logger.info("");
+			logger.info("***DEBUG: Normalized Ontology");
+
+			OntologyInfo.printTBoxAxioms(ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity);
+
+			OntologyInfo.printABoxAxioms(ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity);
+			logger.info("***DEBUG: End");
+			logger.info("");
+		}
+		/*
+		 * Debug:End
+		 */
+		manager.removeOntology(ontologyInNormalForm);
+		return ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity;
+
+	}
+
 	@Override
 	public OrarOntology getNormalizedOrarOntology(String tboxFileName, String aboxListFileName) {
-		try {
-			long startParsing = System.currentTimeMillis();
-			/*
-			 * Read the tboxFile
-			 */
-			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-			logger.info("Using OWLAPI to read TBox file:" + tboxFileName + " ...");
-			OWLOntology inputTBox;
-			inputTBox = manager.loadOntologyFromOntologyDocument(new File(tboxFileName));
-			/*
-			 * Get ontology in the desied DL fragment
-			 */
 
-			OWLOntologyValidator ontologyValidator = getOntologyValidator(inputTBox);
-			ontologyValidator.validateOWLOntology();
-			OWLOntology ontologyInTheDLFragment = ontologyValidator.getOWLOntologyInTheTargetedDLFragment();
-			logger.info("Number of max cardinality axioms:" + ontologyValidator.getNumberOfMaxCardinalityAxioms());
-			/*
-			 * Normalize ontology into normal form. ALCHOIF and SHOIF have the
-			 * same procedure.
-			 */
-			Normalizer normalizer = getNormalizer(ontologyInTheDLFragment);
-			OWLOntology ontologyInNormalForm = normalizer.getNormalizedOntology();
+		long startParsing = System.currentTimeMillis();
+		/*
+		 * get a normalized owlapi ontology
+		 */
+		OWLOntology ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity = getNormalizedOWLAPIOntology(
+				tboxFileName);
 
-			/*
-			 * eliminate transitivity
-			 */
-			TransitivityNormalizer tranEliminator = new TransitivityNormalizerWithHermit(ontologyInNormalForm);
-			tranEliminator.normalizeTransitivity();
-			OWLOntology normalizedOntology = tranEliminator.getResultingOntology();
-			/*
-			 * Read aboxes in stream mannner
-			 */
-			StreamOntologyReader2InternalModel streamReader = new StreamOntologyReader2InternalModel(normalizedOntology,
-					aboxListFileName);
+		/*
+		 * Read aboxes in stream mannner
+		 */
+		StreamOntologyReader2InternalModel streamReader = new StreamOntologyReader2InternalModel(
+				ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity, aboxListFileName);
 
-			OrarOntology internalOntology = streamReader.getOntology();
-			internalOntology.setActualDLConstructors(ontologyValidator.getDLConstructors());
-			if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
-				printOntologyInfo(internalOntology);
-			}
-
-			manager.removeOntology(inputTBox);
-			inputTBox = null;
-			manager.removeOntology(ontologyInTheDLFragment);
-			ontologyInTheDLFragment = null;
-			manager.removeOntology(normalizedOntology);
-			normalizedOntology = null;
-			long endParsing = System.currentTimeMillis();
-			long parsingTimeInSecond = (endParsing - startParsing) / 1000;
-
-			if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
-				logger.info("Time (in second) for loading ontology: " + parsingTimeInSecond);
-			}
-			return internalOntology;
-		} catch (OWLOntologyCreationException e) {
-
-			e.printStackTrace();
+		OrarOntology internalOntology = streamReader.getOntology();
+		internalOntology.setActualDLConstructors(profileValidator.getDLConstructors());
+		if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
+			printOntologyInfo(internalOntology);
 		}
-		return null;
+
+		long endParsing = System.currentTimeMillis();
+		long parsingTimeInSecond = (endParsing - startParsing) / 1000;
+
+		if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
+			logger.info("Time (in second) for loading ontology: " + parsingTimeInSecond);
+		}
+		return internalOntology;
+
 	}
 
 	@Override
@@ -208,24 +227,17 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 			/*
 			 * Read the ontologyFile
 			 */
-			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-			logger.info("Using OWLAPI to parse the ontology:" + ontologyFileName + " ...");
-			OWLOntology inputOntology;
-			inputOntology = manager.loadOntologyFromOntologyDocument(new File(ontologyFileName));
+
+			OWLOntology inputOntology = getInputOWLAPIOntology(ontologyFileName);
 
 			/*
-			 * Get the fragment
+			 * Get the ontology in the target DL fragment
 			 */
 
-			OWLOntologyValidator profiledOntCreator = getOntologyValidator(inputOntology);
-			profiledOntCreator.validateOWLOntology();
-			OWLOntology profiledOntology = profiledOntCreator.getOWLOntologyInTheTargetedDLFragment();
-			logger.info("Number of max cardinality axioms:" + profiledOntCreator.getNumberOfMaxCardinalityAxioms());
+			OWLOntology profiledOntology = getOntologyInTargetDLFragment(inputOntology);
 			/*
 			 * Remove unused ontololgies
 			 */
-			manager.removeOntology(inputOntology);
-			inputOntology = null;
 
 			long endParsing = System.currentTimeMillis();
 			long parsingTimeInSecond = (endParsing - startParsing) / 1000;
@@ -247,21 +259,17 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		try {
 			long startParsing = System.currentTimeMillis();
 			/*
-			 * Read the tboxFile
+			 * Read the ontologyFile
 			 */
-			OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-			logger.info("Using OWLAPI to parse TBox file:" + tboxFile + " ...");
-			OWLOntology inputTBox;
-			inputTBox = manager.loadOntologyFromOntologyDocument(new File(tboxFile));
+
+			OWLOntology inputOntology = getInputOWLAPIOntology(tboxFile);
 
 			/*
-			 * Get ontology in the DL fragment
+			 * Get the ontology in the target DL fragment
 			 */
 
-			OWLOntologyValidator profiledOntCreator = getOntologyValidator(inputTBox);
-			profiledOntCreator.validateOWLOntology();
-			OWLOntology profiledOntology = profiledOntCreator.getOWLOntologyInTheTargetedDLFragment();
-			logger.info("Number of max cardinality axioms:" + profiledOntCreator.getNumberOfMaxCardinalityAxioms());
+			OWLOntology profiledOntology = getOntologyInTargetDLFragment(inputOntology);
+
 			/*
 			 * Read assertions in stream manner
 			 */
@@ -271,11 +279,6 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 			if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
 				printOntologyInfo(owlOntology);
 			}
-
-			manager.removeOntology(inputTBox);
-			inputTBox = null;
-			manager.removeOntology(profiledOntology);
-			profiledOntology = null;
 
 			long endParsing = System.currentTimeMillis();
 			long parsingTimeInSecond = (endParsing - startParsing) / 1000;

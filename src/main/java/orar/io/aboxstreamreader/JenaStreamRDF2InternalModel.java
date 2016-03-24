@@ -43,10 +43,9 @@ public class JenaStreamRDF2InternalModel extends StreamRDFBase {
 	private final String OWL_DATA_PROPERTY = OWL_NAMESPACE + "DatatypeProperty";
 
 	private final String RDF_TYPE = RDF_NAMESPACE + "type";
-	private int countDeclairedAssertions;
-	private int countAllAssertions;
-	private int countConceptAssertions;
-	private int countRoleAssertions;
+	private int numberOfAllTriples;
+	private int numberOfDeclairedConceptAssertions;
+	private int numberOfDeclariedRoleAssertions;
 
 	private static final Logger logger = Logger.getLogger(JenaStreamRDF2InternalModel.class);
 	private final Set<OWLObjectProperty> definedRoleNames;
@@ -65,10 +64,9 @@ public class JenaStreamRDF2InternalModel extends StreamRDFBase {
 		this.definedConceptNames = definedConceptNames;
 		this.orarOntology = resultingOntology;
 		this.owlDataFactory = OWLManager.getOWLDataFactory();
-		this.countDeclairedAssertions = 0;
-		this.countAllAssertions = 0;
-		this.countConceptAssertions = 0;
-		this.countRoleAssertions = 0;
+		this.numberOfAllTriples = 0;
+		this.numberOfDeclairedConceptAssertions = 0;
+		this.numberOfDeclariedRoleAssertions = 0;
 
 	}
 
@@ -77,52 +75,75 @@ public class JenaStreamRDF2InternalModel extends StreamRDFBase {
 		Node subject = triple.getSubject();
 		Node predicate = triple.getPredicate();
 		Node object = triple.getObject();
-		this.countAllAssertions++;
+		this.numberOfAllTriples++;
 		if (isClassAssertion(subject, predicate, object)) {
 			addClassAssertion(subject, object);
-			countDeclairedAssertions++;
-			countConceptAssertions++;
 			// printTriple(subject, predicate, object);
 		}
 
 		if (isObjectPropertyAssertion(subject, predicate, object)) {
 			addObjectPropertyAssertion(subject, predicate, object);
-			countDeclairedAssertions++;
-			countRoleAssertions++;
 			// printTriple(subject, predicate, object);
 		}
 		// TODO: take care of import
 	}
 
+	/**
+	 * Add a triple <subject, rdf:type, object> to the internal ontology:<br>
+	 * -add the triple <br>
+	 * -update the signature with involved individuals <br>
+	 * -update the number of declared concept assertions
+	 * 
+	 * @param subject:
+	 *            individual
+	 * @param object:
+	 *            owlClass
+	 */
 	private void addClassAssertion(Node subject, Node object) {
 		/*
-		 * add class assertion.
+		 * add a class assertion.
 		 */
 		OWLClass owlClass = owlDataFactory.getOWLClass(IRI.create(object.toString()));
 		OWLNamedIndividual owlNamedIndividual = owlDataFactory.getOWLNamedIndividual(IRI.create(subject.toString()));
 
-		this.orarOntology.addConceptAssertion(owlNamedIndividual, owlClass);
-
-		/*
-		 * update in Signature
-		 */
-		this.orarOntology.addIndividualToSignature(owlNamedIndividual);
-		this.orarOntology.addConceptNameToSignature(owlClass);
+		boolean hasNewElement = this.orarOntology.addConceptAssertion(owlNamedIndividual, owlClass);
+		if (hasNewElement) {
+			this.numberOfDeclairedConceptAssertions++;
+			/*
+			 * update in Signature
+			 */
+			this.orarOntology.addIndividualToSignature(owlNamedIndividual);
+			this.orarOntology.addConceptNameToSignature(owlClass);
+		}
 
 	}
 
+	/**
+	 * Add a triple <subject, predicate, object> to the internal ontology:<br>
+	 * -add the triple <br>
+	 * -update the signature with involved individuals<br>
+	 * -update the number of declared role assertions
+	 * 
+	 * @param subject
+	 * @param predicate
+	 * @param object
+	 */
 	private void addObjectPropertyAssertion(Node subject, Node predicate, Node object) {
 
 		OWLNamedIndividual subjectInd = owlDataFactory.getOWLNamedIndividual(IRI.create(subject.toString()));
 		OWLNamedIndividual objectInd = owlDataFactory.getOWLNamedIndividual(IRI.create(object.toString()));
 		OWLObjectProperty property = owlDataFactory.getOWLObjectProperty(IRI.create(predicate.toString()));
 		// logger.info("property:"+property);
-		this.orarOntology.addRoleAssertion(subjectInd, property, objectInd);
-		/*
-		 * Update in Signature
-		 */
-		this.orarOntology.addIndividualToSignature(subjectInd);
-		this.orarOntology.addIndividualToSignature(objectInd);
+		boolean hasNewElement = this.orarOntology.addRoleAssertion(subjectInd, property, objectInd);
+		if (hasNewElement) {
+			this.numberOfDeclariedRoleAssertions++;
+			/*
+			 * Update in Signature
+			 */
+			this.orarOntology.addIndividualToSignature(subjectInd);
+			this.orarOntology.addIndividualToSignature(objectInd);
+		}
+
 		// this.owlObjectPropertyInABoxSignature.add(property);
 
 	}
@@ -185,29 +206,39 @@ public class JenaStreamRDF2InternalModel extends StreamRDFBase {
 		return false;
 	}
 
-	 /**
+	/**
 	 * @param triple
 	 * @return true if this triple is a triple to import other ontologies.
 	 */
-	 private boolean isImportTriple(Node subject, Node predicate, Node object)
-	 {
-	 if (predicate.toString().equals(OWL_IMPORTS)) {
-	 return true;
-	 }
-	 return false;
-	 }
+	private boolean isImportTriple(Node subject, Node predicate, Node object) {
+		if (predicate.toString().equals(OWL_IMPORTS)) {
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public void finish() {
-		logger.info("Number of parsed triples up to now: " + countAllAssertions);
+		logger.info("===Begin:Statistic for this file/resource.===");
+		logger.info("Number of parsed triples: " + numberOfAllTriples);
 
-		logger.info("Number of declaired triples up to now: " + countDeclairedAssertions);
-		logger.info("Number of (declaried) concept assertions: " + this.countConceptAssertions);
-		logger.info("Number of (declaried) role assertions: " + this.countRoleAssertions);
+		logger.info("Number of declaried concept assertions: " + this.numberOfDeclairedConceptAssertions);
+		logger.info("Number of declaried role assertions: " + this.numberOfDeclariedRoleAssertions);
+		int numberOfDeclariedAssertions = this.numberOfDeclairedConceptAssertions
+				+ this.numberOfDeclariedRoleAssertions;
+		logger.info("Number of declaired concept and role assertions: " + numberOfDeclariedAssertions);
+		logger.info("===End:Statistic for this file/resource.===");
+		/*
+		 * increase the number of assertions in the internal ontology
+		 */
+		int newNumberOfConceptAssertions = this.orarOntology.getNumberOfInputConceptAssertions()
+				+ numberOfDeclairedConceptAssertions;
+		orarOntology.setNumberOfInputConceptAssertions(newNumberOfConceptAssertions);
 
-		orarOntology.setNumberOfInputConceptAssertions(countConceptAssertions);
+		int newNumberOfRoleAssertions = this.orarOntology.getNumberOfInputRoleAssertions()
+				+ numberOfDeclariedRoleAssertions;
+		orarOntology.setNumberOfInputRoleAssertions(newNumberOfRoleAssertions);
 
-		orarOntology.setNumberOfInputRoleAssertions(countRoleAssertions);
 	}
 
 }

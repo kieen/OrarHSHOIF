@@ -43,8 +43,7 @@ public class JenaStreamRDF2OWLAPI extends StreamRDFBase {
 	private final String OWL_DATA_PROPERTY = OWL_NAMESPACE + "DatatypeProperty";
 
 	private final String RDF_TYPE = RDF_NAMESPACE + "type";
-	private long countDeclairedAssertions;
-	private long countAllAssertions;
+	private int numberOfAllParsedTriples;
 	private static final Logger logger = Logger.getLogger(JenaStreamRDF2OWLAPI.class);
 	private Set<OWLObjectProperty> definedObjectProperties;
 	private Set<OWLClass> definedClasses;
@@ -62,8 +61,7 @@ public class JenaStreamRDF2OWLAPI extends StreamRDFBase {
 		this.owlOntology = owlOntology;
 		this.owlDataFactory = OWLManager.getOWLDataFactory();
 		this.manager = this.owlOntology.getOWLOntologyManager();
-		this.countDeclairedAssertions = 0;
-		this.countAllAssertions = 0;
+		this.numberOfAllParsedTriples = 0;
 		// this.aboxAssertions = new HashSet<>();
 	}
 
@@ -72,16 +70,16 @@ public class JenaStreamRDF2OWLAPI extends StreamRDFBase {
 		Node subject = triple.getSubject();
 		Node predicate = triple.getPredicate();
 		Node object = triple.getObject();
-		this.countAllAssertions++;
+		this.numberOfAllParsedTriples++;
 		if (isClassAssertion(subject, predicate, object)) {
 			addClassAssertion(subject, object);
-			countDeclairedAssertions++;
+
 			// printTriple(subject, predicate, object);
 		}
 
 		if (isObjectPropertyAssertion(subject, predicate, object)) {
 			addObjectPropertyAssertion(subject, predicate, object);
-			countDeclairedAssertions++;
+
 			// printTriple(subject, predicate, object);
 		}
 		// TODO: take care of import if you allow to use import in ABox files.
@@ -112,7 +110,7 @@ public class JenaStreamRDF2OWLAPI extends StreamRDFBase {
 
 	private void printTriple(Node subject, Node predicate, Node object) {
 
-		logger.info("Triples #" + countDeclairedAssertions);
+		logger.info("Triples ");
 
 		logger.info(subject);
 		logger.info(predicate);
@@ -188,8 +186,10 @@ public class JenaStreamRDF2OWLAPI extends StreamRDFBase {
 
 	@Override
 	public void finish() {
-		logger.info("Number of declaired triples up to now: " + countDeclairedAssertions);
-		logger.info("Number of all parsed triples up to now: " + countAllAssertions);
+		logger.info("===Begin:Statistic for this file/resource.===");
+		logger.info("Number of all parsed triples up to now: " + numberOfAllParsedTriples);
+		logger.info("===End:Statistic for this file/resource.===");
+
 	}
 
 }
