@@ -7,8 +7,10 @@ import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectAllValuesFrom;
@@ -17,7 +19,12 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLObjectUnionOf;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
+import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
+import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 
 public class DefaultTestDataFactory {
 	private String IRIString = "http://www.test.org/af#";
@@ -51,6 +58,14 @@ public class DefaultTestDataFactory {
 	 */
 	public OWLClass getConcept(String name) {
 		return dataFactory.getOWLClass(IRI.create(IRIString + name));
+	}
+
+	/**
+	 * @param fullIRIName
+	 * @return OWLClass with the given full IRI String
+	 */
+	public OWLClass getConceptWithFullname(String fullIRIName) {
+		return dataFactory.getOWLClass(IRI.create(fullIRIName));
 	}
 
 	public Set<OWLClassAssertionAxiom> getSetOfConceptAssertions(OWLClassAssertionAxiom... conceptAssertions) {
@@ -121,6 +136,26 @@ public class DefaultTestDataFactory {
 		c12Set.add(owlConcept1);
 		c12Set.add(owlConcept2);
 		return dataFactory.getOWLObjectIntersectionOf(c12Set);
+	}
+
+	public OWLObjectIntersectionOf getConjunctionOfConcepts(String... concepts) {
+		Set<OWLClass> setOfConjuncts = new HashSet<>();
+		for (String concept : concepts) {
+			OWLClass owlConcept = getConcept(concept);
+			setOfConjuncts.add(owlConcept);
+		}
+
+		return dataFactory.getOWLObjectIntersectionOf(setOfConjuncts);
+	}
+
+	public OWLObjectIntersectionOf getConjunctionOfConcepts(OWLClass... concepts) {
+		Set<OWLClass> setOfConjuncts = new HashSet<>();
+		for (OWLClass concept : concepts) {
+
+			setOfConjuncts.add(concept);
+		}
+
+		return dataFactory.getOWLObjectIntersectionOf(setOfConjuncts);
 	}
 
 	public OWLObjectIntersectionOf getConjunctionOfConcepts(OWLClass owlClass1, OWLClass owlClass2) {
@@ -202,6 +237,14 @@ public class DefaultTestDataFactory {
 		return dataFactory.getOWLObjectAllValuesFrom(R, A);
 	}
 
+	public OWLObjectAllValuesFrom getForAllAxiom(OWLObjectProperty role, OWLClass concept) {
+		return dataFactory.getOWLObjectAllValuesFrom(role, concept);
+	}
+
+	public OWLObjectAllValuesFrom getForAllAxiom(OWLObjectProperty role, OWLClassExpression conceptExpression) {
+		return dataFactory.getOWLObjectAllValuesFrom(role, conceptExpression);
+	}
+
 	// public IndividualType get_HornSHOIF_IndividualType(Set<String> concepts,
 	// Set<String> preRoles, Set<String> sucRoles) {
 	// Set<OWLClass> owlConcepts = new HashSet<>();
@@ -231,4 +274,44 @@ public class DefaultTestDataFactory {
 		return map;
 	}
 
+	public OWLOntology getOntology() {
+		OWLOntology owlOntology;
+		try {
+			owlOntology = owlManager.createOntology();
+			return owlOntology;
+		} catch (OWLOntologyCreationException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public void addAxiomsTo(OWLOntology ontology, OWLAxiom... axioms) {
+		for (OWLAxiom axiom : axioms) {
+			this.owlManager.addAxiom(ontology, axiom);
+		}
+	}
+
+	public OWLSubObjectPropertyOfAxiom getSubRoleAxiom(String subRole, String superRole) {
+		OWLObjectProperty owlSubRole = getRole(superRole);
+		OWLObjectProperty owlSuperRole = getRole(superRole);
+		return dataFactory.getOWLSubObjectPropertyOfAxiom(owlSubRole, owlSuperRole);
+	}
+
+	public OWLSubObjectPropertyOfAxiom getSubRoleAxiom(OWLObjectProperty subRole, OWLObjectProperty superRole) {
+
+		return dataFactory.getOWLSubObjectPropertyOfAxiom(subRole, superRole);
+	}
+
+	public OWLSubClassOfAxiom getSubClassAxiom(OWLClassExpression subClass, OWLClassExpression superClass) {
+		return dataFactory.getOWLSubClassOfAxiom(subClass, superClass);
+	}
+
+	public OWLTransitiveObjectPropertyAxiom getTransitivityAxiom(String roleName) {
+		OWLObjectProperty role = getRole(roleName);
+		return dataFactory.getOWLTransitiveObjectPropertyAxiom(role);
+	}
+
+	public OWLTransitiveObjectPropertyAxiom getTransitivityAxiom(OWLObjectProperty role) {
+		return dataFactory.getOWLTransitiveObjectPropertyAxiom(role);
+	}
 }

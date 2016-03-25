@@ -15,8 +15,8 @@ import orar.config.LogInfo;
 import orar.dlfragmentvalidator.OWLOntologyValidator;
 import orar.modeling.ontology.OrarOntology;
 import orar.normalization.Normalizer;
-import orar.normalization.transitivityelimination.TransitivityNormalizer;
-import orar.normalization.transitivityelimination.TransitivityNormalizerWithHermit;
+import orar.normalization.transitivity.TransitivityNormalizer;
+import orar.normalization.transitivity.TransitivityNormalizerWithHermit;
 import orar.util.OntologyInfo;
 
 public abstract class OntologyReaderTemplate implements OntologyReader {

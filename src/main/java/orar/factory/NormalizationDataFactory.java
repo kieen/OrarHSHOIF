@@ -11,20 +11,20 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
-public class NormalizerDataFactory {
+public class NormalizationDataFactory {
 
-	private static NormalizerDataFactory instance;
+	private static NormalizationDataFactory instance;
 	private OWLDataFactory owlDataFactory;
-	private final String IRI_CONCEPT_BY_NORMALIZING_AXIOM = "http://www.af#NormTBoxC";
-	private final String IRI_CONEPT_FOR_NOMINAL = "http://www.af#NormNominalC";
-	private final String IRI_CONCEPT_FOR_TRANSITIVITY="http://www.af#NormTransC";
+	private final String CONCEPT_PREFIX = "http://www.af#NormTBoxC";
+	private final String NOMINAL_CONCEPT_PREFIX = "http://www.af#NormNominalC";
+	private final String TRANSITIVITY_CONCEPT_PREFIX = "http://www.af#NormTransC";
 
 	private long count;
 	private final Set<OWLClass> conceptsByNormalization;
 
 	private final Map<OWLNamedIndividual, OWLClass> nominal2ConceptMap;
 
-	private NormalizerDataFactory() {
+	private NormalizationDataFactory() {
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		conceptsByNormalization = new HashSet<OWLClass>();
 		nominal2ConceptMap = new HashMap<OWLNamedIndividual, OWLClass>();
@@ -32,24 +32,24 @@ public class NormalizerDataFactory {
 		count = 0;
 	}
 
-	public static NormalizerDataFactory getInstance() {
+	public static NormalizationDataFactory getInstance() {
 		if (instance == null) {
-			instance = new NormalizerDataFactory();
+			instance = new NormalizationDataFactory();
 		}
 		return instance;
 	}
 
 	public OWLClass getFreshConcept() {
 		count++;
-		String name = IRI_CONCEPT_BY_NORMALIZING_AXIOM + count;
+		String name = CONCEPT_PREFIX + count;
 		OWLClass freshOWLClass = owlDataFactory.getOWLClass(IRI.create(name));
 		conceptsByNormalization.add(freshOWLClass);
 		return freshOWLClass;
 	}
-	
-	public OWLClass getFreshConceptForTransitivity(){
+
+	public OWLClass getFreshConceptForTransitivity() {
 		count++;
-		String name=IRI_CONCEPT_FOR_TRANSITIVITY+ count;
+		String name = TRANSITIVITY_CONCEPT_PREFIX + count;
 		OWLClass freshOWLClass = owlDataFactory.getOWLClass(IRI.create(name));
 		conceptsByNormalization.add(freshOWLClass);
 		return freshOWLClass;
@@ -61,9 +61,8 @@ public class NormalizerDataFactory {
 			return owlClass;
 		} else {
 			count++;
-			String name = IRI_CONEPT_FOR_NOMINAL + count;
-			OWLClass freshOWLClass = owlDataFactory.getOWLClass(IRI
-					.create(name));
+			String name = NOMINAL_CONCEPT_PREFIX + count;
+			OWLClass freshOWLClass = owlDataFactory.getOWLClass(IRI.create(name));
 			nominal2ConceptMap.put(ind, freshOWLClass);
 			conceptsByNormalization.add(freshOWLClass);
 			return freshOWLClass;
@@ -79,7 +78,7 @@ public class NormalizerDataFactory {
 	public OWLClass getFreshOWLClassForNominal(Set<OWLNamedIndividual> inds) {
 
 		count++;
-		String name = IRI_CONEPT_FOR_NOMINAL + count;
+		String name = NOMINAL_CONCEPT_PREFIX + count;
 		OWLClass freshOWLClass = owlDataFactory.getOWLClass(IRI.create(name));
 		conceptsByNormalization.add(freshOWLClass);
 		for (OWLNamedIndividual ind : inds) {
@@ -110,7 +109,16 @@ public class NormalizerDataFactory {
 
 	}
 
-	public String getIRI_STRING_CLASS() {
-		return IRI_CONCEPT_BY_NORMALIZING_AXIOM;
+	public String getConceptPrefix() {
+		return CONCEPT_PREFIX;
 	}
+
+	public String getNominalConceptPrefix() {
+		return NOMINAL_CONCEPT_PREFIX;
+	}
+
+	public String getTransivityConceptPrefix() {
+		return TRANSITIVITY_CONCEPT_PREFIX;
+	}
+
 }

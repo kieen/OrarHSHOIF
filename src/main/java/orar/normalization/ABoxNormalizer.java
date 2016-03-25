@@ -53,7 +53,7 @@ import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.SWRLRule;
 
-import orar.factory.NormalizerDataFactory;
+import orar.factory.NormalizationDataFactory;
 
 /**
  * Normalize SameIndividualAxioms, DifferentIndividualAxioms Since they contain
@@ -69,7 +69,7 @@ public class ABoxNormalizer implements OWLAxiomVisitorEx<OWLAxiom> {
 	 */
 	private final Set<OWLAxiom> additionalAxioms;
 	private final OWLDataFactory owlDataFactory;
-	private final NormalizerDataFactory normFactory;
+	private final NormalizationDataFactory normFactory;
 
 	private static Logger logger = Logger.getLogger(ABoxNormalizer.class);
 
@@ -77,7 +77,7 @@ public class ABoxNormalizer implements OWLAxiomVisitorEx<OWLAxiom> {
 
 		additionalAxioms = new HashSet<>();
 		owlDataFactory = OWLManager.getOWLDataFactory();
-		normFactory = NormalizerDataFactory.getInstance();
+		normFactory = NormalizationDataFactory.getInstance();
 	}
 
 	@Override

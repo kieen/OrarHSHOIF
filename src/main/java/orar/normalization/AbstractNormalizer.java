@@ -7,7 +7,7 @@ import java.util.Stack;
 import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.data.SharedData;
-import orar.factory.NormalizerDataFactory;
+import orar.factory.NormalizationDataFactory;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -226,7 +226,7 @@ public abstract class AbstractNormalizer implements Normalizer {
 		Set<OWLNamedIndividual> nominals = SharedData.getInstance().getNominals();
 
 		for (OWLNamedIndividual nominal : nominals) {
-			OWLClass nominalConcept = NormalizerDataFactory.getInstance().getFreshOWLClassForNominal(nominal);
+			OWLClass nominalConcept = NormalizationDataFactory.getInstance().getFreshOWLClassForNominal(nominal);
 			SharedData.getInstance().getNominalConcepts().add(nominalConcept);
 			OWLClassAssertionAxiom newAssertion = owlDataFactory.getOWLClassAssertionAxiom(nominalConcept, nominal);
 			this.aboxAxiomsByNomalizingNominals.add(newAssertion);
@@ -288,7 +288,7 @@ public abstract class AbstractNormalizer implements Normalizer {
 
 		if (config.getLogInfos().contains(LogInfo.NORMALIZATION_INFO)) {
 			logger.info("Number of new ConceptNames generated during the normalizaton:"
-					+ NormalizerDataFactory.getInstance().getCount());
+					+ NormalizationDataFactory.getInstance().getCount());
 			logger.info("Normalized TBox size: " + normalizedOntology.getTBoxAxioms(true).size());
 			logger.info("Normalized RBox size: " + normalizedOntology.getRBoxAxioms(true).size());
 			logger.info("Normalized ABox size: " + normalizedOntology.getABoxAxioms(true).size());

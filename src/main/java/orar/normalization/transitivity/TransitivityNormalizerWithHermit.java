@@ -1,4 +1,4 @@
-package orar.normalization.transitivityelimination;
+package orar.normalization.transitivity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,7 @@ import org.semanticweb.owlapi.reasoner.InferenceType;
 
 import orar.config.Configuration;
 import orar.config.DebugLevel;
-import orar.factory.NormalizerDataFactory;
+import orar.factory.NormalizationDataFactory;
 
 /**
  * @author kien Using Hermit reasoner to compute role hierarchy, which is the
@@ -37,7 +37,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 	private OWLOntology resultingOntology;
 
 	private OWLDataFactory owlDataFactory;
-	private NormalizerDataFactory normalizerDataFactory;
+	private NormalizationDataFactory normalizerDataFactory;
 	private boolean eliminationIsDone;
 	private Configuration config;
 	private Logger logger = Logger.getLogger(TransitivityNormalizerWithHermit.class);
@@ -47,7 +47,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 		this.hermit = new Reasoner(inputOntology);
 
 		this.owlDataFactory = OWLManager.getOWLDataFactory();
-		this.normalizerDataFactory = NormalizerDataFactory.getInstance();
+		this.normalizerDataFactory = NormalizationDataFactory.getInstance();
 
 		this.eliminationIsDone = false;
 		this.config = Configuration.getInstance();
@@ -67,7 +67,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 			ontologyManager.addAxioms(resultingOntology, axiomsSimulatingTransitivity);
 
 			/*
-			 * get all Axioms from the inputOntology, except transitivity axioms
+			 * get all Axioms from the inputOntology
 			 */
 			Set<OWLAxiom> axiomsFromInputOntology = new HashSet<>();
 			axiomsFromInputOntology.addAll(this.inputOntology.getTBoxAxioms(true));
@@ -105,32 +105,31 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 			superRolesOfEachTransRole.add(eachTransRole);
 
 			for (OWLSubClassOfAxiom eachSubClassAxiom : todoSubClassAxioms) {
-				if (eachSubClassAxiom.getSuperClass() instanceof OWLObjectAllValuesFrom) {
 
-					OWLObjectAllValuesFrom superClass = (OWLObjectAllValuesFrom) eachSubClassAxiom.getSuperClass();
-					OWLObjectPropertyExpression roleOfTheAxiom = superClass.getProperty();
-					if (superRolesOfEachTransRole.contains(roleOfTheAxiom)) {
-						OWLClassExpression fillerOfTheAxiom = superClass.getFiller();
-						OWLClassExpression subClass = eachSubClassAxiom.getSubClass();
-						Set<OWLSubClassOfAxiom> newAxioms = getNormalizedAxiomsForEachSubClassAxiom(subClass,
-								eachTransRole, fillerOfTheAxiom);
-						generatedAxioms.addAll(newAxioms);
-						/*
-						 * Debug:start
-						 */
-						if (config.getDebuglevels().contains(DebugLevel.TRANSITIVITY_ELIMINATION)) {
-							logger.info("*** DEBUG: transivitity elimination");
-							logger.info("Axiom to be considered:" + eachSubClassAxiom);
-							logger.info("Transitive role:" + eachTransRole);
-							logger.info("Generated axioms:" + newAxioms);
-							logger.info("*** ");
-						}
-						/*
-						 * Debug:end
-						 */
+				OWLObjectAllValuesFrom superClass = (OWLObjectAllValuesFrom) eachSubClassAxiom.getSuperClass();
+				OWLObjectPropertyExpression roleOfTheAxiom = superClass.getProperty();
+				if (superRolesOfEachTransRole.contains(roleOfTheAxiom)) {
+					OWLClassExpression fillerOfTheAxiom = superClass.getFiller();
+					OWLClassExpression subClass = eachSubClassAxiom.getSubClass();
+					Set<OWLSubClassOfAxiom> newAxioms = getNormalizedAxiomsForEachSubClassAxiom(subClass, eachTransRole,
+							fillerOfTheAxiom);
+					generatedAxioms.addAll(newAxioms);
+					/*
+					 * Debug:start
+					 */
+					if (config.getDebuglevels().contains(DebugLevel.TRANSITIVITY_ELIMINATION)) {
+						logger.info("*** DEBUG: transivitity elimination");
+						logger.info("Axiom to be considered:" + eachSubClassAxiom);
+						logger.info("Transitive role:" + eachTransRole);
+						logger.info("Generated axioms:" + newAxioms);
+						logger.info("*** ");
 					}
+					/*
+					 * Debug:end
+					 */
 				}
 			}
+
 		}
 		return generatedAxioms;
 	}
@@ -157,7 +156,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 
 	private Set<OWLSubClassOfAxiom> getSubClassOfAxioms() {
 		Set<OWLSubClassOfAxiom> subClassOfAxioms = new HashSet<>();
-		SubClassOfAxiomCollector axiomCollector = new SubClassOfAxiomCollector();
+		SubClassOfValueRestrictionAxiomCollector axiomCollector = new SubClassOfValueRestrictionAxiomCollector();
 		Set<OWLAxiom> tboxAxioms = this.inputOntology.getTBoxAxioms(true);
 		for (OWLAxiom axiom : tboxAxioms) {
 			OWLSubClassOfAxiom subClassOfAxiom = axiom.accept(axiomCollector);

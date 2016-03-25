@@ -1,4 +1,4 @@
-package orar.normalization.transitivityelimination;
+package orar.normalization.transitivity;
 
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationPropertyDomainAxiom;
@@ -49,7 +49,7 @@ import org.semanticweb.owlapi.model.SWRLRule;
  * @author kien
  *
  */
-public class SubClassOfAxiomCollector implements
+public class SubClassOfValueRestrictionAxiomCollector implements
 		OWLAxiomVisitorEx<OWLSubClassOfAxiom> {
 
 	@Override
