@@ -1,5 +1,6 @@
 package orar.modeling.roleassertion;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -59,4 +60,19 @@ public interface RoleAssertionBox {
 	 */
 	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role);
 
+	/**
+	 * @param individual
+	 * @return Successor role assertions, stored in a (possibly empty)
+	 *         map:role-->set of successor objects, of the given individual
+	 */
+	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getSuccesorRoleAssertionsAsMap(
+			OWLNamedIndividual subjectIndividual);
+
+	/**
+	 * @param individual
+	 * @return Predecessor role assertions, stored in a (possibly empty)
+	 *         map:role-->set of predecessor subjects, of the given individual
+	 */
+	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getPredecessorRoleAssertionsAsMap(
+			OWLNamedIndividual objectIndividual);
 }

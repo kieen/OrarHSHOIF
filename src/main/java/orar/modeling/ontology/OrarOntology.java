@@ -1,5 +1,6 @@
 package orar.modeling.ontology;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -162,11 +163,39 @@ public interface OrarOntology {
 	public boolean addRoleAssertion(OWLNamedIndividual subject, OWLObjectProperty role, OWLNamedIndividual object);
 
 	/*
-	 * Adding sameas assertion
+	 * Methods for sameas assertions
 	 */
 	public boolean addSameAsAssertion(OWLNamedIndividual individual, OWLNamedIndividual equalIndividual);
 
 	public boolean addManySameAsAssertions(OWLNamedIndividual individual, Set<OWLNamedIndividual> equalIndividuals);
 
-	
+	/**
+	 * @param individual
+	 * @return a (possible empty) set of individuals that are equal to
+	 *         {@code individual}
+	 */
+	public Set<OWLNamedIndividual> getSameIndividuals(OWLNamedIndividual individual);
+
+	/**
+	 * @param individual
+	 * @return a (possibly empty) set of asserted concepts for the given
+	 *         individual
+	 */
+	public Set<OWLClass> getAssertedConcepts(OWLNamedIndividual individual);
+
+	/**
+	 * @param individual
+	 * @return get successor assertions (stored in a map: role --> set of
+	 *         objects) of the given individual
+	 */
+	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getSuccessorRoleAssertionsAsMap(
+			OWLNamedIndividual subjectIndividual);
+
+	/**
+	 * @param individual
+	 * @return get predecessor assertions (stored in a map: role --> set of
+	 *         objects) of the given individual
+	 */
+	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getPredecessorRoleAssertionsAsMap(
+			OWLNamedIndividual objectIndividual);
 }

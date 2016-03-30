@@ -182,4 +182,26 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 		return allIndividuals;
 	}
 
+	@Override
+	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getSuccesorRoleAssertionsAsMap(
+			OWLNamedIndividual subjectIndividual) {
+		Map<OWLObjectProperty, Set<OWLNamedIndividual>> successorAssertionsAsMap = this.roleAssertionMapWithSubjectAsKey
+				.get(subjectIndividual);
+		if (successorAssertionsAsMap==null) {
+			successorAssertionsAsMap = new HashMap<>();
+		}
+		return successorAssertionsAsMap;
+	}
+
+	@Override
+	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getPredecessorRoleAssertionsAsMap(
+			OWLNamedIndividual objectIndividual) {
+		Map<OWLObjectProperty, Set<OWLNamedIndividual>> predecessorAssertionsAsMap = this.roleAssertionMapWithObjectAsKey
+				.get(objectIndividual);
+		if (predecessorAssertionsAsMap==null) {
+			predecessorAssertionsAsMap = new HashMap<>();
+		}
+		return predecessorAssertionsAsMap;
+	}
+
 }

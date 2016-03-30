@@ -1,6 +1,7 @@
 package orar.modeling.ontology;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -238,6 +239,32 @@ public class MapbasedOrarOntology implements OrarOntology {
 			Set<OWLNamedIndividual> manyEqualIndividuals) {
 		return this.sameasBox.addManySameAsAssertions(individual, manyEqualIndividuals);
 
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getSameIndividuals(OWLNamedIndividual individual) {
+		Set<OWLNamedIndividual> equalIndividuals = this.sameasBox.getSameIndividuals(individual);
+		if (equalIndividuals == null) {
+			equalIndividuals = new HashSet<>();
+		}
+		return equalIndividuals;
+	}
+
+	@Override
+	public Set<OWLClass> getAssertedConcepts(OWLNamedIndividual individual) {
+		return this.conceptAssertionBox.getAssertedConcepts(individual);
+	}
+
+	@Override
+	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getSuccessorRoleAssertionsAsMap(
+			OWLNamedIndividual individual) {
+		return this.roleAssertionBox.getSuccesorRoleAssertionsAsMap(individual);
+	}
+
+	@Override
+	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getPredecessorRoleAssertionsAsMap(
+			OWLNamedIndividual objectIndividual) {
+		return this.roleAssertionBox.getPredecessorRoleAssertionsAsMap(objectIndividual);
 	}
 
 }

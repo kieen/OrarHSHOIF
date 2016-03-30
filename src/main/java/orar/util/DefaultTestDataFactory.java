@@ -191,6 +191,14 @@ public class DefaultTestDataFactory {
 		return setOfConcepts;
 	}
 
+	public Set<OWLClass> getSetOfConcepts(OWLClass... concepts) {
+		Set<OWLClass> setOfConcepts = new HashSet<>();
+		for (OWLClass concept : concepts) {
+			setOfConcepts.add(concept);
+		}
+		return setOfConcepts;
+	}
+
 	public Set<OWLNamedIndividual> getSetOfIndividuals(String... individualNames) {
 		Set<OWLNamedIndividual> setOfIndividuals = new HashSet<>();
 		for (String name : individualNames) {
@@ -200,10 +208,26 @@ public class DefaultTestDataFactory {
 		return setOfIndividuals;
 	}
 
+	public Set<OWLNamedIndividual> getSetOfIndividuals(OWLNamedIndividual... individuals) {
+		Set<OWLNamedIndividual> setOfIndividuals = new HashSet<>();
+		for (OWLNamedIndividual ind : individuals) {
+			setOfIndividuals.add(ind);
+		}
+		return setOfIndividuals;
+	}
+
 	public Set<OWLObjectProperty> getSetOfRoles(String... roleNames) {
 		Set<OWLObjectProperty> setOfRoles = new HashSet<>();
 		for (String name : roleNames) {
 			OWLObjectProperty role = getRole(name);
+			setOfRoles.add(role);
+		}
+		return setOfRoles;
+	}
+
+	public Set<OWLObjectProperty> getSetOfRoles(OWLObjectProperty... roles) {
+		Set<OWLObjectProperty> setOfRoles = new HashSet<>();
+		for (OWLObjectProperty role : roles) {
 			setOfRoles.add(role);
 		}
 		return setOfRoles;
@@ -313,5 +337,12 @@ public class DefaultTestDataFactory {
 
 	public OWLTransitiveObjectPropertyAxiom getTransitivityAxiom(OWLObjectProperty role) {
 		return dataFactory.getOWLTransitiveObjectPropertyAxiom(role);
+	}
+
+	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getMapFromRole2Individuals(OWLObjectProperty role,
+			Set<OWLNamedIndividual> individuals) {
+		HashMap<OWLObjectProperty, Set<OWLNamedIndividual>> map = new HashMap<>();
+		map.put(role, individuals);
+		return map;
 	}
 }
