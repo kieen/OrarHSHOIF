@@ -1,4 +1,4 @@
-package orar.type.HornSHOIF;
+package orar.type;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
@@ -8,21 +8,19 @@ import java.util.WeakHashMap;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
-import orar.type.IndividualType;
-
-public class HornSHOIF_IndividualTypeFactory_UsingWeakHashMap implements HornSHOIF_IndividualTypeFactory {
+public class BasicIndividualTypeFactory_UsingWeakHashMap implements BasicIndividualTypeFactory {
 
 	private final Map<IndividualType, WeakReference<IndividualType>> cache;
-	private static HornSHOIF_IndividualTypeFactory_UsingWeakHashMap instance;
+	private static BasicIndividualTypeFactory_UsingWeakHashMap instance;
 
-	private HornSHOIF_IndividualTypeFactory_UsingWeakHashMap() {
+	private BasicIndividualTypeFactory_UsingWeakHashMap() {
 		this.cache = new WeakHashMap<IndividualType, WeakReference<IndividualType>>();
 
 	}
 
-	public static HornSHOIF_IndividualTypeFactory_UsingWeakHashMap getInstance() {
+	public static BasicIndividualTypeFactory_UsingWeakHashMap getInstance() {
 		if (instance == null) {
-			instance = new HornSHOIF_IndividualTypeFactory_UsingWeakHashMap();
+			instance = new BasicIndividualTypeFactory_UsingWeakHashMap();
 		}
 		return instance;
 
@@ -31,7 +29,7 @@ public class HornSHOIF_IndividualTypeFactory_UsingWeakHashMap implements HornSHO
 	@Override
 	public IndividualType getIndividualType(Set<OWLClass> atomicConcepts, Set<OWLObjectProperty> preRoles,
 			Set<OWLObjectProperty> sucRoles) {
-		IndividualType newType = new HornSHOIF_IndividualType(atomicConcepts, preRoles, sucRoles);
+		IndividualType newType = new BasicIndividualType(atomicConcepts, preRoles, sucRoles);
 
 		WeakReference<IndividualType> valueOfNewType = this.cache.get(newType);
 		if (valueOfNewType == null) {

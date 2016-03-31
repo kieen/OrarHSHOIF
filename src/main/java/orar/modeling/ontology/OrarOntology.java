@@ -1,5 +1,6 @@
 package orar.modeling.ontology;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -198,4 +199,9 @@ public interface OrarOntology {
 	 */
 	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getPredecessorRoleAssertionsAsMap(
 			OWLNamedIndividual objectIndividual);
+
+	public Set<OWLNamedIndividual> getPredecessors(OWLNamedIndividual object, OWLObjectProperty role);
+
+	public Set<OWLNamedIndividual> getSuccessors(OWLNamedIndividual subject, OWLObjectProperty role);
+
 }

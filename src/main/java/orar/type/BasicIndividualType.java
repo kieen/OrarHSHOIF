@@ -1,4 +1,4 @@
-package orar.type.HornSHOIF;
+package orar.type;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,15 +6,13 @@ import java.util.Set;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
-import orar.type.IndividualType;
-
-public class HornSHOIF_IndividualType implements IndividualType {
+public class BasicIndividualType implements IndividualType {
 
 	private final Set<OWLClass> concepts;
 	private final Set<OWLObjectProperty> preRoles;
 	private final Set<OWLObjectProperty> sucRoles;
 
-	HornSHOIF_IndividualType(Set<OWLClass> atomicConcepts, Set<OWLObjectProperty> preRoles,
+	public BasicIndividualType(Set<OWLClass> atomicConcepts, Set<OWLObjectProperty> preRoles,
 			Set<OWLObjectProperty> sucRoles) {
 
 		this.concepts = new HashSet<OWLClass>(atomicConcepts);
@@ -25,17 +23,17 @@ public class HornSHOIF_IndividualType implements IndividualType {
 
 	@Override
 	public Set<OWLClass> getConcepts() {
-		return new HashSet<>(concepts);
+		return this.concepts;
 	}
 
 	@Override
 	public Set<OWLObjectProperty> getPredecessorRoles() {
-		return new HashSet<>(preRoles);
+		return this.preRoles;
 	}
 
 	@Override
 	public Set<OWLObjectProperty> getSuccessorRoles() {
-		return new HashSet<>(sucRoles);
+		return this.sucRoles;
 	}
 
 	@Override
@@ -56,7 +54,7 @@ public class HornSHOIF_IndividualType implements IndividualType {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		HornSHOIF_IndividualType other = (HornSHOIF_IndividualType) obj;
+		BasicIndividualType other = (BasicIndividualType) obj;
 		if (concepts == null) {
 			if (other.concepts != null)
 				return false;

@@ -267,4 +267,26 @@ public class MapbasedOrarOntology implements OrarOntology {
 		return this.roleAssertionBox.getPredecessorRoleAssertionsAsMap(objectIndividual);
 	}
 
+	@Override
+	public Set<OWLNamedIndividual> getPredecessors(OWLNamedIndividual object, OWLObjectProperty role) {
+		Map<OWLObjectProperty, Set<OWLNamedIndividual>> predecessorAssertionAsMap = this.roleAssertionBox
+				.getPredecessorRoleAssertionsAsMap(object);
+		Set<OWLNamedIndividual> setOfPredecessors = predecessorAssertionAsMap.get(role);
+		if (setOfPredecessors == null) {
+			setOfPredecessors = new HashSet<>();
+		}
+		return setOfPredecessors;
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getSuccessors(OWLNamedIndividual subject, OWLObjectProperty role) {
+		Map<OWLObjectProperty, Set<OWLNamedIndividual>> successorAssertionAsMap = this.roleAssertionBox
+				.getSuccesorRoleAssertionsAsMap(subject);
+		Set<OWLNamedIndividual> setOfSuccessors = successorAssertionAsMap.get(role);
+		if (setOfSuccessors == null) {
+			setOfSuccessors = new HashSet<>();
+		}
+		return setOfSuccessors;
+	}
+
 }

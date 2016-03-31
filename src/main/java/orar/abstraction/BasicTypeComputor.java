@@ -1,4 +1,4 @@
-package orar.abstraction.HornSHOIF;
+package orar.abstraction;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,11 +9,10 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
-import orar.abstraction.TypeComputor;
 import orar.modeling.ontology.OrarOntology;
+import orar.type.BasicIndividualTypeFactory;
+import orar.type.BasicIndividualTypeFactory_UsingWeakHashMap;
 import orar.type.IndividualType;
-import orar.type.HornSHOIF.HornSHOIF_IndividualTypeFactory;
-import orar.type.HornSHOIF.HornSHOIF_IndividualTypeFactory_UsingWeakHashMap;
 import orar.util.MapOperator;
 
 /**
@@ -22,15 +21,15 @@ import orar.util.MapOperator;
  * @author kien
  *
  */
-public class HornSHOIF_TypeComputor implements TypeComputor {
-	private final HornSHOIF_IndividualTypeFactory typeFactory;
+public class BasicTypeComputor implements TypeComputor {
+	private final BasicIndividualTypeFactory typeFactory;
 
 	// private Configuration config;
 	// private static Logger logger =
 	// Logger.getLogger(HornSHOIF_TypeComputor.class);
 
-	public HornSHOIF_TypeComputor() {
-		typeFactory = HornSHOIF_IndividualTypeFactory_UsingWeakHashMap.getInstance();
+	public BasicTypeComputor() {
+		typeFactory = BasicIndividualTypeFactory_UsingWeakHashMap.getInstance();
 
 		// this.config = Configuration.getInstance();
 	}

@@ -1,4 +1,4 @@
-package orar.type.HornSHOIF;
+package orar.type;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,14 +9,16 @@ import org.junit.Test;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
+import orar.type.BasicIndividualTypeFactory;
+import orar.type.BasicIndividualTypeFactory_UsingWeakHashMap;
 import orar.type.IndividualType;
 import orar.util.DefaultTestDataFactory;
 
-public class HornSHOIF_IndividualTypeFactory_UsingWeakHashMap_Test {
+public class BasicIndividualTypeFactory_UsingWeakHashMap_Test {
 
 	OWLClass A, B;
 	OWLObjectProperty R, S;
-	HornSHOIF_IndividualTypeFactory typeFactory = HornSHOIF_IndividualTypeFactory_UsingWeakHashMap.getInstance();
+	BasicIndividualTypeFactory typeFactory = BasicIndividualTypeFactory_UsingWeakHashMap.getInstance();
 	Set<OWLClass> conceptNamesA;
 	Set<OWLClass> conceptNamesAB;
 	Set<OWLClass> conceptNamesBA;

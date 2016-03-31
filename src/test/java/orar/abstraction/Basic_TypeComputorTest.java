@@ -10,16 +10,15 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 import junit.framework.Assert;
-import orar.abstraction.HornSHOIF.HornSHOIF_TypeComputor;
 import orar.modeling.ontology.MapbasedOrarOntology;
 import orar.modeling.ontology.OrarOntology;
+import orar.type.BasicIndividualTypeFactory;
+import orar.type.BasicIndividualTypeFactory_UsingWeakHashMap;
 import orar.type.IndividualType;
-import orar.type.HornSHOIF.HornSHOIF_IndividualTypeFactory;
-import orar.type.HornSHOIF.HornSHOIF_IndividualTypeFactory_UsingWeakHashMap;
 import orar.util.DefaultTestDataFactory;
 import orar.util.PrintingHelper;
 
-public class HornSHOIF_TypeComputorTest {
+public class Basic_TypeComputorTest {
 	/*
 	 * Signature
 	 */
@@ -54,12 +53,16 @@ public class HornSHOIF_TypeComputorTest {
 	/*
 	 * Others
 	 */
-	HornSHOIF_IndividualTypeFactory typeFactory = HornSHOIF_IndividualTypeFactory_UsingWeakHashMap.getInstance();
-	TypeComputor typeComputor = new HornSHOIF_TypeComputor();
+	BasicIndividualTypeFactory typeFactory = BasicIndividualTypeFactory_UsingWeakHashMap.getInstance();
+	TypeComputor typeComputor = new BasicTypeComputor();
 
 	@Test
 	public void shouldComputeTypeProperly() {
 		OrarOntology orarOntology = new MapbasedOrarOntology();
+		/*
+		 * Note to add individuals to the signature of the ontology. When we
+		 * load ontology from file, the OntologyReader will do the job.
+		 */
 		orarOntology.addIndividualsToSignature(testData.getSetOfIndividuals(a1, a2, b1, b2));
 
 		orarOntology.addConceptAssertion(a1, A1);
@@ -72,7 +75,9 @@ public class HornSHOIF_TypeComputorTest {
 		orarOntology.addRoleAssertion(a2, R2, b2);
 
 		/*
-		 * Note that the ontology should be closed under equality.
+		 * Note that the ontology should be closed under equality. In the
+		 * procedure, the RuleReasoner will compute the closure before we
+		 * compute types.
 		 */
 		orarOntology.addSameAsAssertion(a1, a2);
 		orarOntology.addSameAsAssertion(a2, a1);

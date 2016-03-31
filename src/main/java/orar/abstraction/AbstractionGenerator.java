@@ -1,16 +1,23 @@
 package orar.abstraction;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
-
-import orar.type.IndividualType;
 
 public interface AbstractionGenerator {
 
-	// public void generateAbstractOntology();
+	/**
+	 * @param numberOfTypesPerAbstraction
+	 *            the number of types per abstraction (in case of splitting
+	 *            abstraction into smaller ones)
+	 * 
+	 * @return a list of OWLAPI abstract ontologies
+	 */
+	public List<OWLOntology> getAbstractOntologies(int numberOfTypesPerAbstraction);
 
-	public OWLOntology getAbstractOntology(Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals);
+	/**
+	 *
+	 * @return the abstract ontology generated from all types.s
+	 */
+	public OWLOntology getAbstractOntology();
 }
