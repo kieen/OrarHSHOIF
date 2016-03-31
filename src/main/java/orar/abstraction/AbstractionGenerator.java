@@ -4,6 +4,14 @@ import java.util.List;
 
 import org.semanticweb.owlapi.model.OWLOntology;
 
+/**
+ * Generate abstraction from individual type and create respective mapping
+ * necessary for transferring assertions from the abstraction to the original
+ * ABox.
+ * 
+ * @author kien
+ *
+ */
 public interface AbstractionGenerator {
 
 	/**

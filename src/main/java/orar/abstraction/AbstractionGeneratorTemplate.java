@@ -25,6 +25,12 @@ import orar.factory.AbstractDataFactory;
 import orar.modeling.ontology.OrarOntology;
 import orar.type.IndividualType;
 
+/**
+ * Template for generating abstraction from individuals types.
+ * 
+ * @author kien
+ *
+ */
 public abstract class AbstractionGeneratorTemplate implements AbstractionGenerator {
 
 	protected final SharedMap sharedMap;
@@ -41,17 +47,17 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 	protected final Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals;
 
 	public AbstractionGeneratorTemplate(OrarOntology orarOntology,
-				Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
-			this.sharedMap = SharedMap.getInstance();
-			this.sharedData = SharedData.getInstance();
-			this.manager = OWLManager.createOWLOntologyManager();
-			this.owlDataFactory = OWLManager.getOWLDataFactory();
-			this.abstractDataFactory = AbstractDataFactory.getInstance();
+			Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
+		this.sharedMap = SharedMap.getInstance();
+		this.sharedData = SharedData.getInstance();
+		this.manager = OWLManager.createOWLOntologyManager();
+		this.owlDataFactory = OWLManager.getOWLDataFactory();
+		this.abstractDataFactory = AbstractDataFactory.getInstance();
 
-			this.orarOntology = orarOntology;
-			this.typeMap2Individuals = typeMap2Individuals;
+		this.orarOntology = orarOntology;
+		this.typeMap2Individuals = typeMap2Individuals;
 
-		}
+	}
 
 	@Override
 	public OWLOntology getAbstractOntology() {
@@ -119,7 +125,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 	 * @param type
 	 * @return a set of assertions for the given type.
 	 */
-	protected abstract Set<OWLAxiom> generateAssertions(IndividualType type) ;
+	protected abstract Set<OWLAxiom> generateAssertions(IndividualType type);
 
 	/**
 	 * @param x
