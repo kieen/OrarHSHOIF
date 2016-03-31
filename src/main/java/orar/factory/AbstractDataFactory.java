@@ -18,16 +18,19 @@ public class AbstractDataFactory {
 	private final String IRI_BASE_X = "http://www.af#abstractX";
 	private final String IRI_BASE_Y = "http://www.af#abstractY";
 	private final String IRI_BASE_Z = "http://www.af#abstractZ";
-	private final String IRI_BASE_CONCEPT = "http://www.af#freshC";
+	private final String IRI_BASE_U = "http://www.af#abstractU";
+	private final String IRI_BASE_FRESHCONCEPT = "http://www.af#freshC";
 	private static long xCounter;
 	private static long yCounter;
 	private static long zCounter;
+	private static long uCounter;
 
 	private static AbstractDataFactory instance;
 
 	private final Set<OWLNamedIndividual> yAbstractIndividuals;
 	private final Set<OWLNamedIndividual> zAbstractIndividuals;
 	private final Set<OWLNamedIndividual> xAbstractIndividuals;
+	private final Set<OWLNamedIndividual> uAbstractIndividuals;
 
 	OWLOntologyManager manager;
 	OWLDataFactory factory;
@@ -38,9 +41,11 @@ public class AbstractDataFactory {
 		yAbstractIndividuals = new HashSet<OWLNamedIndividual>();
 		xAbstractIndividuals = new HashSet<OWLNamedIndividual>();
 		zAbstractIndividuals = new HashSet<OWLNamedIndividual>();
+		uAbstractIndividuals = new HashSet<>();
 		xCounter = 0;
 		yCounter = 0;
 		zCounter = 0;
+		uCounter = 0;
 
 	}
 
@@ -59,11 +64,22 @@ public class AbstractDataFactory {
 	 * @return a fresh abstract individual with x-prefix
 	 */
 	public OWLNamedIndividual createAbstractIndividualX() {
-		OWLNamedIndividual x = factory.getOWLNamedIndividual(IRI
-				.create(IRI_BASE_X + ++xCounter));
+		OWLNamedIndividual x = factory.getOWLNamedIndividual(IRI.create(IRI_BASE_X + ++xCounter));
 		xAbstractIndividuals.add(x);
 
 		return x;
+
+	}
+	/**
+	 * Create abstract an individual representing concept type
+	 * 
+	 * @return a fresh abstract individual with x-prefix
+	 */
+	public OWLNamedIndividual createAbstractIndividualU() {
+		OWLNamedIndividual u = factory.getOWLNamedIndividual(IRI.create(IRI_BASE_U + ++uCounter));
+		uAbstractIndividuals.add(u);
+
+		return u;
 
 	}
 
@@ -73,8 +89,7 @@ public class AbstractDataFactory {
 	 * @return a fresh abstract individual with y-prefix
 	 */
 	public OWLNamedIndividual createAbstractIndividualY() {
-		OWLNamedIndividual y = factory.getOWLNamedIndividual(IRI
-				.create(IRI_BASE_Y + ++yCounter));
+		OWLNamedIndividual y = factory.getOWLNamedIndividual(IRI.create(IRI_BASE_Y + ++yCounter));
 		yAbstractIndividuals.add(y);
 
 		return y;
@@ -86,8 +101,7 @@ public class AbstractDataFactory {
 	 * @return a fresh abstract individual with z-prefix
 	 */
 	public OWLNamedIndividual createAbstractIndividualZ() {
-		OWLNamedIndividual z = factory.getOWLNamedIndividual(IRI
-				.create(IRI_BASE_Z + ++zCounter));
+		OWLNamedIndividual z = factory.getOWLNamedIndividual(IRI.create(IRI_BASE_Z + ++zCounter));
 		zAbstractIndividuals.add(z);
 
 		return z;
@@ -114,12 +128,19 @@ public class AbstractDataFactory {
 	public String getIRI_BASE_Z() {
 		return IRI_BASE_Z;
 	}
+	
+	/**
+	 * @return the iRI_BASE_U
+	 */
+	public String getIRI_BASE_U() {
+		return IRI_BASE_U;
+	}
 
 	/**
 	 * @return the iRI_BASE_CONCEPT
 	 */
-	public String getIRI_BASE_CONCEPT() {
-		return IRI_BASE_CONCEPT;
+	public String getIRI_BASE_FRESHCONCEPT() {
+		return IRI_BASE_FRESHCONCEPT;
 	}
 
 	public static long getxCounter() {
@@ -132,6 +153,10 @@ public class AbstractDataFactory {
 
 	public static long getzCounter() {
 		return zCounter;
+	}
+	
+	public static long getuCounter() {
+		return uCounter;
 	}
 
 	/**
@@ -162,6 +187,14 @@ public class AbstractDataFactory {
 		return xAbstractIndividuals;
 	}
 
+	/**
+	 * @return A set of abstract individual U
+	 */
+	public Set<OWLNamedIndividual> getUAbstractIndividuals() {
+		return uAbstractIndividuals;
+	}
+
+	
 	// /**
 	// * @return All abstract individuals genearted during abstraction.
 	// */
@@ -174,9 +207,11 @@ public class AbstractDataFactory {
 		xAbstractIndividuals.clear();
 		yAbstractIndividuals.clear();
 		zAbstractIndividuals.clear();
+		uAbstractIndividuals.clear();
 		xCounter = 0;
 		yCounter = 0;
 		zCounter = 0;
+		uCounter = 0;
 
 	}
 

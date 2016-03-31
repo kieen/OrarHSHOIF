@@ -54,27 +54,27 @@ public class SharedMap {
 		return instance;
 	}
 
-	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getXAbstract2OriginalIndividualsMap() {
+	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getMap_XAbstractIndiv_2_OriginalIndivs() {
 		return xAbstract2OriginalIndividualsMap;
 	}
 
-	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getYAbstract2OriginalIndividualsMap() {
+	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getMap_YAbstractIndiv_2_OriginalIndivs() {
 		return yAbstract2OriginalIndividualsMap;
 	}
 
-	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getZAbstract2OriginalIndividualsMap() {
+	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getMap_ZAbstractIndiv_2_OriginalIndivs() {
 		return zAbstract2OriginalIndividualsMap;
 	}
 
-	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getUAbstract2OriginalIndividualsMap() {
+	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getMap_UAbstractIndiv_2_OriginalIndivs() {
 		return uAbstract2OriginalIndividualsMap;
 	}
 
-	public Map<PairOfSubjectAndObject, Set<OWLObjectProperty>> getXYMap2Roles() {
+	public Map<PairOfSubjectAndObject, Set<OWLObjectProperty>> getMap_XY_2_Roles() {
 		return xyMap2Roles;
 	}
 
-	public Map<PairOfSubjectAndObject, Set<OWLObjectProperty>> getZXMap2Roles() {
+	public Map<PairOfSubjectAndObject, Set<OWLObjectProperty>> getMap_ZX_2_Roles() {
 		return zxMap2Roles;
 	}
 

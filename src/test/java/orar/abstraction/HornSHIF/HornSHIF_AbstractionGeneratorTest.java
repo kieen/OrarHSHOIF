@@ -1,4 +1,4 @@
-package HornSHIF_AbstractionGenerator;
+package orar.abstraction.HornSHIF;
 
 import java.util.HashSet;
 import java.util.List;
@@ -122,17 +122,17 @@ public class HornSHIF_AbstractionGeneratorTest {
 		 * compare mappings for x
 		 */
 		Assert.assertEquals(testData.getSetOfIndividuals(a1, a2),
-				sharedMap.getXAbstract2OriginalIndividualsMap().get(x1));
+				sharedMap.getMap_XAbstractIndiv_2_OriginalIndivs().get(x1));
 		/*
 		 * compare mappings for y
 		 */
 		Assert.assertEquals(testData.getSetOfIndividuals(b1, b2),
-				sharedMap.getYAbstract2OriginalIndividualsMap().get(y1));
+				sharedMap.getMap_YAbstractIndiv_2_OriginalIndivs().get(y1));
 		/*
 		 * compare mapping for x1y1
 		 */
 		PairOfSubjectAndObject x1y1 = new PairOfSubjectAndObject(x1, y1);
-		Assert.assertEquals(testData.getSetOfRoles(funcRole), sharedMap.getXYMap2Roles().get(x1y1));
+		Assert.assertEquals(testData.getSetOfRoles(funcRole), sharedMap.getMap_XY_2_Roles().get(x1y1));
 	}
 
 	@Test
@@ -205,17 +205,17 @@ public class HornSHIF_AbstractionGeneratorTest {
 		 * compare mappings for x
 		 */
 		Assert.assertEquals(testData.getSetOfIndividuals(a1, a2),
-				sharedMap.getXAbstract2OriginalIndividualsMap().get(x1));
+				sharedMap.getMap_XAbstractIndiv_2_OriginalIndivs().get(x1));
 		/*
 		 * compare mappings for y
 		 */
 		Assert.assertEquals(testData.getSetOfIndividuals(b1, b2),
-				sharedMap.getYAbstract2OriginalIndividualsMap().get(y1));
+				sharedMap.getMap_YAbstractIndiv_2_OriginalIndivs().get(y1));
 		/*
 		 * compare mapping for x1y1
 		 */
 		PairOfSubjectAndObject x1y1 = new PairOfSubjectAndObject(x1, y1);
-		Assert.assertEquals(testData.getSetOfRoles(funcRole), sharedMap.getXYMap2Roles().get(x1y1));
+		Assert.assertEquals(testData.getSetOfRoles(funcRole), sharedMap.getMap_XY_2_Roles().get(x1y1));
 	}
 
 	@Test
@@ -257,14 +257,14 @@ public class HornSHIF_AbstractionGeneratorTest {
 		OWLNamedIndividual x1 = testData.getAbstractIndividual("X1");
 		OWLNamedIndividual z1 = testData.getAbstractIndividual("Z1");
 		PrintingHelper.printSet(abstraction.getAxioms());
-		Assert.assertEquals(testData.getSetOfIndividuals(a1), sharedMap.getZAbstract2OriginalIndividualsMap().get(z1));
-		Assert.assertEquals(testData.getSetOfIndividuals(b1), sharedMap.getXAbstract2OriginalIndividualsMap().get(x1));
+		Assert.assertEquals(testData.getSetOfIndividuals(a1), sharedMap.getMap_ZAbstractIndiv_2_OriginalIndivs().get(z1));
+		Assert.assertEquals(testData.getSetOfIndividuals(b1), sharedMap.getMap_XAbstractIndiv_2_OriginalIndivs().get(x1));
 
 		/*
 		 * compare mapping for z1x1
 		 */
 		PairOfSubjectAndObject z1x1 = new PairOfSubjectAndObject(z1, x1);
-		Assert.assertEquals(testData.getSetOfRoles(invFuncRole), sharedMap.getZXMap2Roles().get(z1x1));
+		Assert.assertEquals(testData.getSetOfRoles(invFuncRole), sharedMap.getMap_ZX_2_Roles().get(z1x1));
 	}
 
 }
