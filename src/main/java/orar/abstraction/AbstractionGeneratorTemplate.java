@@ -19,9 +19,9 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import orar.data.AbstractDataFactory;
 import orar.data.SharedData;
-import orar.data.SharedMap;
-import orar.factory.AbstractDataFactory;
+import orar.data.SharedDataForTransferingEntailments;
 import orar.modeling.ontology.OrarOntology;
 import orar.type.IndividualType;
 
@@ -33,7 +33,7 @@ import orar.type.IndividualType;
  */
 public abstract class AbstractionGeneratorTemplate implements AbstractionGenerator {
 
-	protected final SharedMap sharedMap;
+	protected final SharedDataForTransferingEntailments sharedMap;
 	protected final SharedData sharedData;
 
 	protected final OWLOntologyManager manager;
@@ -48,7 +48,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 
 	public AbstractionGeneratorTemplate(OrarOntology orarOntology,
 			Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
-		this.sharedMap = SharedMap.getInstance();
+		this.sharedMap = SharedDataForTransferingEntailments.getInstance();
 		this.sharedData = SharedData.getInstance();
 		this.manager = OWLManager.createOWLOntologyManager();
 		this.owlDataFactory = OWLManager.getOWLDataFactory();
@@ -121,18 +121,50 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 
 	}
 
-	/**
-	 * @param type
-	 * @return a set of assertions for the given type.
-	 */
-	protected abstract Set<OWLAxiom> generateAssertions(IndividualType type);
+	private Set<OWLAxiom> generateAssertions(IndividualType type) {
+		Set<OWLAxiom> abstractAssertions = new HashSet<>();
+		/*
+		 * create x
+		 */
+		OWLNamedIndividual x = abstractDataFactory.createAbstractIndividualX();
+		/*
+		 * map X to original individuals.
+		 */
+		Set<OWLNamedIndividual> originalIndsForThisType = this.typeMap2Individuals.get(type);
+		sharedMap.getMap_XAbstractIndiv_2_OriginalIndivs().put(x, originalIndsForThisType);
+
+		/*
+		 * Mark x if x has functional succ-role
+		 */
+		markXHavingFunctionalRole(x, type);
+		/*
+		 * create abstract class assertions for x
+		 */
+		abstractAssertions.addAll(getConceptAssertions(x, type));
+
+		/*
+		 * create prerole assertions for x
+		 */
+		abstractAssertions.addAll(getPredecessorRoleAssertions(x, type));
+		/*
+		 * create succRole assertions for x
+		 */
+		abstractAssertions.addAll(getSuccessorRoleAssertions(x, type));
+
+		/*
+		 * create concept assertion for conept-type
+		 */
+		abstractAssertions.addAll(getConceptAssertionsForConceptType(type));
+
+		return abstractAssertions;
+	}
 
 	/**
 	 * @param x
 	 * @param type
 	 * @return concept assertions x according to its type
 	 */
-	protected Set<OWLAxiom> getAbstractClassAssertions(OWLNamedIndividual x, IndividualType type) {
+	protected Set<OWLAxiom> getConceptAssertions(OWLNamedIndividual x, IndividualType type) {
 
 		Set<OWLAxiom> classAssertions = new HashSet<OWLAxiom>();
 
@@ -144,30 +176,8 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 		return classAssertions;
 	}
 
-	/**
-	 * @param x
-	 * @param type
-	 * @return Pre and successor property assertions of x according to its type
-	 */
-	protected Set<OWLAxiom> getAbstractRoleAssertions(OWLNamedIndividual x, IndividualType type) {
-
-		Set<OWLAxiom> propertyAssertions = new HashSet<>();
-
-		/*
-		 * add predecessor roles assertions
-		 */
-		propertyAssertions.addAll(getPredecessorRoleAssertions(x, type));
-		/*
-		 * add successor role assertions
-		 */
-		propertyAssertions.addAll(getSuccessorRoleAssertions(x, type));
-
-		return propertyAssertions;
-
-	}
-
 	protected Set<OWLAxiom> getPredecessorRoleAssertions(OWLNamedIndividual x, IndividualType type) {
-		Set<OWLAxiom> propertyAssertions = new HashSet<>();
+		Set<OWLAxiom> preRoleAssertions = new HashSet<>();
 		for (OWLObjectProperty preRole : type.getPredecessorRoles()) {
 			// if (propertyIn == null) {
 			// Printer.printSet(type.getPreRoles());
@@ -177,9 +187,14 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 			 */
 			OWLNamedIndividual z = abstractDataFactory.createAbstractIndividualZ();
 
-			OWLObjectPropertyAssertionAxiom inPropertyAssertion = owlDataFactory
+			OWLObjectPropertyAssertionAxiom preRoleAssertion = owlDataFactory
 					.getOWLObjectPropertyAssertionAxiom(preRole, z, x);
-			propertyAssertions.add(inPropertyAssertion);
+			preRoleAssertions.add(preRoleAssertion);
+
+			/*
+			 * Mark z if z has an inverse functional pre-role
+			 */
+			markZHavingInverseFunctionalRole(z, preRole);
 
 			/*
 			 * map z to original individuals
@@ -206,7 +221,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 			}
 
 		}
-		return propertyAssertions;
+		return preRoleAssertions;
 
 	}
 
@@ -222,6 +237,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 					.getOWLObjectPropertyAssertionAxiom(succRole, x, y);
 
 			propertyAssertions.add(outPropertyAssertion);
+
 			/*
 			 * map y to original individuals
 			 */
@@ -249,4 +265,10 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 		}
 		return propertyAssertions;
 	}
+
+	protected abstract Set<OWLAxiom> getConceptAssertionsForConceptType(IndividualType type);
+
+	protected abstract void markXHavingFunctionalRole(OWLNamedIndividual xIndividual, IndividualType type);
+
+	protected abstract void markZHavingInverseFunctionalRole(OWLNamedIndividual zIndividual, OWLObjectProperty role);
 }

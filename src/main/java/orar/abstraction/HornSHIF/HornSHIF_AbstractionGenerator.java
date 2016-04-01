@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 import orar.abstraction.AbstractionGeneratorTemplate;
 import orar.modeling.ontology.OrarOntology;
@@ -20,29 +21,45 @@ public class HornSHIF_AbstractionGenerator extends AbstractionGeneratorTemplate 
 	}
 
 	@Override
-	protected Set<OWLAxiom> generateAssertions(IndividualType type) {
-		Set<OWLAxiom> abstractAssertions = new HashSet<>();
+	protected Set<OWLAxiom> getConceptAssertionsForConceptType(IndividualType type) {
 		/*
-		 * create x
+		 * for HornSHIF, there is no need for concept-type
 		 */
-		OWLNamedIndividual x = abstractDataFactory.createAbstractIndividualX();
-		Set<OWLNamedIndividual> originalIndsForThisType = this.typeMap2Individuals.get(type);
-		/*
-		 * map X to original individuals.
-		 */
-		sharedMap.getMap_XAbstractIndiv_2_OriginalIndivs().put(x, originalIndsForThisType);
+		return new HashSet<>();
+	}
 
+	@Override
+	protected void markXHavingFunctionalRole(OWLNamedIndividual xIndividual, IndividualType type) {
+		Set<OWLObjectProperty> sucRoles = type.getSuccessorRoles();
 		/*
-		 * create abstract class assertions for x
+		 * if sucRoles contains some functional roles
 		 */
-		abstractAssertions.addAll(getAbstractClassAssertions(x, type));
+		if (intersectionNotEmpty(sucRoles, this.sharedData.getFunctionalRoles())) {
+			this.sharedMap.getxAbstractHavingFunctionalRole().add(xIndividual);
+		}
 
-		/*
-		 * role assertions for x
-		 */
-		abstractAssertions.addAll(getAbstractRoleAssertions(x, type));
+	}
 
-		return abstractAssertions;
+	@Override
+	protected void markZHavingInverseFunctionalRole(OWLNamedIndividual zIndividual, OWLObjectProperty role) {
+		if (this.sharedData.getInverseFunctionalRoles().contains(role)) {
+			this.sharedMap.getzAbstractHavingInverseFunctionalRole().add(zIndividual);
+		}
+
+	}
+
+	/**
+	 * check if intersection of two set is not empty without modifying the sets.
+	 * 
+	 * @param set1
+	 * @param set2
+	 * @return true if the intersection of the two sets is not empty, false
+	 *         otherwise
+	 */
+	private <T> boolean intersectionNotEmpty(Set<T> set1, Set<T> set2) {
+		HashSet<T> copySet1 = new HashSet<>(set1);
+		copySet1.retainAll(set2);
+		return (!copySet1.isEmpty());
 	}
 
 }

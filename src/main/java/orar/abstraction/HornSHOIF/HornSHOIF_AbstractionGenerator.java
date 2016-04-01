@@ -20,14 +20,7 @@ public class HornSHOIF_AbstractionGenerator extends HornSHIF_AbstractionGenerato
 	}
 
 	@Override
-	protected Set<OWLAxiom> generateAssertions(IndividualType type) {
-		Set<OWLAxiom> abstractAssertions = new HashSet<>();
-		abstractAssertions.addAll(super.generateAssertions(type));
-		abstractAssertions.addAll(generateAssertionsForConceptType(type));
-		return abstractAssertions;
-	}
-
-	private Set<OWLAxiom> generateAssertionsForConceptType(IndividualType type) {
+	protected Set<OWLAxiom> getConceptAssertionsForConceptType(IndividualType type) {
 		Set<OWLAxiom> abstractAssertions = new HashSet<>();
 		/*
 		 * create u
@@ -41,9 +34,8 @@ public class HornSHOIF_AbstractionGenerator extends HornSHIF_AbstractionGenerato
 		/*
 		 * create abstract class assertions for u
 		 */
-		abstractAssertions.addAll(getAbstractClassAssertions(u, type));
+		abstractAssertions.addAll(getConceptAssertions(u, type));
 		return abstractAssertions;
 	}
-	
-	
+
 }

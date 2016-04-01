@@ -20,9 +20,9 @@ import orar.abstraction.BasicTypeComputor;
 import orar.abstraction.PairOfSubjectAndObject;
 import orar.abstraction.TypeComputor;
 import orar.abstraction.HornSHIF.HornSHIF_AbstractionGenerator;
+import orar.data.AbstractDataFactory;
 import orar.data.SharedData;
-import orar.data.SharedMap;
-import orar.factory.AbstractDataFactory;
+import orar.data.SharedDataForTransferingEntailments;
 import orar.modeling.ontology.MapbasedOrarOntology;
 import orar.modeling.ontology.OrarOntology;
 import orar.type.IndividualType;
@@ -67,7 +67,7 @@ public class HornSHIF_AbstractionGeneratorTest {
 	OWLObjectProperty funcRole = testData.getRole("funcRole");
 	OWLObjectProperty invFuncRole = testData.getRole("invFuncRole");
 	SharedData sharedData = SharedData.getInstance();
-	SharedMap sharedMap = SharedMap.getInstance();
+	SharedDataForTransferingEntailments sharedMap = SharedDataForTransferingEntailments.getInstance();
 	AbstractDataFactory abstractDataFactory=AbstractDataFactory.getInstance();
 
 	@Test
@@ -216,6 +216,11 @@ public class HornSHIF_AbstractionGeneratorTest {
 		 */
 		PairOfSubjectAndObject x1y1 = new PairOfSubjectAndObject(x1, y1);
 		Assert.assertEquals(testData.getSetOfRoles(funcRole), sharedMap.getMap_XY_2_Roles().get(x1y1));
+		
+		/*
+		 * compare marking for x1
+		 */
+		Assert.assertEquals(testData.getSetOfIndividuals(x1), sharedMap.getxAbstractHavingFunctionalRole());
 	}
 
 	@Test
@@ -265,6 +270,11 @@ public class HornSHIF_AbstractionGeneratorTest {
 		 */
 		PairOfSubjectAndObject z1x1 = new PairOfSubjectAndObject(z1, x1);
 		Assert.assertEquals(testData.getSetOfRoles(invFuncRole), sharedMap.getMap_ZX_2_Roles().get(z1x1));
+		
+		/*
+		 * compare marking for z1
+		 */
+		Assert.assertEquals(testData.getSetOfIndividuals(z1), sharedMap.getzAbstractHavingInverseFunctionalRole());
 	}
 
 }
