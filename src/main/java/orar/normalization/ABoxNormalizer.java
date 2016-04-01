@@ -53,7 +53,7 @@ import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.SWRLRule;
 
-import orar.factory.NormalizationDataFactory;
+import orar.data.NormalizationDataFactory;
 
 /**
  * Normalize SameIndividualAxioms, DifferentIndividualAxioms Since they contain

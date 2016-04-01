@@ -6,8 +6,8 @@ import java.util.Stack;
 
 import orar.config.Configuration;
 import orar.config.LogInfo;
+import orar.data.NormalizationDataFactory;
 import orar.data.SharedData;
-import orar.factory.NormalizationDataFactory;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;

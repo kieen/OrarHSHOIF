@@ -22,7 +22,7 @@ import org.semanticweb.owlapi.reasoner.InferenceType;
 
 import orar.config.Configuration;
 import orar.config.DebugLevel;
-import orar.factory.NormalizationDataFactory;
+import orar.data.NormalizationDataFactory;
 
 /**
  * @author kien Using Hermit reasoner to compute role hierarchy, which is the

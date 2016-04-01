@@ -1,7 +1,7 @@
 package orar.io.ontologyreader;
 
+import orar.data.NormalizationDataFactory;
 import orar.dlfragmentvalidator.ValidatorDataFactory;
-import orar.factory.NormalizationDataFactory;
 import orar.modeling.ontology.MapbasedOrarOntology;
 import orar.modeling.ontology.OrarOntology;
 

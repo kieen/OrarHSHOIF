@@ -11,7 +11,7 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import junit.framework.Assert;
-import orar.factory.NormalizationDataFactory;
+import orar.data.NormalizationDataFactory;
 import orar.util.DefaultTestDataFactory;
 import orar.util.PrintingHelper;
 

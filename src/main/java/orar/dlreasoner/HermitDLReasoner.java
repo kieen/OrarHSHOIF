@@ -17,4 +17,9 @@ public class HermitDLReasoner extends DLReasonerTemplate {
 		return reasoner;
 	}
 
+	@Override
+	protected void dispose() {
+		reasoner.dispose();
+
+	}
 }

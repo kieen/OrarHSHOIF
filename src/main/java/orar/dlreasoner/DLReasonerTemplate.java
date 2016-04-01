@@ -89,6 +89,7 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 		computeEntailedSameasAssertions();
 		long endTime = System.currentTimeMillis();
 		this.entailmentComputed = true;
+		dispose();
 		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
 	}
 
@@ -140,5 +141,11 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 
 		}
 	}
+
+	/**
+	 * release resource from the reasoner. Stop Konclude server (in case of
+	 * using Konclude via OWLLink)
+	 */
+	protected abstract void dispose();
 
 }

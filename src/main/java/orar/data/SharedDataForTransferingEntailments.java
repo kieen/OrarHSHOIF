@@ -1,6 +1,7 @@
 package orar.data;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,8 +10,15 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 import orar.abstraction.PairOfSubjectAndObject;
 
-public class SharedMap {
-	private static SharedMap instance;
+/**
+ * Data using to transfer entailments from the abstraction to the original ABox.
+ * This data is created while generating the abstraction from types.
+ * 
+ * @author kien
+ *
+ */
+public class SharedDataForTransferingEntailments {
+	private static SharedDataForTransferingEntailments instance;
 
 	/*
 	 * Maps: x/y/z --> original individuals. x,y,z are abstract individuals for
@@ -34,7 +42,17 @@ public class SharedMap {
 	 */
 	private final Map<PairOfSubjectAndObject, Set<OWLObjectProperty>> zxMap2Roles;
 
-	private SharedMap() {
+	/*
+	 * A set of x whose type contains functional roles
+	 */
+	private final Set<OWLNamedIndividual> xAbstractHavingFunctionalRole;
+
+	/*
+	 * A set of z whose type contains inverse functional roles.
+	 */
+	private final Set<OWLNamedIndividual> zAbstractHavingInverseFunctionalRole;
+
+	private SharedDataForTransferingEntailments() {
 
 		this.xAbstract2OriginalIndividualsMap = new HashMap<>();
 		this.yAbstract2OriginalIndividualsMap = new HashMap<>();
@@ -45,11 +63,14 @@ public class SharedMap {
 		this.xyMap2Roles = new HashMap<>();
 		this.zxMap2Roles = new HashMap<>();
 
+		this.xAbstractHavingFunctionalRole = new HashSet<>();
+		this.zAbstractHavingInverseFunctionalRole = new HashSet<>();
+
 	}
 
-	public static SharedMap getInstance() {
+	public static SharedDataForTransferingEntailments getInstance() {
 		if (instance == null) {
-			instance = new SharedMap();
+			instance = new SharedDataForTransferingEntailments();
 		}
 		return instance;
 	}
@@ -79,6 +100,21 @@ public class SharedMap {
 	}
 
 	/**
+	 * @return a set of abstract indiv x whose type contains functional roles.
+	 */
+	public Set<OWLNamedIndividual> getxAbstractHavingFunctionalRole() {
+		return xAbstractHavingFunctionalRole;
+	}
+
+	/**
+	 * @return a set of abstract indiv z whose type contains inverse functional
+	 *         roles.
+	 */
+	public Set<OWLNamedIndividual> getzAbstractHavingInverseFunctionalRole() {
+		return zAbstractHavingInverseFunctionalRole;
+	}
+
+	/**
 	 * Clear all maps.
 	 */
 	public void clear() {
@@ -91,5 +127,8 @@ public class SharedMap {
 
 		this.xyMap2Roles.clear();
 		this.zxMap2Roles.clear();
+
+		this.xAbstractHavingFunctionalRole.clear();
+		this.zAbstractHavingInverseFunctionalRole.clear();
 	}
 }

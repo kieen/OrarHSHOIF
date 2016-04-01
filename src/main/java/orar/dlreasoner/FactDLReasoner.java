@@ -21,4 +21,10 @@ public class FactDLReasoner extends DLReasonerTemplate {
 		return reasoner;
 	}
 
+	@Override
+	protected void dispose() {
+		reasoner.dispose();
+
+	}
+
 }

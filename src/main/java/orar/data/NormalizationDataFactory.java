@@ -1,4 +1,4 @@
-package orar.factory;
+package orar.data;
 
 import java.util.HashMap;
 import java.util.HashSet;
