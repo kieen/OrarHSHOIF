@@ -11,33 +11,40 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 
 /**
- * Store some extra information of the ontology
+ * Store some extra information of the ontology:<br>
+ * -nominals <br>
+ * -nominalconcepts, e.g. concepts generated while normalizing nominals <br>
+ * -entailed functional roles <br>
+ * -entailed inverse functional roles <br>
+ * -entailed role hierarchy.
  * 
  * @author kien
  *
  */
-public class SharedData {
+public class MetaDataOfOntology {
 
-	private static SharedData instance;
+	private static MetaDataOfOntology instance;
 	private final Set<OWLNamedIndividual> nominals;
 	private final Set<OWLClass> nominalConcepts;
 
 	private final Set<OWLObjectProperty> functionalRoles;
 	private final Set<OWLObjectProperty> inverseFunctionalRoles;
+	private final Set<OWLObjectProperty> transitiveRoles;
 
 	private final Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> subRoleMap;
 
-	private SharedData() {
+	private MetaDataOfOntology() {
 		this.nominalConcepts = new HashSet<>();
 		this.nominals = new HashSet<>();
 		this.functionalRoles = new HashSet<>();
 		this.inverseFunctionalRoles = new HashSet<>();
+		this.transitiveRoles = new HashSet<>();
 		this.subRoleMap = new HashMap<OWLObjectProperty, Set<OWLObjectPropertyExpression>>();
 	}
 
-	public static SharedData getInstance() {
+	public static MetaDataOfOntology getInstance() {
 		if (instance == null) {
-			instance = new SharedData();
+			instance = new MetaDataOfOntology();
 		}
 		return instance;
 	}
@@ -62,11 +69,17 @@ public class SharedData {
 		return inverseFunctionalRoles;
 	}
 
+	
+	public Set<OWLObjectProperty> getTransitiveRoles() {
+		return transitiveRoles;
+	}
+
 	public void clear() {
 		this.nominalConcepts.clear();
 		this.nominals.clear();
 		this.functionalRoles.clear();
 		this.inverseFunctionalRoles.clear();
 		this.subRoleMap.clear();
+		this.transitiveRoles.clear();
 	}
 }

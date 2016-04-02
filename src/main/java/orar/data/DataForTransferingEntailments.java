@@ -17,8 +17,8 @@ import orar.abstraction.PairOfSubjectAndObject;
  * @author kien
  *
  */
-public class SharedDataForTransferingEntailments {
-	private static SharedDataForTransferingEntailments instance;
+public class DataForTransferingEntailments {
+	private static DataForTransferingEntailments instance;
 
 	/*
 	 * Maps: x/y/z --> original individuals. x,y,z are abstract individuals for
@@ -52,7 +52,7 @@ public class SharedDataForTransferingEntailments {
 	 */
 	private final Set<OWLNamedIndividual> zAbstractHavingInverseFunctionalRole;
 
-	private SharedDataForTransferingEntailments() {
+	private DataForTransferingEntailments() {
 
 		this.xAbstract2OriginalIndividualsMap = new HashMap<>();
 		this.yAbstract2OriginalIndividualsMap = new HashMap<>();
@@ -68,9 +68,9 @@ public class SharedDataForTransferingEntailments {
 
 	}
 
-	public static SharedDataForTransferingEntailments getInstance() {
+	public static DataForTransferingEntailments getInstance() {
 		if (instance == null) {
-			instance = new SharedDataForTransferingEntailments();
+			instance = new DataForTransferingEntailments();
 		}
 		return instance;
 	}

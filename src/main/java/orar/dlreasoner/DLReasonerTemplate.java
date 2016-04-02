@@ -76,9 +76,11 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 
 	@Override
 	public void computeEntailments() {
-		long startTime = System.currentTimeMillis();
 
 		this.reasoner = getOWLReasoner(owlOntology);
+
+		long startTime = System.currentTimeMillis();
+
 		this.reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS, InferenceType.OBJECT_PROPERTY_ASSERTIONS,
 				InferenceType.SAME_INDIVIDUAL);
 		if (!reasoner.isConsistent()) {
@@ -87,7 +89,9 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 		computeEntailedConceptAssertions();
 		computeEntailedRoleAssertions();
 		computeEntailedSameasAssertions();
+
 		long endTime = System.currentTimeMillis();
+
 		this.entailmentComputed = true;
 		dispose();
 		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
@@ -129,13 +133,13 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 	 * compute entailed concept assertions
 	 */
 	private void computeEntailedConceptAssertions() {
-		Set<OWLNamedIndividual> allIndividuals = this.owlOntology.getIndividualsInSignature(true);
-		for (OWLNamedIndividual indiv : allIndividuals) {
-			Set<OWLClass> entailedConcepts = reasoner.getTypes(indiv, false).getFlattened();
-			entailedConcepts.remove(OWLManager.getOWLDataFactory().getOWLThing());
-			for (OWLClass entailedConcept : entailedConcepts) {
-				OWLClassAssertionAxiom newConceptAssertion = this.dataFactory.getOWLClassAssertionAxiom(entailedConcept,
-						indiv);
+		Set<OWLClass> allConceptsNames = this.owlOntology.getClassesInSignature(true);
+		allConceptsNames.remove(OWLManager.getOWLDataFactory().getOWLThing());
+		for (OWLClass eachConceptName : allConceptsNames) {
+			Set<OWLNamedIndividual> instances = this.reasoner.getInstances(eachConceptName, false).getFlattened();
+			for (OWLNamedIndividual eachInstance : instances) {
+				OWLClassAssertionAxiom newConceptAssertion = this.dataFactory.getOWLClassAssertionAxiom(eachConceptName,
+						eachInstance);
 				this.conceptAssertions.add(newConceptAssertion);
 			}
 

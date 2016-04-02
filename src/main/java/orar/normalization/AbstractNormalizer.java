@@ -7,7 +7,7 @@ import java.util.Stack;
 import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.data.NormalizationDataFactory;
-import orar.data.SharedData;
+import orar.data.MetaDataOfOntology;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -223,11 +223,11 @@ public abstract class AbstractNormalizer implements Normalizer {
 	 * 
 	 */
 	private void normalizeNominalsInTBox() {
-		Set<OWLNamedIndividual> nominals = SharedData.getInstance().getNominals();
+		Set<OWLNamedIndividual> nominals = MetaDataOfOntology.getInstance().getNominals();
 
 		for (OWLNamedIndividual nominal : nominals) {
 			OWLClass nominalConcept = NormalizationDataFactory.getInstance().getFreshOWLClassForNominal(nominal);
-			SharedData.getInstance().getNominalConcepts().add(nominalConcept);
+			MetaDataOfOntology.getInstance().getNominalConcepts().add(nominalConcept);
 			OWLClassAssertionAxiom newAssertion = owlDataFactory.getOWLClassAssertionAxiom(nominalConcept, nominal);
 			this.aboxAxiomsByNomalizingNominals.add(newAssertion);
 

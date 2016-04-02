@@ -20,8 +20,8 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import orar.data.AbstractDataFactory;
-import orar.data.SharedData;
-import orar.data.SharedDataForTransferingEntailments;
+import orar.data.MetaDataOfOntology;
+import orar.data.DataForTransferingEntailments;
 import orar.modeling.ontology.OrarOntology;
 import orar.type.IndividualType;
 
@@ -33,8 +33,8 @@ import orar.type.IndividualType;
  */
 public abstract class AbstractionGeneratorTemplate implements AbstractionGenerator {
 
-	protected final SharedDataForTransferingEntailments sharedMap;
-	protected final SharedData sharedData;
+	protected final DataForTransferingEntailments sharedMap;
+	protected final MetaDataOfOntology sharedData;
 
 	protected final OWLOntologyManager manager;
 	protected final OWLDataFactory owlDataFactory;
@@ -48,8 +48,8 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 
 	public AbstractionGeneratorTemplate(OrarOntology orarOntology,
 			Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
-		this.sharedMap = SharedDataForTransferingEntailments.getInstance();
-		this.sharedData = SharedData.getInstance();
+		this.sharedMap = DataForTransferingEntailments.getInstance();
+		this.sharedData = MetaDataOfOntology.getInstance();
 		this.manager = OWLManager.createOWLOntologyManager();
 		this.owlDataFactory = OWLManager.getOWLDataFactory();
 		this.abstractDataFactory = AbstractDataFactory.getInstance();

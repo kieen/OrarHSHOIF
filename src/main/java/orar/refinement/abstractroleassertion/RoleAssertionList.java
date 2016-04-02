@@ -12,13 +12,13 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
  * @author kien
  *
  */
-public class ListOfRoleAssertion {
+public class RoleAssertionList {
 
 	private final List<OWLNamedIndividual> subjects;
 	private final List<OWLObjectProperty> roles;
 	private final List<OWLNamedIndividual> objects;
 
-	public ListOfRoleAssertion() {
+	public RoleAssertionList() {
 
 		this.subjects = new ArrayList<>();
 		this.roles = new ArrayList<>();

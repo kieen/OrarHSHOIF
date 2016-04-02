@@ -31,7 +31,7 @@ import org.semanticweb.owlapi.model.OWLObjectUnionOf;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
 import orar.data.NormalizationDataFactory;
-import orar.data.SharedData;
+import orar.data.MetaDataOfOntology;
 import orar.normalization.SubClassNormalizer;
 import orar.normalization.SuperClassNormalizer;
 
@@ -48,13 +48,13 @@ public class ALCHOI_SuperClassNormalizer implements SuperClassNormalizer {
 	protected final NormalizationDataFactory normalizerDataFactory;
 	private static Logger logger = Logger.getLogger(ALCHOI_SuperClassNormalizer.class);
 	private SubClassNormalizer subClassNormalizer;
-	protected final SharedData sharedData;
+	protected final MetaDataOfOntology sharedData;
 
 	public ALCHOI_SuperClassNormalizer(Stack<OWLSubClassOfAxiom> stack) {
 		this.stack = stack;
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		normalizerDataFactory = NormalizationDataFactory.getInstance();
-		sharedData = SharedData.getInstance();
+		sharedData = MetaDataOfOntology.getInstance();
 
 	}
 

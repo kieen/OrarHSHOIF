@@ -22,8 +22,8 @@ import orar.abstraction.BasicTypeComputor;
 import orar.abstraction.PairOfSubjectAndObject;
 import orar.abstraction.TypeComputor;
 import orar.data.AbstractDataFactory;
-import orar.data.SharedData;
-import orar.data.SharedDataForTransferingEntailments;
+import orar.data.MetaDataOfOntology;
+import orar.data.DataForTransferingEntailments;
 import orar.modeling.ontology.MapbasedOrarOntology;
 import orar.modeling.ontology.OrarOntology;
 import orar.type.IndividualType;
@@ -67,8 +67,8 @@ public class HornSHOIF_AbstractionGeneratorTest {
 
 	OWLObjectProperty funcRole = testData.getRole("funcRole");
 	OWLObjectProperty invFuncRole = testData.getRole("invFuncRole");
-	SharedData sharedData = SharedData.getInstance();
-	SharedDataForTransferingEntailments sharedMap = SharedDataForTransferingEntailments.getInstance();
+	MetaDataOfOntology sharedData = MetaDataOfOntology.getInstance();
+	DataForTransferingEntailments sharedMap = DataForTransferingEntailments.getInstance();
 	AbstractDataFactory abstractDataFactory = AbstractDataFactory.getInstance();
 
 	@Test

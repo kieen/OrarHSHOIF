@@ -7,7 +7,7 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 import orar.dlreasoner.DLReasoner;
-import orar.refinement.abstractroleassertion.EntailedAbstractRoleAssertions;
+import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
 
 /**
  * Interface for reasoners used to materialize abstraction. This interface is
@@ -35,9 +35,9 @@ public interface InnerReasoner {
 
 	/**
 	 * @return entailed role assertions stored in several lists. See
-	 *         {@link EntailedAbstractRoleAssertions}.
+	 *         {@link AbstractRoleAssertionBox}.
 	 */
-	public EntailedAbstractRoleAssertions getEntailedRoleAssertions();
+	public AbstractRoleAssertionBox getEntailedRoleAssertions();
 
 	/**
 	 * Get SameAs assertions in form of a map.

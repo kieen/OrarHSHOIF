@@ -1,10 +1,21 @@
-package orar.util;
+package MarkingAxiomsAdder;
 
+import org.junit.Test;
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-public class SignatureForTestData {
+import orar.data.MetaDataOfOntology;
+import orar.inerreasoner.MarkingAxiomAdder;
+import orar.util.DefaultTestDataFactory;
+import orar.util.PrintingHelper;
+
+public class MarkingAxiomAdderTest {
+
 	DefaultTestDataFactory testData = DefaultTestDataFactory.getInsatnce();
 	/*
 	 * Signature
@@ -18,8 +29,6 @@ public class SignatureForTestData {
 	OWLNamedIndividual b2 = testData.getIndividual("b2");
 
 	OWLNamedIndividual c = testData.getIndividual("c");
-	
-	OWLNamedIndividual o = testData.getIndividual("o");
 
 	OWLClass A = testData.getConcept("A");
 	OWLClass A1 = testData.getConcept("A1");
@@ -30,7 +39,6 @@ public class SignatureForTestData {
 	OWLClass B2 = testData.getConcept("B2");
 
 	OWLClass C = testData.getConcept("C");
-	
 	/*
 	 * Nominal-Concept, e.g. concept generated for each nominal.
 	 */
@@ -41,9 +49,26 @@ public class SignatureForTestData {
 	OWLObjectProperty R2 = testData.getRole("R2");
 
 	OWLObjectProperty S = testData.getRole("S");
-
 	OWLObjectProperty T = testData.getRole("T");
 	OWLObjectProperty F = testData.getRole("F");
 	OWLObjectProperty InvF = testData.getRole("InvF");
+	/*
+	 * others
+	 */
+	OWLOntologyManager ontoManager = OWLManager.createOWLOntologyManager();
+	MetaDataOfOntology metaDataOfOntology = MetaDataOfOntology.getInstance();
+
+	@Test
+	public void shouldAddAxioms() throws OWLOntologyCreationException {
+		this.metaDataOfOntology.getNominalConcepts().add(NoC);
+		this.metaDataOfOntology.getFunctionalRoles().add(F);
+		this.metaDataOfOntology.getTransitiveRoles().add(T);
+
+		OWLOntology ontology = ontoManager.createOntology();
+		MarkingAxiomAdder axiomAdder = new MarkingAxiomAdder(ontology);
+		axiomAdder.addMarkingAxioms();
+		PrintingHelper.printSet(ontology.getAxioms());
+		// TODO: Looks good :-), write code to compare result
+	}
 
 }
