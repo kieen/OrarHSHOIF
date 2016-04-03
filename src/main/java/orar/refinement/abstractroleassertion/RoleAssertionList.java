@@ -1,10 +1,15 @@
 package orar.refinement.abstractroleassertion;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 
 /**
  * A list of role assertions.
@@ -63,4 +68,18 @@ public class RoleAssertionList {
 		return this.objects.get(index);
 	}
 
+	/**
+	 * @return a set of OWLAPI role assertions in this list. This method is used
+	 *         only for tetsing
+	 */
+	public Set<OWLObjectPropertyAssertionAxiom> getSetOfRoleAssertions() {
+		OWLDataFactory dataFactory = OWLManager.getOWLDataFactory();
+		Set<OWLObjectPropertyAssertionAxiom> roleAssertions = new HashSet<>();
+		for (int i = 0; i < getSize(); i++) {
+			OWLObjectPropertyAssertionAxiom newAssertion = dataFactory.getOWLObjectPropertyAssertionAxiom(getRole(i),
+					getSubject(i), getObject(i));
+			roleAssertions.add(newAssertion);
+		}
+		return roleAssertions;
+	}
 }

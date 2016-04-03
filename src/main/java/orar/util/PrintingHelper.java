@@ -76,6 +76,8 @@ public class PrintingHelper {
 			for (T element : set) {
 				loggerOfHelper.info(element);
 			}
+		} else {
+			loggerOfHelper.info("Empty set");
 		}
 	}
 

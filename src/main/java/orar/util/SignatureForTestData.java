@@ -21,6 +21,7 @@ public class SignatureForTestData {
 	
 	OWLNamedIndividual o = testData.getIndividual("o");
 
+	
 	OWLClass A = testData.getConcept("A");
 	OWLClass A1 = testData.getConcept("A1");
 	OWLClass A2 = testData.getConcept("A2");
@@ -31,6 +32,7 @@ public class SignatureForTestData {
 
 	OWLClass C = testData.getConcept("C");
 	
+	OWLClass No = testData.getConcept("No");
 	/*
 	 * Nominal-Concept, e.g. concept generated for each nominal.
 	 */
@@ -43,6 +45,7 @@ public class SignatureForTestData {
 	OWLObjectProperty S = testData.getRole("S");
 
 	OWLObjectProperty T = testData.getRole("T");
+	OWLObjectProperty invT = testData.getRole("InvT");
 	OWLObjectProperty F = testData.getRole("F");
 	OWLObjectProperty InvF = testData.getRole("InvF");
 

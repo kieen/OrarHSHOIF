@@ -292,7 +292,9 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 			 * assertions.
 			 */
 			equivalentIndividuals.remove(indiv);
-			this.sameAsMap.put(indiv, equivalentIndividuals);
+			if (!equivalentIndividuals.isEmpty()) {
+				this.sameAsMap.put(indiv, equivalentIndividuals);
+			}
 		}
 
 	}

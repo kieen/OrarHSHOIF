@@ -1,7 +1,11 @@
 package orar.refinement.abstractroleassertion;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 
 /**
  * Data structure for entailed abstract role assertions. It contains several
@@ -117,4 +121,12 @@ public class AbstractRoleAssertionBox {
 		return uxRoleAssertionsForCTypeAndType;
 	}
 
+	public Set<OWLObjectPropertyAssertionAxiom> getSetOfRoleAssertions() {
+		Set<OWLObjectPropertyAssertionAxiom> roleAssertions = new HashSet<>();
+		roleAssertions.addAll(this.uuLoopRoleAssertionsForCType.getSetOfRoleAssertions());
+		roleAssertions.addAll(this.uxRoleAssertionsForCTypeAndType.getSetOfRoleAssertions());
+		roleAssertions.addAll(this.xyRoleAssertionsForType.getSetOfRoleAssertions());
+		roleAssertions.addAll(this.zxRoleAssertionsForType.getSetOfRoleAssertions());
+		return roleAssertions;
+	}
 }

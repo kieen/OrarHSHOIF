@@ -57,6 +57,9 @@ public class MetaDataOfOntology {
 		return nominalConcepts;
 	}
 
+	/**
+	 * @return get all (entailed) functional roles (in/by) the ontology.
+	 */
 	public Set<OWLObjectProperty> getFunctionalRoles() {
 		return functionalRoles;
 	}
@@ -69,7 +72,6 @@ public class MetaDataOfOntology {
 		return inverseFunctionalRoles;
 	}
 
-	
 	public Set<OWLObjectProperty> getTransitiveRoles() {
 		return transitiveRoles;
 	}
