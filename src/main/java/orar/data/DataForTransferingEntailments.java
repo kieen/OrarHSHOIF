@@ -36,11 +36,11 @@ public class DataForTransferingEntailments {
 	/*
 	 * Map: (x,y) --> r (functional role) in the abstract abox
 	 */
-	private final Map<PairOfSubjectAndObject, Set<OWLObjectProperty>> xyMap2Roles;
+	private final Map<PairOfSubjectAndObject, OWLObjectProperty> xyMap2Role;
 	/*
 	 * Map: (z,x) ---> r (inverse functional role) in the abstract abox
 	 */
-	private final Map<PairOfSubjectAndObject, Set<OWLObjectProperty>> zxMap2Roles;
+	private final Map<PairOfSubjectAndObject, OWLObjectProperty> zxMap2Role;
 
 	/*
 	 * A set of x whose type contains functional roles
@@ -60,8 +60,8 @@ public class DataForTransferingEntailments {
 
 		this.uAbstract2OriginalIndividualsMap = new HashMap<>();
 
-		this.xyMap2Roles = new HashMap<>();
-		this.zxMap2Roles = new HashMap<>();
+		this.xyMap2Role = new HashMap<>();
+		this.zxMap2Role = new HashMap<>();
 
 		this.xAbstractHavingFunctionalRole = new HashSet<>();
 		this.zAbstractHavingInverseFunctionalRole = new HashSet<>();
@@ -91,12 +91,12 @@ public class DataForTransferingEntailments {
 		return uAbstract2OriginalIndividualsMap;
 	}
 
-	public Map<PairOfSubjectAndObject, Set<OWLObjectProperty>> getMap_XY_2_Roles() {
-		return xyMap2Roles;
+	public Map<PairOfSubjectAndObject, OWLObjectProperty> getMap_XY_2_Role() {
+		return xyMap2Role;
 	}
 
-	public Map<PairOfSubjectAndObject, Set<OWLObjectProperty>> getMap_ZX_2_Roles() {
-		return zxMap2Roles;
+	public Map<PairOfSubjectAndObject, OWLObjectProperty> getMap_ZX_2_Role() {
+		return zxMap2Role;
 	}
 
 	/**
@@ -114,6 +114,29 @@ public class DataForTransferingEntailments {
 		return zAbstractHavingInverseFunctionalRole;
 	}
 
+	public Set<OWLNamedIndividual> getOriginalIndividuals(OWLNamedIndividual abstractInd) {
+		Set<OWLNamedIndividual> originalInds = new HashSet<>();
+
+		Set<OWLNamedIndividual> originalOfX = this.xAbstract2OriginalIndividualsMap.get(abstractInd);
+		Set<OWLNamedIndividual> originalOfY = this.yAbstract2OriginalIndividualsMap.get(abstractInd);
+		Set<OWLNamedIndividual> originalOfZ = this.zAbstract2OriginalIndividualsMap.get(abstractInd);
+		Set<OWLNamedIndividual> originalOfU = this.uAbstract2OriginalIndividualsMap.get(abstractInd);
+		/*
+		 * an abstract individual can ONLY be either x,y,z, or u.
+		 */
+		if (originalOfX != null) {
+			originalInds.addAll(originalOfX);
+		} else if (originalOfY != null) {
+			originalInds.addAll(originalOfY);
+		} else if (originalOfZ != null) {
+			originalInds.addAll(originalOfZ);
+		} else if (originalOfU != null) {
+			originalInds.addAll(originalOfU);
+		}
+
+		return originalInds;
+	}
+
 	/**
 	 * Clear all maps.
 	 */
@@ -125,8 +148,8 @@ public class DataForTransferingEntailments {
 
 		this.uAbstract2OriginalIndividualsMap.clear();
 
-		this.xyMap2Roles.clear();
-		this.zxMap2Roles.clear();
+		this.xyMap2Role.clear();
+		this.zxMap2Role.clear();
 
 		this.xAbstractHavingFunctionalRole.clear();
 		this.zAbstractHavingInverseFunctionalRole.clear();

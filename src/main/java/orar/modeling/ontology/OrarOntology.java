@@ -158,8 +158,13 @@ public interface OrarOntology {
 
 	public boolean addManyConceptAssertions(OWLNamedIndividual originalInd, Set<OWLClass> concepts);
 
-	/*
-	 * Adding role assertions
+	/**
+	 * Adding role assertions.
+	 * 
+	 * @param subject
+	 * @param role
+	 * @param object
+	 * @return true if new assertion has been added, false otherwise.
 	 */
 	public boolean addRoleAssertion(OWLNamedIndividual subject, OWLObjectProperty role, OWLNamedIndividual object);
 

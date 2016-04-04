@@ -28,10 +28,10 @@ public class AbstractRoleAssertionBox {
 	 */
 	private final RoleAssertionList zxRoleAssertionsForType;
 	/**
-	 * role assertions of the form T(u,u), where T is transitive, and u is the
+	 * role assertions of the form T(u,u), (or T(x,x) in case of Horn-SHIF, where T is transitive, and u is the
 	 * representative individual for concept-type
 	 */
-	private final RoleAssertionList uuLoopRoleAssertionsForCType;
+	private final RoleAssertionList loopRoleAssertions;
 	/**
 	 * role assertions of the form R(u,x), where u is the representative for the
 	 * concept-type and x is the representative for the combined-type.
@@ -41,7 +41,7 @@ public class AbstractRoleAssertionBox {
 	public AbstractRoleAssertionBox() {
 		this.xyRoleAssertionsForType = new RoleAssertionList();
 		this.zxRoleAssertionsForType = new RoleAssertionList();
-		this.uuLoopRoleAssertionsForCType = new RoleAssertionList();
+		this.loopRoleAssertions = new RoleAssertionList();
 		this.uxRoleAssertionsForCTypeAndType = new RoleAssertionList();
 	}
 
@@ -85,8 +85,8 @@ public class AbstractRoleAssertionBox {
 	 * @param role
 	 *            a transitive role
 	 */
-	public void addUU_LoopRoleAssertionForCType(OWLNamedIndividual subjectEqualToObject, OWLObjectProperty role) {
-		this.uuLoopRoleAssertionsForCType.addRoleAssertion(subjectEqualToObject, role, subjectEqualToObject);
+	public void addLoopRoleAssertion(OWLNamedIndividual subjectEqualToObject, OWLObjectProperty role) {
+		this.loopRoleAssertions.addRoleAssertion(subjectEqualToObject, role, subjectEqualToObject);
 	}
 
 	/**
@@ -105,25 +105,27 @@ public class AbstractRoleAssertionBox {
 		this.uxRoleAssertionsForCTypeAndType.addRoleAssertion(subject, role, object);
 	}
 
-	/*
-	 * getters
-	 * 
-	 */
-	public RoleAssertionList getTypeRoleAssertions() {
+	
+
+	public RoleAssertionList getXyRoleAssertionsForType() {
 		return xyRoleAssertionsForType;
 	}
 
-	public RoleAssertionList getLoopCTypeRoleAssertions() {
-		return uuLoopRoleAssertionsForCType;
+	public RoleAssertionList getZxRoleAssertionsForType() {
+		return zxRoleAssertionsForType;
 	}
 
-	public RoleAssertionList getCtypeAndTypeRoleAssertions() {
+	public RoleAssertionList getLoopRoleAssertions() {
+		return loopRoleAssertions;
+	}
+
+	public RoleAssertionList getUxRoleAssertionsForCTypeAndType() {
 		return uxRoleAssertionsForCTypeAndType;
 	}
 
 	public Set<OWLObjectPropertyAssertionAxiom> getSetOfRoleAssertions() {
 		Set<OWLObjectPropertyAssertionAxiom> roleAssertions = new HashSet<>();
-		roleAssertions.addAll(this.uuLoopRoleAssertionsForCType.getSetOfRoleAssertions());
+		roleAssertions.addAll(this.loopRoleAssertions.getSetOfRoleAssertions());
 		roleAssertions.addAll(this.uxRoleAssertionsForCTypeAndType.getSetOfRoleAssertions());
 		roleAssertions.addAll(this.xyRoleAssertionsForType.getSetOfRoleAssertions());
 		roleAssertions.addAll(this.zxRoleAssertionsForType.getSetOfRoleAssertions());

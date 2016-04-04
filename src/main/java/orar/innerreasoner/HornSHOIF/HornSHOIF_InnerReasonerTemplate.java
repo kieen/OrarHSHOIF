@@ -30,7 +30,7 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 			for (OWLObjectProperty tranRol : this.metadataOfOntology.getTransitiveRoles()) {
 				Set<OWLNamedIndividual> objects = reasoner.getObjectPropertyValues(eachU, tranRol).getFlattened();
 				if (objects.contains(eachU)) {
-					this.roleAssertionList.addUU_LoopRoleAssertionForCType(eachU, tranRol);
+					this.roleAssertionList.addLoopRoleAssertion(eachU, tranRol);
 				}
 			}
 		}

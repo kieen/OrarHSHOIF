@@ -212,12 +212,8 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 			 */
 			if (this.sharedData.getInverseFunctionalRoles().contains(preRole)) {
 				PairOfSubjectAndObject zxPair = new PairOfSubjectAndObject(z, x);
-				Set<OWLObjectProperty> existingRoles = this.sharedMap.getMap_ZX_2_Roles().get(zxPair);
-				if (existingRoles == null) {
-					existingRoles = new HashSet<>();
-				}
-				existingRoles.add(preRole);
-				this.sharedMap.getMap_ZX_2_Roles().put(zxPair, existingRoles);
+
+				this.sharedMap.getMap_ZX_2_Role().put(zxPair, preRole);
 			}
 
 		}
@@ -254,12 +250,8 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 			 */
 			if (this.sharedData.getFunctionalRoles().contains(succRole)) {
 				PairOfSubjectAndObject xyPair = new PairOfSubjectAndObject(x, y);
-				Set<OWLObjectProperty> existingRoles = this.sharedMap.getMap_XY_2_Roles().get(xyPair);
-				if (existingRoles == null) {
-					existingRoles = new HashSet<>();
-				}
-				existingRoles.add(succRole);
-				this.sharedMap.getMap_XY_2_Roles().put(xyPair, existingRoles);
+
+				this.sharedMap.getMap_XY_2_Role().put(xyPair, succRole);
 			}
 
 		}

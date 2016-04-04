@@ -221,6 +221,9 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 			} else if (this.axiomsAdder.getHasTranConcepts().contains(eachConceptName)) {
 				this.instancesOfHasTranConcepts.addAll(instances);
 			} else {
+				/*
+				 * filter out asserted instances
+				 */
 				Set<OWLClassAssertionAxiom> assertedAssertions = this.owlOntology
 						.getClassAssertionAxioms(eachConceptName);
 				Set<OWLNamedIndividual> assertedIndividuals = new HashSet<>();
@@ -228,6 +231,10 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 					assertedIndividuals.add(eachAssertion.getIndividual().asOWLNamedIndividual());
 				}
 				instances.removeAll(assertedIndividuals);
+				/*
+				 * filter out U-individuals (in case of Horn-SHOIF)
+				 */
+				instances.removeAll(this.abstractDataFactory.getUAbstractIndividuals());
 				putIndividual2ConceptMap(instances, eachConceptName);
 			}
 		}

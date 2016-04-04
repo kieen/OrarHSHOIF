@@ -143,7 +143,7 @@ public class HornSHOIF_AbstractionGeneratorTest {
 		 * compare mapping for x1y1
 		 */
 		PairOfSubjectAndObject x1y1 = new PairOfSubjectAndObject(x1, y1);
-		Assert.assertEquals(testData.getSetOfRoles(funcRole), sharedMap.getMap_XY_2_Roles().get(x1y1));
+		Assert.assertEquals(funcRole, sharedMap.getMap_XY_2_Role().get(x1y1));
 	}
 
 	

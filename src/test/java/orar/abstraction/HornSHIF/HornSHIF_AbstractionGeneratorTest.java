@@ -132,7 +132,7 @@ public class HornSHIF_AbstractionGeneratorTest {
 		 * compare mapping for x1y1
 		 */
 		PairOfSubjectAndObject x1y1 = new PairOfSubjectAndObject(x1, y1);
-		Assert.assertEquals(testData.getSetOfRoles(funcRole), sharedMap.getMap_XY_2_Roles().get(x1y1));
+		Assert.assertEquals(funcRole, sharedMap.getMap_XY_2_Role().get(x1y1));
 	}
 
 	@Test
@@ -215,7 +215,7 @@ public class HornSHIF_AbstractionGeneratorTest {
 		 * compare mapping for x1y1
 		 */
 		PairOfSubjectAndObject x1y1 = new PairOfSubjectAndObject(x1, y1);
-		Assert.assertEquals(testData.getSetOfRoles(funcRole), sharedMap.getMap_XY_2_Roles().get(x1y1));
+		Assert.assertEquals(funcRole, sharedMap.getMap_XY_2_Role().get(x1y1));
 		
 		/*
 		 * compare marking for x1
@@ -269,7 +269,7 @@ public class HornSHIF_AbstractionGeneratorTest {
 		 * compare mapping for z1x1
 		 */
 		PairOfSubjectAndObject z1x1 = new PairOfSubjectAndObject(z1, x1);
-		Assert.assertEquals(testData.getSetOfRoles(invFuncRole), sharedMap.getMap_ZX_2_Roles().get(z1x1));
+		Assert.assertEquals(invFuncRole, sharedMap.getMap_ZX_2_Role().get(z1x1));
 		
 		/*
 		 * compare marking for z1
