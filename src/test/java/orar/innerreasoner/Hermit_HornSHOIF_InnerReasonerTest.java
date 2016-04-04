@@ -30,13 +30,13 @@ import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
-import orar.innerreasoner.HermitInnerReasoner;
 import orar.innerreasoner.InnerReasoner;
+import orar.innerreasoner.HornSHOIF.Hermit_HornSHOIF_InnerReasoner;
 import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
 import orar.util.DefaultTestDataFactory;
 import orar.util.PrintingHelper;
 
-public class HermitInnerReasonerTest {
+public class Hermit_HornSHOIF_InnerReasonerTest {
 	DefaultTestDataFactory testData = DefaultTestDataFactory.getInsatnce();
 	/*
 	 * Signature
@@ -118,6 +118,9 @@ public class HermitInnerReasonerTest {
 		 * prepare some information used in optimization, e.g. trans role,
 		 * marked abstract individuals,...
 		 */
+		this.metaDataOfOntology.getTransitiveRoles().clear();
+		this.abstractDataFactory.getXAbstractIndividuals().clear();
+		this.abstractDataFactory.getUAbstractIndividuals().clear();
 		this.metaDataOfOntology.getTransitiveRoles().add(T);
 		this.abstractDataFactory.getXAbstractIndividuals().add(a);
 		this.abstractDataFactory.getUAbstractIndividuals().add(a);
@@ -130,7 +133,7 @@ public class HermitInnerReasonerTest {
 		PrintingHelper.printString("===Result by a DL reasoner:===");
 		PrintingHelper.printSet(expectedResult);
 
-		InnerReasoner hermitInnerReasoner = new HermitInnerReasoner(ontology);
+		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
 		hermitInnerReasoner.computeEntailments();
 		AbstractRoleAssertionBox entailedRoleAssertionBox = hermitInnerReasoner.getEntailedRoleAssertions();
 		Set<OWLObjectPropertyAssertionAxiom> actualResult = entailedRoleAssertionBox.getSetOfRoleAssertions();
@@ -191,6 +194,13 @@ public class HermitInnerReasonerTest {
 		 * prepare some information used in optimization, e.g. trans role,
 		 * marked abstract individuals,...
 		 */
+		// clear existing data
+		this.metaDataOfOntology.getFunctionalRoles().clear();
+		this.metaDataOfOntology.getNominalConcepts().clear();
+		this.abstractDataFactory.getXAbstractIndividuals().clear();
+		this.abstractDataFactory.getUAbstractIndividuals().clear();
+		
+		// add necessary data
 		this.metaDataOfOntology.getFunctionalRoles().add(F);
 		this.metaDataOfOntology.getNominalConcepts().add(No);
 		this.abstractDataFactory.getXAbstractIndividuals().add(a);
@@ -208,7 +218,7 @@ public class HermitInnerReasonerTest {
 		expectedResult.put(a, testData.getSetOfIndividuals(b));
 		expectedResult.put(b, testData.getSetOfIndividuals(a));
 
-		InnerReasoner hermitInnerReasoner = new HermitInnerReasoner(ontology);
+		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
 		hermitInnerReasoner.computeEntailments();
 		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> actualResult = hermitInnerReasoner.getSameAsMap();
 
@@ -281,6 +291,13 @@ public class HermitInnerReasonerTest {
 		 * prepare some information used in optimization, e.g. trans role,
 		 * marked abstract individuals,...
 		 */
+		// clear old data
+		this.metaDataOfOntology.getTransitiveRoles().clear();
+		this.metaDataOfOntology.getNominalConcepts().clear();
+		this.abstractDataFactory.getXAbstractIndividuals().clear();
+		this.abstractDataFactory.getUAbstractIndividuals().clear();
+				
+		// add necessary data
 		this.metaDataOfOntology.getTransitiveRoles().add(T);
 		this.metaDataOfOntology.getNominalConcepts().add(No);
 		this.abstractDataFactory.getXAbstractIndividuals().add(a);
@@ -299,7 +316,7 @@ public class HermitInnerReasonerTest {
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(T, a, b));
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(T, o, b));
 
-		InnerReasoner hermitInnerReasoner = new HermitInnerReasoner(ontology);
+		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
 		hermitInnerReasoner.computeEntailments();
 		Set<OWLObjectPropertyAssertionAxiom> actualResult = hermitInnerReasoner.getEntailedRoleAssertions()
 				.getSetOfRoleAssertions();
@@ -363,6 +380,14 @@ public class HermitInnerReasonerTest {
 		 * prepare some information used in optimization, e.g. trans role,
 		 * marked abstract individuals,...
 		 */
+		//clear old data
+		this.metaDataOfOntology.getFunctionalRoles().clear();
+		this.metaDataOfOntology.getFunctionalRoles().clear();
+		this.abstractDataFactory.getXAbstractIndividuals().clear();
+		this.abstractDataFactory.getYAbstractIndividuals().clear();
+		this.dataForTransferingEntailments.getxAbstractHavingFunctionalRole().clear();
+		this.dataForTransferingEntailments.getzAbstractHavingInverseFunctionalRole().clear();
+		//add neccessary data
 		this.metaDataOfOntology.getFunctionalRoles().add(F);
 		this.metaDataOfOntology.getFunctionalRoles().add(R);
 		this.abstractDataFactory.getXAbstractIndividuals().add(a);
@@ -381,7 +406,7 @@ public class HermitInnerReasonerTest {
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(R, a, b));
 		
 
-		InnerReasoner hermitInnerReasoner = new HermitInnerReasoner(ontology);
+		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
 		hermitInnerReasoner.computeEntailments();
 		Set<OWLObjectPropertyAssertionAxiom> actualResult = hermitInnerReasoner.getEntailedRoleAssertions()
 				.getSetOfRoleAssertions();

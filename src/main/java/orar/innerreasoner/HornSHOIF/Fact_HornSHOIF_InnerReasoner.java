@@ -1,4 +1,4 @@
-package orar.innerreasoner;
+package orar.innerreasoner.HornSHOIF;
 
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -6,9 +6,9 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
 import uk.ac.manchester.cs.jfact.JFactFactory;
 
-public class FactInnerReasoner extends InnerReasonerTemplate {
+public class Fact_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTemplate {
 
-	public FactInnerReasoner(OWLOntology owlOntology) {
+	public Fact_HornSHOIF_InnerReasoner(OWLOntology owlOntology) {
 		super(owlOntology);
 
 	}

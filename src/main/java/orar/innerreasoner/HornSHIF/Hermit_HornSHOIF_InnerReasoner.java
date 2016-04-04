@@ -1,12 +1,12 @@
-package orar.innerreasoner;
+package orar.innerreasoner.HornSHIF;
 
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
-public class HermitInnerReasoner extends InnerReasonerTemplate {
+public class Hermit_HornSHOIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
 
-	public HermitInnerReasoner(OWLOntology owlOntology) {
+	public Hermit_HornSHOIF_InnerReasoner(OWLOntology owlOntology) {
 		super(owlOntology);
 
 	}

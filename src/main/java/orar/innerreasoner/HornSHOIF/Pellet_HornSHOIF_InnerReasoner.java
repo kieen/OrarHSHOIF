@@ -1,13 +1,13 @@
-package orar.innerreasoner;
+package orar.innerreasoner.HornSHOIF;
 
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 
-public class PelletInnerReasoner extends InnerReasonerTemplate {
+public class Pellet_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTemplate {
 
-	public PelletInnerReasoner(OWLOntology owlOntology) {
+	public Pellet_HornSHOIF_InnerReasoner(OWLOntology owlOntology) {
 		super(owlOntology);
 
 	}

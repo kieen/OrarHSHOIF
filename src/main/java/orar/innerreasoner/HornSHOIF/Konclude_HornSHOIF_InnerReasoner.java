@@ -1,4 +1,4 @@
-package orar.innerreasoner;
+package orar.innerreasoner.HornSHOIF;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -17,18 +17,18 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
 import orar.config.Configuration;
 
-public class KoncludeInnerReasoner extends InnerReasonerTemplate {
+public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTemplate {
 	private int portNumber;
 	private ExecuteWatchdog watchdog;
-	private static Logger logger = Logger.getLogger(KoncludeInnerReasoner.class);
+	private static Logger logger = Logger.getLogger(Konclude_HornSHOIF_InnerReasoner.class);
 
-	public KoncludeInnerReasoner(OWLOntology owlOntology) {
+	public Konclude_HornSHOIF_InnerReasoner(OWLOntology owlOntology) {
 		super(owlOntology);
 		this.portNumber = 8080;// default value
 
 	}
 
-	public KoncludeInnerReasoner(OWLOntology ontology, int portNumber) {
+	public Konclude_HornSHOIF_InnerReasoner(OWLOntology ontology, int portNumber) {
 		super(ontology);
 		this.portNumber = portNumber;
 	}
