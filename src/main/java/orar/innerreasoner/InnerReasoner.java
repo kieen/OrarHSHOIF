@@ -1,4 +1,4 @@
-package orar.inerreasoner;
+package orar.innerreasoner;
 
 import java.util.Map;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package orar.inerreasoner;
+package orar.innerreasoner;
 
 import java.util.HashSet;
 import java.util.Set;

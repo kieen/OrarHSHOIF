@@ -1,4 +1,4 @@
-package orar.inerreasoner;
+package orar.innerreasoner;
 
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.model.OWLOntology;

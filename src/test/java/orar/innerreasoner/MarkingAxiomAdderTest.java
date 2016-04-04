@@ -1,4 +1,4 @@
-package MarkingAxiomsAdder;
+package orar.innerreasoner;
 
 import org.junit.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -10,7 +10,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import orar.data.MetaDataOfOntology;
-import orar.inerreasoner.MarkingAxiomAdder;
+import orar.innerreasoner.MarkingAxiomAdder;
 import orar.util.DefaultTestDataFactory;
 import orar.util.PrintingHelper;
 

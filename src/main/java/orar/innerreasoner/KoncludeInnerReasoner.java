@@ -1,4 +1,4 @@
-package orar.inerreasoner;
+package orar.innerreasoner;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

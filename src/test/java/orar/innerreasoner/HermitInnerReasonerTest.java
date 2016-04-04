@@ -1,4 +1,4 @@
-package orar.inerreasoner;
+package orar.innerreasoner;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +30,8 @@ import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
+import orar.innerreasoner.HermitInnerReasoner;
+import orar.innerreasoner.InnerReasoner;
 import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
 import orar.util.DefaultTestDataFactory;
 import orar.util.PrintingHelper;
