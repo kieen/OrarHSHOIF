@@ -162,6 +162,7 @@ public class FunctionalRoleIdentifierHermitTest {
 	@Test
 	public void shouldComputeTranRolesProperly(){
 		
+		
 		Set<OWLAxiom> tboxRboxAxioms = new HashSet<>();
 		OWLTransitiveObjectPropertyAxiom transR = dataFactory.getOWLTransitiveObjectPropertyAxiom(R);
 		OWLTransitiveObjectPropertyAxiom tranInvS = dataFactory.getOWLTransitiveObjectPropertyAxiom(dataFactory.getOWLObjectInverseOf(S));
