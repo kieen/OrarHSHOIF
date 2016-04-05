@@ -53,4 +53,14 @@ public class MapbasedSameAsBox implements SameAsBox {
 		return hasNewElement;
 	}
 
+	@Override
+	public Set<OWLNamedIndividual> getAllIndividuals() {
+		Set<OWLNamedIndividual> allIndividuals = new HashSet<>();
+		allIndividuals.addAll(this.sameAsMap.keySet());
+		for (Set<OWLNamedIndividual> value : this.sameAsMap.values()) {
+			allIndividuals.addAll(value);
+		}
+		return allIndividuals;
+	}
+
 }

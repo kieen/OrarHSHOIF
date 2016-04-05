@@ -34,5 +34,6 @@ public interface SameAsBox {
 	 * @return true if new elements have been added, false otherwise.
 	 */
 	public boolean addManySameAsAssertions(OWLNamedIndividual individual, Set<OWLNamedIndividual> manyEqualIndividuals);
-
+	
+	public Set<OWLNamedIndividual> getAllIndividuals();
 }

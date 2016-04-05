@@ -33,7 +33,7 @@ public interface RoleReasoner {
 	public Set<OWLObjectProperty> getInverseFunctionalRoles();
 
 	/**
-	 * @return a role hierarchy as a map: an atomic role ---> its super-roles
+	 * @return a role hierarchy as a map: an atomic role ---> its super-roles,<b>Excluding</b> itself.
 	 */
 	public Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> getRoleHierarchyAsMap();
 

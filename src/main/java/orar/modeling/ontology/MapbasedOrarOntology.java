@@ -289,4 +289,44 @@ public class MapbasedOrarOntology implements OrarOntology {
 		return setOfSuccessors;
 	}
 
+	@Override
+	public SameAsBox getSameasBox() {
+
+		return this.sameasBox;
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getSubjectsInRoleAssertions(OWLObjectProperty role) {
+
+		return this.roleAssertionBox.getSubjectsInRoleAssertions(role);
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role) {
+
+		return this.roleAssertionBox.getObjectsInRoleAssertions(role);
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getPredecessorsTakingEqualityIntoAccount(OWLNamedIndividual object,
+			OWLObjectProperty role) {
+		Set<OWLNamedIndividual> subjects= new HashSet<>();
+		Set<OWLNamedIndividual> equivalentIndsOf_object = getSameIndividuals(object);
+		for (OWLNamedIndividual eachobject:equivalentIndsOf_object){
+			subjects.addAll(getPredecessors(eachobject, role));
+		}
+		return subjects;
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getSuccessorsTakingEqualityIntoAccount(OWLNamedIndividual subject,
+			OWLObjectProperty role) {
+		Set<OWLNamedIndividual> objects= new HashSet<>();
+		Set<OWLNamedIndividual> equivalentIndsOf_subject = getSameIndividuals(subject);
+		for (OWLNamedIndividual eachSubject:equivalentIndsOf_subject){
+			objects.addAll(getSuccessors(eachSubject, role));
+		}
+		return objects;
+	}
+
 }

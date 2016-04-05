@@ -13,6 +13,7 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 
 import orar.dlfragmentvalidator.DLConstructor;
 import orar.dlfragmentvalidator.DLFragment;
+import orar.modeling.sameas.SameAsBox;
 
 /**
  * Internal representation of an ontology.
@@ -206,7 +207,15 @@ public interface OrarOntology {
 			OWLNamedIndividual objectIndividual);
 
 	public Set<OWLNamedIndividual> getPredecessors(OWLNamedIndividual object, OWLObjectProperty role);
-
+	public Set<OWLNamedIndividual> getPredecessorsTakingEqualityIntoAccount(OWLNamedIndividual object, OWLObjectProperty role);
 	public Set<OWLNamedIndividual> getSuccessors(OWLNamedIndividual subject, OWLObjectProperty role);
+	public Set<OWLNamedIndividual> getSuccessorsTakingEqualityIntoAccount(OWLNamedIndividual subject, OWLObjectProperty role);
+
+	/*
+	 * others
+	 */
+	public SameAsBox getSameasBox();
+	public Set<OWLNamedIndividual> getSubjectsInRoleAssertions(OWLObjectProperty role);
+	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role);
 
 }

@@ -81,6 +81,7 @@ public class HermitRoleReasoner implements RoleReasoner {
 		for (OWLObjectProperty role : allRoles) {
 			Set<OWLObjectPropertyExpression> superRoles = hermit.getSuperObjectProperties(role, false).getFlattened();
 			superRoles.remove(owlDataFactory.getOWLTopObjectProperty());
+			superRoles.remove(role);
 			if (!superRoles.isEmpty()) {
 				this.subRoleMaps.put(role, superRoles);
 			}
