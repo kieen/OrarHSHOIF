@@ -6,11 +6,9 @@ import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 import orar.modeling.ontology.OrarOntology;
 import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
-import orar.refinement.abstractroleassertion.RoleAssertionList;
 import orar.refinement.assertiontransferring.AssertionTransporterTemplate;
 
 public class HornSHIF_AssertionTransporter extends AssertionTransporterTemplate {
@@ -27,19 +25,10 @@ public class HornSHIF_AssertionTransporter extends AssertionTransporterTemplate 
 	@Override
 	protected void addSameasAssertions() {
 		// nothing to do.
-
 	}
 
 	@Override
-	protected void addRoleAssertionsForSingletonConcept() {
+	protected void tranferRoleAssertionsBetweenUX() {
 		// nothing to do
-
 	}
-
-	@Override
-	protected void addRoleAssertionsForConceptsHavingTranRole() {
-		// nothing to do
-
-	}
-
 }

@@ -43,8 +43,10 @@ public interface InnerReasoner {
 	 * Get SameAs assertions in form of a map.
 	 * 
 	 * @return Map for SameAs assertions, each individual is mapped to its
-	 *         equivalent individuals, <b>EXCLUDING itself</b>
-	 *         
+	 *         equivalent individuals, <b>EXCLUDING itself</b>. Note that: for a
+	 *         equivalent b, we only need to get a--> {b}; Map b-->{a} is
+	 *         unnecessary.
+	 * 
 	 */
 	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getSameAsMap();
 

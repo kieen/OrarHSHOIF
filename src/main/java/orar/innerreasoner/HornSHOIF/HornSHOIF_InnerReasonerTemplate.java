@@ -1,6 +1,8 @@
 package orar.innerreasoner.HornSHOIF;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -124,15 +126,20 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 	@Override
 	protected void computeEntailedSameasAssertions() {
 		Set<OWLNamedIndividual> allIndividualsFromConceptType = this.abstractDataFactory.getUAbstractIndividuals();
-		for (OWLNamedIndividual indiv : allIndividualsFromConceptType) {
-			Set<OWLNamedIndividual> equivalentIndividuals = reasoner.getSameIndividuals(indiv).getEntities();
+		Queue<OWLNamedIndividual> todoIndividuals = new LinkedList<>(allIndividualsFromConceptType);
+		while (!todoIndividuals.isEmpty()) {
+			OWLNamedIndividual anIndividual = todoIndividuals.poll();
+			Set<OWLNamedIndividual> equivalentIndividuals = reasoner.getSameIndividuals(anIndividual).getEntities();
 			/*
 			 * Note to remove the indv itself as we DONT use (u=u) to transfer
 			 * assertions.
 			 */
-			equivalentIndividuals.remove(indiv);
+			equivalentIndividuals.remove(anIndividual);
 			if (!equivalentIndividuals.isEmpty()) {
-				this.sameAsMap.put(indiv, equivalentIndividuals);
+				this.sameAsMap.put(anIndividual, equivalentIndividuals);
+				// don't need to query for equivalentIndividuals. So we remove
+				// them from todoIndividuals.
+				todoIndividuals.removeAll(equivalentIndividuals);
 			}
 		}
 

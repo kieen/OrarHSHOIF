@@ -114,6 +114,10 @@ public class DataForTransferingEntailments {
 		return zAbstractHavingInverseFunctionalRole;
 	}
 
+	/**
+	 * @param abstractInd
+	 * @return a set of original individuals for which the abstractInd represents.<b> Note </b> that changing in this set will affect the mapping.
+	 */
 	public Set<OWLNamedIndividual> getOriginalIndividuals(OWLNamedIndividual abstractInd) {
 		Set<OWLNamedIndividual> originalInds = new HashSet<>();
 

@@ -1,8 +1,8 @@
 package orar.refinement.assertiontransferring;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -34,6 +34,9 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 	private static final Logger logger = Logger.getLogger(AssertionTransporterTemplate.class);
 	// map/data for transferring assertions
 	protected final DataForTransferingEntailments dataForTransferingEntailments;
+	// output
+	protected final RoleAssertionList newRoleAssertions;
+	protected final List<Set<OWLNamedIndividual>> newSameasAssertions;
 
 	public AssertionTransporterTemplate(OrarOntology orarOntoloy) {
 		this.orarOntology = orarOntoloy;
@@ -43,34 +46,31 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 		this.isABoxExtended = false;
 		this.config = Configuration.getInstance();
 		this.dataForTransferingEntailments = DataForTransferingEntailments.getInstance();
+		this.newRoleAssertions = new RoleAssertionList();
+		this.newSameasAssertions = new ArrayList<>();
 	}
 
 	@Override
 	public void updateOriginalABox() {
-		addConceptAssertions();// same for all AssertionTransporter-subclasses
-		addRoleAssertions();
-		addSameasAssertions();
+		addConceptAssertions();// not change
+		addRoleAssertions();// not change
+		addSameasAssertions();// varies
 	}
 
 	protected abstract void addSameasAssertions();
 
 	private void addRoleAssertions() {
-		addRoleAssertionsForLoopConcepts(); // same in all
-		// AssertionTransporter-subclasses. Well it is slightly different, but we handle it in 
-		addRoleAssertionsForConceptsHavingTranRole();
-		addRoleAssertionsForSingletonConcept();
-		addRoleAssertionsForXYHavingFunctionalRoles();// same in all
-														// AssertionTransporter-subclasses
-		addRoleAssertionsForZXHavingInverseFunctionalRoles();// same in all
-																// AssertionTransporter-subclasses
-
+		transferRoleAssertionsForLoopConcepts();// not change
+		tranferRoleAssertionsBetweenUX();// varies
+		transferRoleAssertionsForXYHavingFunctionalRoles();// not change
+		transferRoleAssertionsForZXHavingInverseFunctionalRoles();// not change
 	}
 
 	/**
 	 * add role assertions by the rule R^2_<: M(a), F(a,b) --> H(a,b). Case: F
 	 * is atomic.
 	 */
-	private void addRoleAssertionsForZXHavingInverseFunctionalRoles() {
+	private void transferRoleAssertionsForZXHavingInverseFunctionalRoles() {
 		RoleAssertionList roleAssertionList = this.abstractRoleAssertionBox.getZxRoleAssertionsForType();
 		int size = roleAssertionList.getSize();
 		for (int index = 0; index < size; index++) {
@@ -95,13 +95,16 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 			/*
 			 * add role assertions to the original ABox.
 			 */
-			Set<OWLNamedIndividual> originalIndsCorrespondingToX = this.dataForTransferingEntailments.getOriginalIndividuals(xAbstractIndiv);
+			Set<OWLNamedIndividual> originalIndsCorrespondingToX = this.dataForTransferingEntailments
+					.getOriginalIndividuals(xAbstractIndiv);
 			for (OWLNamedIndividual eachOriginalIndiv : originalIndsCorrespondingToX) {
 				Set<OWLNamedIndividual> allSubjects = this.orarOntology.getPredecessors(eachOriginalIndiv,
 						roleConnectsZandX);
 				for (OWLNamedIndividual eachSubject : allSubjects) {
 					if (this.orarOntology.addRoleAssertion(eachSubject, roleInEntailedAssertion, eachOriginalIndiv)) {
 						this.isABoxExtended = true;
+						this.newRoleAssertions.addRoleAssertion(eachSubject, roleInEntailedAssertion,
+								eachOriginalIndiv);
 					}
 				}
 			}
@@ -113,7 +116,7 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 	 * add role assertions by the rule R^2_<: M(a), F(a,b) --> H(a,b). Case: F
 	 * is the inverse of an atomic role.
 	 */
-	private void addRoleAssertionsForXYHavingFunctionalRoles() {
+	private void transferRoleAssertionsForXYHavingFunctionalRoles() {
 		RoleAssertionList roleAssertionList = this.abstractRoleAssertionBox.getXyRoleAssertionsForType();
 		int size = roleAssertionList.getSize();
 		for (int index = 0; index < size; index++) {
@@ -138,13 +141,15 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 			/*
 			 * add role assertions
 			 */
-			Set<OWLNamedIndividual> originalIndsCorrespondingToX = this.dataForTransferingEntailments.getOriginalIndividuals(xAbstractIndiv);
+			Set<OWLNamedIndividual> originalIndsCorrespondingToX = this.dataForTransferingEntailments
+					.getOriginalIndividuals(xAbstractIndiv);
 			for (OWLNamedIndividual eachOriginalIndiv : originalIndsCorrespondingToX) {
 				Set<OWLNamedIndividual> allObjects = this.orarOntology.getSuccessors(eachOriginalIndiv,
 						roleConnectsXandY);
 				for (OWLNamedIndividual eachObject : allObjects) {
 					if (this.orarOntology.addRoleAssertion(eachOriginalIndiv, roleInEntailedAssertion, eachObject)) {
 						this.isABoxExtended = true;
+						this.newRoleAssertions.addRoleAssertion(eachOriginalIndiv, roleInEntailedAssertion, eachObject);
 					}
 				}
 			}
@@ -152,11 +157,13 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 
 	}
 
-	protected abstract void addRoleAssertionsForSingletonConcept();
+	/**
+	 * transferring from abstract role assertions of the form R(u,x) or R(x,u),
+	 * e.g. from rule R_\exists
+	 */
+	protected abstract void tranferRoleAssertionsBetweenUX();
 
-	protected abstract void addRoleAssertionsForConceptsHavingTranRole();
-
-	private void addRoleAssertionsForLoopConcepts() {
+	private void transferRoleAssertionsForLoopConcepts() {
 		RoleAssertionList roleAssertionList = this.abstractRoleAssertionBox.getLoopRoleAssertions();
 		int size = roleAssertionList.getSize();
 		for (int index = 0; index < size; index++) {
@@ -166,7 +173,10 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 			Set<OWLNamedIndividual> allOriginalInds = this.dataForTransferingEntailments.getOriginalIndividuals(xInd);
 			// add assertions to the orignal ABox
 			for (OWLNamedIndividual eachOriginalInd : allOriginalInds) {
-				this.orarOntology.addRoleAssertion(eachOriginalInd, role, eachOriginalInd);
+				if (this.orarOntology.addRoleAssertion(eachOriginalInd, role, eachOriginalInd)) {
+					this.isABoxExtended = true;
+					this.newRoleAssertions.addRoleAssertion(eachOriginalInd, role, eachOriginalInd);
+				}
 			}
 		}
 	}
@@ -183,7 +193,8 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 			OWLNamedIndividual abstractInd = entry.getKey();
 			Set<OWLClass> concepts = entry.getValue();
 			if (concepts != null) {
-				Set<OWLNamedIndividual> originalIndividuals = this.dataForTransferingEntailments.getOriginalIndividuals(abstractInd);
+				Set<OWLNamedIndividual> originalIndividuals = this.dataForTransferingEntailments
+						.getOriginalIndividuals(abstractInd);
 				for (OWLNamedIndividual originalInd : originalIndividuals) {
 
 					// /*
@@ -220,11 +231,19 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 
 	}
 
-	
 	@Override
 	public boolean isABoxExtended() {
 
 		return this.isABoxExtended;
 	}
 
+	@Override
+	public RoleAssertionList getNewlyAddedRoleAssertions() {
+		return this.newRoleAssertions;
+	}
+
+	@Override
+	public List<Set<OWLNamedIndividual>> getNewlyAddedSameasAssertions() {
+		return this.newSameasAssertions;
+	}
 }

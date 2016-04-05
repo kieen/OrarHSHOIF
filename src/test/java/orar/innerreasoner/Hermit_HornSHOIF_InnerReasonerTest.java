@@ -216,7 +216,7 @@ public class Hermit_HornSHOIF_InnerReasonerTest {
 		 */
 		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> expectedResult = new HashMap<>();
 		expectedResult.put(a, testData.getSetOfIndividuals(b));
-		expectedResult.put(b, testData.getSetOfIndividuals(a));
+	
 
 		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
 		hermitInnerReasoner.computeEntailments();
