@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
@@ -20,7 +21,7 @@ public class SameasRuleExecutor implements RuleExecutor {
 	private final OrarOntology orarOntology;
 	private boolean isABoxExtended;
 	// private Queue<Set<OWLNamedIndividual>> localTodoSameas;
-
+	private final Logger logger = Logger.getLogger(SameasRuleExecutor.class);
 	public SameasRuleExecutor(OrarOntology orarOntology) {
 		this.orarOntology = orarOntology;
 		this.isABoxExtended = false;
@@ -28,6 +29,7 @@ public class SameasRuleExecutor implements RuleExecutor {
 
 	@Override
 	public void materialize() {
+		
 		// compute connect components
 		List<Set<OWLNamedIndividual>> components = computeConnectedComponents();
 		// put components to the map.
@@ -39,6 +41,8 @@ public class SameasRuleExecutor implements RuleExecutor {
 			}
 		}
 	}
+
+	
 
 	private List<Set<OWLNamedIndividual>> computeConnectedComponents() {
 		Set<OWLNamedIndividual> allIndividualsInSameasMap = this.orarOntology.getSameasBox().getAllIndividuals();
@@ -54,6 +58,7 @@ public class SameasRuleExecutor implements RuleExecutor {
 			while (!stackForDFS.isEmpty()) {
 				OWLNamedIndividual ind = stackForDFS.pop();
 				Set<OWLNamedIndividual> sameasOf_a = this.orarOntology.getSameIndividuals(ind);
+				sameasOf_a.removeAll(newComponent);
 				newComponent.addAll(sameasOf_a);
 				stackForDFS.addAll(sameasOf_a);
 				todoIndividuals.removeAll(sameasOf_a);
@@ -83,8 +88,10 @@ public class SameasRuleExecutor implements RuleExecutor {
 
 	@Override
 	public void incrementalMaterialize(Set<OWLNamedIndividual> setOfSameasIndividuals) {
+//		logger.info("SameasRuleExecutor.incrementalMaterialize");
 		// get union of equivalent individuals in the set.
 		Set<OWLNamedIndividual> accumulatedSameasIndividuals = new HashSet<>();
+		accumulatedSameasIndividuals.addAll(setOfSameasIndividuals);
 		for (OWLNamedIndividual ind : setOfSameasIndividuals) {
 			accumulatedSameasIndividuals.addAll(this.orarOntology.getSameIndividuals(ind));
 		}
@@ -99,5 +106,11 @@ public class SameasRuleExecutor implements RuleExecutor {
 	@Override
 	public void incrementalMaterialize(OWLObjectPropertyAssertionAxiom roleAssertion) {
 		// nothing to do with a role assertion.
+	}
+
+	@Override
+	public void clearOldBuffer() {
+		// nothing to clear
+
 	}
 }

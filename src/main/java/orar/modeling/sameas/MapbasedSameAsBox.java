@@ -15,9 +15,11 @@ public class MapbasedSameAsBox implements SameAsBox {
 	 * than itself.
 	 */
 	private final Map<OWLNamedIndividual, Set<OWLNamedIndividual>> sameAsMap;
+	// private final List<Set<OWLNamedIndividual>> listOfSameasAssertions;
 
 	public MapbasedSameAsBox() {
 		this.sameAsMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
+		// this.listOfSameasAssertions = new ArrayList<>();
 	}
 
 	@Override
@@ -63,4 +65,19 @@ public class MapbasedSameAsBox implements SameAsBox {
 		return allIndividuals;
 	}
 
+	@Override
+	public boolean addSameasAssertions(Set<OWLNamedIndividual> setOfSameasIndividuals) {
+		boolean updated = false;
+		for (OWLNamedIndividual anIndividual : setOfSameasIndividuals) {
+			Set<OWLNamedIndividual> existsingInds = this.sameAsMap.get(anIndividual);
+			if (existsingInds == null) {
+				existsingInds = new HashSet<>();
+			}
+			if (existsingInds.addAll(setOfSameasIndividuals)) {
+				updated = true;
+			}
+			this.sameAsMap.put(anIndividual, existsingInds);
+		}
+		return updated;
+	}
 }

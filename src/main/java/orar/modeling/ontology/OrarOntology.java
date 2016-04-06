@@ -52,8 +52,10 @@ public interface OrarOntology {
 	 * Number of assertions when the ontology was first created: getters
 	 */
 	public int getNumberOfInputConceptAssertions();
+	public int getNumberOfConceptAssertions();
 
 	public int getNumberOfInputRoleAssertions();
+	public int getNumberOfRoleAssertions();
 
 	/*
 	 * Number of assertions when the ontology was first created: setters
@@ -207,8 +209,18 @@ public interface OrarOntology {
 			OWLNamedIndividual objectIndividual);
 
 	public Set<OWLNamedIndividual> getPredecessors(OWLNamedIndividual object, OWLObjectProperty role);
+	/**
+	 * @param object
+	 * @param role
+	 * @return get a copy of all Predecessors
+	 */
 	public Set<OWLNamedIndividual> getPredecessorsTakingEqualityIntoAccount(OWLNamedIndividual object, OWLObjectProperty role);
 	public Set<OWLNamedIndividual> getSuccessors(OWLNamedIndividual subject, OWLObjectProperty role);
+	/**
+	 * @param subject
+	 * @param role
+	 * @return get a copy of all Successors
+	 */
 	public Set<OWLNamedIndividual> getSuccessorsTakingEqualityIntoAccount(OWLNamedIndividual subject, OWLObjectProperty role);
 
 	/*
@@ -217,5 +229,6 @@ public interface OrarOntology {
 	public SameAsBox getSameasBox();
 	public Set<OWLNamedIndividual> getSubjectsInRoleAssertions(OWLObjectProperty role);
 	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role);
+	public boolean addSameasAssertion(Set<OWLNamedIndividual> setOfSameasIndividuals);
 
 }

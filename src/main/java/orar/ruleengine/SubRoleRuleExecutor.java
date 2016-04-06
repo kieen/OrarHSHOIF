@@ -36,7 +36,8 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 			Set<OWLNamedIndividual> allSubjectsOf_R = this.orarOntology.getSubjectsInRoleAssertions(R);
 			for (OWLNamedIndividual eachSubjectOf_R : allSubjectsOf_R) {
 				Set<OWLNamedIndividual> allObjectsOf_R = this.orarOntology.getSuccessors(eachSubjectOf_R, R);
-				Set<OWLObjectPropertyExpression> allSuperRolesOf_R = this.metaDataOfOntology.getSubRoleMap().get(R);
+				Set<? extends OWLObjectPropertyExpression> allSuperRolesOf_R = this.metaDataOfOntology.getSubRoleMap()
+						.get(R);
 				for (OWLObjectPropertyExpression eachSuperRoleOf_R : allSuperRolesOf_R) {
 					// case of atomic role
 					if (eachSuperRoleOf_R instanceof OWLObjectProperty) {
@@ -89,14 +90,16 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 		OWLObjectProperty role = roleAssertion.getProperty().asOWLObjectProperty();
 		OWLNamedIndividual subject = roleAssertion.getSubject().asOWLNamedIndividual();
 		OWLNamedIndividual object = roleAssertion.getObject().asOWLNamedIndividual();
-		Set<OWLObjectPropertyExpression> allSuperRoles = this.metaDataOfOntology.getSubRoleMap().get(role);
-		for (OWLObjectPropertyExpression eachSuperRole:allSuperRoles){
-			if (eachSuperRole instanceof OWLObjectProperty){
-				addRoleAssertion(subject, eachSuperRole.asOWLObjectProperty(), object);
-			}
-			
-			if (eachSuperRole instanceof OWLObjectInverseOf){
-				addRoleAssertion(object, eachSuperRole.getNamedProperty(), subject);
+		Set<? extends OWLObjectPropertyExpression> allSuperRoles = this.metaDataOfOntology.getSubRoleMap().get(role);
+		if (allSuperRoles != null) {
+			for (OWLObjectPropertyExpression eachSuperRole : allSuperRoles) {
+				if (eachSuperRole instanceof OWLObjectProperty) {
+					addRoleAssertion(subject, eachSuperRole.asOWLObjectProperty(), object);
+				}
+
+				if (eachSuperRole instanceof OWLObjectInverseOf) {
+					addRoleAssertion(object, eachSuperRole.getNamedProperty(), subject);
+				}
 			}
 		}
 	}
@@ -115,6 +118,12 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 	@Override
 	public boolean isABoxExtended() {
 		return this.isABoxExtended;
+	}
+
+	@Override
+	public void clearOldBuffer() {
+		this.newRoleAssertions.clear();
+
 	}
 
 }

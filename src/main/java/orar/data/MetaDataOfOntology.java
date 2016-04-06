@@ -31,7 +31,7 @@ public class MetaDataOfOntology {
 	private final Set<OWLObjectProperty> inverseFunctionalRoles;
 	private final Set<OWLObjectProperty> transitiveRoles;
 
-	private final Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> subRoleMap;
+	private final Map<OWLObjectProperty, Set<? extends OWLObjectPropertyExpression>> subRoleMap;
 
 	private MetaDataOfOntology() {
 		this.nominalConcepts = new HashSet<>();
@@ -39,7 +39,7 @@ public class MetaDataOfOntology {
 		this.functionalRoles = new HashSet<>();
 		this.inverseFunctionalRoles = new HashSet<>();
 		this.transitiveRoles = new HashSet<>();
-		this.subRoleMap = new HashMap<OWLObjectProperty, Set<OWLObjectPropertyExpression>>();
+		this.subRoleMap = new HashMap<OWLObjectProperty, Set<? extends OWLObjectPropertyExpression>>();
 	}
 
 	public static MetaDataOfOntology getInstance() {
@@ -64,7 +64,7 @@ public class MetaDataOfOntology {
 		return functionalRoles;
 	}
 
-	public Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> getSubRoleMap() {
+	public Map<OWLObjectProperty, Set<? extends OWLObjectPropertyExpression>> getSubRoleMap() {
 		return subRoleMap;
 	}
 

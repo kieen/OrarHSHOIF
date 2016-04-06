@@ -21,4 +21,5 @@ public interface RuleExecutor {
 	public Set<OWLObjectPropertyAssertionAxiom> getNewRoleAssertions();
 
 	public boolean isABoxExtended();
+	public void clearOldBuffer();
 }

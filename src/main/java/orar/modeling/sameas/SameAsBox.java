@@ -1,11 +1,12 @@
 package orar.modeling.sameas;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 public interface SameAsBox {
-
+	
 	/**
 	 * @param individual
 	 * @return -A (possibly empty) set of individuals that are equal to
@@ -34,6 +35,9 @@ public interface SameAsBox {
 	 * @return true if new elements have been added, false otherwise.
 	 */
 	public boolean addManySameAsAssertions(OWLNamedIndividual individual, Set<OWLNamedIndividual> manyEqualIndividuals);
-	
+
 	public Set<OWLNamedIndividual> getAllIndividuals();
+
+	
+	public boolean addSameasAssertions(Set<OWLNamedIndividual> setOfSameasIndividuals);
 }

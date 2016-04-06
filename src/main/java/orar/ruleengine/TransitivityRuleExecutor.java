@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -21,6 +22,7 @@ public class TransitivityRuleExecutor implements RuleExecutor {
 	private final OWLDataFactory dataFactory;
 	private boolean isABoxExtended;
 
+	private final Logger logger =Logger.getLogger(TransitivityRuleExecutor.class);
 	public TransitivityRuleExecutor(OrarOntology orarOntology) {
 		this.orarOntology = orarOntology;
 		this.newRoleAssertions = new HashSet<>();
@@ -33,6 +35,7 @@ public class TransitivityRuleExecutor implements RuleExecutor {
 	public void materialize() {
 		// get all transitive role assertions.
 		Queue<OWLObjectPropertyAssertionAxiom> todoTranRoleAssertions = getAllTransitiveRoleAssertions();
+		logger.info("all tran role assertions:"+todoTranRoleAssertions);
 		while (!todoTranRoleAssertions.isEmpty()) {
 			OWLObjectPropertyAssertionAxiom roleT_a_b = todoTranRoleAssertions.poll();
 			OWLNamedIndividual a = roleT_a_b.getSubject().asOWLNamedIndividual();
@@ -137,6 +140,12 @@ public class TransitivityRuleExecutor implements RuleExecutor {
 	@Override
 	public boolean isABoxExtended() {
 		return this.isABoxExtended;
+	}
+
+	@Override
+	public void clearOldBuffer() {
+		this.newRoleAssertions.clear();
+
 	}
 
 }
