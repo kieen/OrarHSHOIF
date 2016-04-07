@@ -14,6 +14,9 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import orar.data.NormalizationDataFactory;
+import orar.dlfragmentvalidator.ValidatorDataFactory;
+
 public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 
 	private final Map<OWLNamedIndividual, Set<OWLClass>> conceptAssertionMap;
@@ -43,10 +46,10 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 		Iterator<Entry<OWLNamedIndividual, Set<OWLClass>>> iterator = conceptAssertionMap.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<OWLNamedIndividual, Set<OWLClass>> entry = iterator.next();
-			OWLNamedIndividual ind = entry.getKey();
+			OWLNamedIndividual a = entry.getKey();
 			Set<OWLClass> assertedClasses = entry.getValue();
 			for (OWLClass owlClass : assertedClasses) {
-				OWLClassAssertionAxiom classAssertion = owlDataFactory.getOWLClassAssertionAxiom(owlClass, ind);
+				OWLClassAssertionAxiom classAssertion = owlDataFactory.getOWLClassAssertionAxiom(owlClass, a);
 				classAssertionAxioms.add(classAssertion);
 			}
 		}
@@ -91,6 +94,41 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 	@Override
 	public boolean addConceptAssertion(OWLClass concept, OWLNamedIndividual individual) {
 		return addConceptAssertion(individual, concept);
+	}
+
+	@Override
+	public Set<OWLClassAssertionAxiom> getOWLAPIConceptAssertionsWithoutNormalizationSymbols() {
+
+		Set<OWLClassAssertionAxiom> classAssertionAxioms = new HashSet<>();
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		OWLDataFactory owlDataFactory = manager.getOWLDataFactory();
+		OWLClass thingConcept = OWLManager.getOWLDataFactory().getOWLThing();
+
+		Iterator<Entry<OWLNamedIndividual, Set<OWLClass>>> iterator = conceptAssertionMap.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<OWLNamedIndividual, Set<OWLClass>> entry = iterator.next();
+			OWLNamedIndividual ind = entry.getKey();
+			Set<OWLClass> assertedClasses = entry.getValue();
+			for (OWLClass owlClass : assertedClasses) {
+				boolean isNotIndividualByNormalization = !ValidatorDataFactory.getInstance()
+						.getNamedIndividualGeneratedDuringValidation().contains(ind);
+				boolean isNotConceptByNormalization = !NormalizationDataFactory.getInstance()
+						.getConceptsByNormalization().contains(owlClass);
+				boolean isNotThingConcept = !owlClass.equals(thingConcept);
+				if (isNotConceptByNormalization && isNotIndividualByNormalization && isNotThingConcept) {
+
+					OWLClassAssertionAxiom classAssertion = owlDataFactory.getOWLClassAssertionAxiom(owlClass, ind);
+					classAssertionAxioms.add(classAssertion);
+				}
+			}
+		}
+
+		return classAssertionAxioms;
+	}
+
+	@Override
+	public Set<OWLNamedIndividual> getAllIndividuals() {
+		return new HashSet<>(this.conceptAssertionMap.keySet());
 	}
 
 }

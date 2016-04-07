@@ -11,7 +11,7 @@ public interface SameAsBox {
 	 * @param individual
 	 * @return -A (possibly empty) set of individuals that are equal to
 	 *         {@code individual}. <br>
-	 *         -{@code null} if there is no equal individual other than the
+	 *         -empty if there is no equal individual other than the
 	 *         {@code individual} itself.
 	 * 
 	 */

@@ -54,10 +54,22 @@ public interface ConceptAssertionBox {
 	 *         for testing only.
 	 */
 	public Set<OWLClassAssertionAxiom> getOWLAPIConceptAssertions();
+	
+	/**
+	 * @return OWLAPI class assertions, including one for concepts and
+	 *         individuals generated during normalization. This should be used
+	 *         for testing only.
+	 */
+	public Set<OWLClassAssertionAxiom> getOWLAPIConceptAssertionsWithoutNormalizationSymbols();
 
 	/**
 	 * @return the up-to-date number of concept assertions occurring in the
 	 *         ontology.
 	 */
 	public int getNumberOfConceptAssertions();
+	
+	/**
+	 * @return a set (copy) of all individuals occurring in all concept assertions.  
+	 */
+	public Set<OWLNamedIndividual> getAllIndividuals();
 }

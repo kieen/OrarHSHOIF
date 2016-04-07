@@ -35,12 +35,15 @@ public class FunctionalityRuleExecutor implements RuleExecutor {
 
 	private void mergePredecessorsOfInvFunctionalRole() {
 		// for inverse functional roles
-		Set<OWLObjectProperty> allInvFuncRoles = this.metaDataOfOntology.getFunctionalRoles();
+		Set<OWLObjectProperty> allInvFuncRoles = this.metaDataOfOntology.getInverseFunctionalRoles();
+		logger.info("********DEBUG**** allInvFuncRoles: "+allInvFuncRoles);
 		for (OWLObjectProperty eachInvFuncRole : allInvFuncRoles) {
 			Set<OWLNamedIndividual> allObjects = this.orarOntology.getObjectsInRoleAssertions(eachInvFuncRole);
+			logger.info("********DEBUG**** allObjects: "+allObjects);
 			for (OWLNamedIndividual eachObject : allObjects) {
 				Set<OWLNamedIndividual> allSubjects = this.orarOntology
 						.getPredecessorsTakingEqualityIntoAccount(eachObject, eachInvFuncRole);
+				logger.info("********DEBUG**** allSubjects: "+allSubjects);
 				if (allSubjects.size() > 1) {
 					this.newSameasAssertions.add(allSubjects);
 				}

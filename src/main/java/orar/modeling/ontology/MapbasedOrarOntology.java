@@ -4,15 +4,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 
+import orar.data.NormalizationDataFactory;
 import orar.dlfragmentvalidator.DLConstructor;
 import orar.dlfragmentvalidator.DLFragment;
+import orar.dlfragmentvalidator.ValidatorDataFactory;
 import orar.modeling.conceptassertion.ConceptAssertionBox;
 import orar.modeling.conceptassertion.MapbasedConceptAssertionBox;
 import orar.modeling.roleassertion.MapbasedRoleAssertionBox;
@@ -21,6 +27,7 @@ import orar.modeling.sameas.MapbasedSameAsBox;
 import orar.modeling.sameas.SameAsBox;
 
 public class MapbasedOrarOntology implements OrarOntology {
+	private static final Logger logger= Logger.getLogger(MapbasedOrarOntology.class);
 	/*
 	 * TBox axioms
 	 */
@@ -172,8 +179,35 @@ public class MapbasedOrarOntology implements OrarOntology {
 
 	@Override
 	public Set<OWLClassAssertionAxiom> getOWLAPIConceptAssertionsWHITOUTNormalizationSymbols() {
-		// TODO Auto-generated method stub
-		return null;
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		OWLDataFactory owlDataFactory = manager.getOWLDataFactory();
+		OWLClass thingConcept = OWLManager.getOWLDataFactory().getOWLThing();
+		Set<OWLNamedIndividual> allIndividuals = this.getIndividualsInSignature();
+		Set<OWLClassAssertionAxiom> conceptAssertions= new HashSet<>();
+		for (OWLNamedIndividual a:allIndividuals){
+			Set<OWLNamedIndividual> sameasOfa = this.getSameIndividuals(a);
+			sameasOfa.add(a);
+//			logger.info(" ***********sameas a:"+sameasOfa);
+			Set<OWLClass> assertedConcepts= new HashSet<>(); 
+			for (OWLNamedIndividual eachInd:sameasOfa){
+				assertedConcepts.addAll(this.getAssertedConcepts(eachInd));
+			}
+//			logger.info(" ***********asserted concepts:"+assertedConcepts);
+			for (OWLClass eachConcept:assertedConcepts){
+				boolean isNotIndividualByNormalization = !ValidatorDataFactory.getInstance()
+						.getNamedIndividualGeneratedDuringValidation().contains(a);
+				boolean isNotConceptByNormalization = !NormalizationDataFactory.getInstance()
+						.getConceptsByNormalization().contains(eachConcept);
+				boolean isNotThingConcept = !eachConcept.equals(thingConcept);
+				if (isNotConceptByNormalization && isNotIndividualByNormalization && isNotThingConcept) {
+
+					OWLClassAssertionAxiom classAssertion = owlDataFactory.getOWLClassAssertionAxiom(eachConcept, a);
+					conceptAssertions.add(classAssertion);
+				}
+			}
+			
+		}
+		return conceptAssertions;
 	}
 
 	@Override
@@ -311,7 +345,8 @@ public class MapbasedOrarOntology implements OrarOntology {
 	public Set<OWLNamedIndividual> getPredecessorsTakingEqualityIntoAccount(OWLNamedIndividual object,
 			OWLObjectProperty role) {
 		Set<OWLNamedIndividual> subjects = new HashSet<>();
-		Set<OWLNamedIndividual> equivalentIndsOf_object = getSameIndividuals(object);
+		Set<OWLNamedIndividual> equivalentIndsOf_object = this.getSameIndividuals(object);
+		equivalentIndsOf_object.add(object);
 		for (OWLNamedIndividual eachobject : equivalentIndsOf_object) {
 			subjects.addAll(getPredecessors(eachobject, role));
 		}
