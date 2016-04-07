@@ -82,4 +82,22 @@ public class RoleAssertionList {
 		}
 		return roleAssertions;
 	}
+
+	public List<OWLNamedIndividual> getSubjects() {
+		return subjects;
+	}
+
+	public List<OWLObjectProperty> getRoles() {
+		return roles;
+	}
+
+	public List<OWLNamedIndividual> getObjects() {
+		return objects;
+	}
+
+	public void addAll(RoleAssertionList roleAsesrtionList) {
+		this.subjects.addAll(roleAsesrtionList.getSubjects());
+		this.roles.addAll(roleAsesrtionList.getRoles());
+		this.objects.addAll(roleAsesrtionList.getObjects());
+	}
 }

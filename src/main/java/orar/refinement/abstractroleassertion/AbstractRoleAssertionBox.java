@@ -28,8 +28,9 @@ public class AbstractRoleAssertionBox {
 	 */
 	private final RoleAssertionList zxRoleAssertionsForType;
 	/**
-	 * role assertions of the form T(u,u), (or T(x,x) in case of Horn-SHIF, where T is transitive, and u is the
-	 * representative individual for concept-type
+	 * role assertions of the form T(u,u), (or T(x,x) in case of Horn-SHIF,
+	 * where T is transitive, and u is the representative individual for
+	 * concept-type
 	 */
 	private final RoleAssertionList loopRoleAssertions;
 	/**
@@ -105,8 +106,6 @@ public class AbstractRoleAssertionBox {
 		this.uxRoleAssertionsForCTypeAndType.addRoleAssertion(subject, role, object);
 	}
 
-	
-
 	public RoleAssertionList getXyRoleAssertionsForType() {
 		return xyRoleAssertionsForType;
 	}
@@ -130,5 +129,12 @@ public class AbstractRoleAssertionBox {
 		roleAssertions.addAll(this.xyRoleAssertionsForType.getSetOfRoleAssertions());
 		roleAssertions.addAll(this.zxRoleAssertionsForType.getSetOfRoleAssertions());
 		return roleAssertions;
+	}
+
+	public void addAll(AbstractRoleAssertionBox abstractRoleAssertionBox) {
+		this.loopRoleAssertions.addAll(abstractRoleAssertionBox.getLoopRoleAssertions());
+		this.uxRoleAssertionsForCTypeAndType.addAll(abstractRoleAssertionBox.getUxRoleAssertionsForCTypeAndType());
+		this.xyRoleAssertionsForType.addAll(abstractRoleAssertionBox.getXyRoleAssertionsForType());
+		this.zxRoleAssertionsForType.addAll(abstractRoleAssertionBox.getZxRoleAssertionsForType());
 	}
 }

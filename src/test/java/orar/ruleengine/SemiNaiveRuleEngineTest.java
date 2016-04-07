@@ -208,7 +208,7 @@ public class SemiNaiveRuleEngineTest {
 	}
 	
 	@Test
-	public void testLUBM(){
+	public void testCorbunLUBM(){
 		/*
 		 * Load ontology where TBox and ABox are in separated files.
 		 */
@@ -216,12 +216,12 @@ public class SemiNaiveRuleEngineTest {
 
 		String aboxListFileName = "src/test/resources/uobm-ox/u1/aboxU1.txt";
 
-		String allInOneOntologyName = "src/test/resources/uobm-ox/u1/univ0.owl";
+		String allInOneOntologyName = "/Users/kien/Cavender&Coburn_1992-D.owl.xml";
 		OntologyReader ontoReader= new HornSHOIF_OntologyReader();
-		OrarOntology orarOntology=ontoReader.getNormalizedOrarOntology(tboxFileName, aboxListFileName);
+		OrarOntology orarOntology=ontoReader.getNormalizedOrarOntology(allInOneOntologyName);
 		
 		RoleReasoner hermitRoleReasoner= new HermitRoleReasoner(orarOntology.getTBoxAxioms());
-		hermitRoleReasoner.roleReasoning();
+		hermitRoleReasoner.doReasoning();
 		metaDataOfOntology.getSubRoleMap().putAll(hermitRoleReasoner.getRoleHierarchyAsMap());
 		
 		RuleEngine ruleEngine = new SemiNaiveRuleEngine(orarOntology);

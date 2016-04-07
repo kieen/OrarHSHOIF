@@ -16,17 +16,17 @@ public interface RoleReasoner {
 	/**
 	 * compute role hierarchy, (inverse)functional roles, and transitive roles
 	 */
-	public void roleReasoning();
+	public void doReasoning();
 
 	/**
-	 * Should be called after calling {@link #roleReasoning()}
+	 * Should be called after calling {@link #doReasoning()}
 	 * 
 	 * @return a set of atomic functional roles
 	 */
 	public Set<OWLObjectProperty> getFunctionalRoles();
 
 	/**
-	 * Should be called after calling {@link #roleReasoning()}
+	 * Should be called after calling {@link #doReasoning()}
 	 * 
 	 * @return a set of atomic inverse-functional roles
 	 */

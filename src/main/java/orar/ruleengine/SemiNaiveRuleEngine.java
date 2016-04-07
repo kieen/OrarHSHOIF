@@ -32,7 +32,7 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 		this.funcRule = new FunctionalityRuleExecutor(orarOntology);
 		this.tranRule = new TransitivityRuleExecutor(orarOntology);
 		this.subroRule = new SubRoleRuleExecutor(orarOntology);
-		this.ruleExecutors= new ArrayList<>();
+		this.ruleExecutors = new ArrayList<>();
 		this.ruleExecutors.add(sameasRule);
 		this.ruleExecutors.add(subroRule);
 		this.ruleExecutors.add(tranRule);
@@ -79,6 +79,18 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 	public OrarOntology getOntology() {
 
 		return this.orarOntology;
+	}
+
+	@Override
+	public void addTodoSameasAssertions(Set<Set<OWLNamedIndividual>> todoSameasAssertions) {
+		this.todoSameasAssertions.addAll(todoSameasAssertions);
+
+	}
+
+	@Override
+	public void addTodoRoleAsesrtions(Set<OWLObjectPropertyAssertionAxiom> odoRoleAssertions) {
+		this.todoRoleAssertions.addAll(odoRoleAssertions);
+
 	}
 
 }

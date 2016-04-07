@@ -82,7 +82,7 @@ public class FunctionalRoleIdentifierHermitTest {
 		tboxRboxAxioms.addAll(ontology.getRBoxAxioms(true));
 
 		RoleReasoner funcRoleIdentifier = new HermitRoleReasoner(tboxRboxAxioms);
-		funcRoleIdentifier.roleReasoning();
+		funcRoleIdentifier.doReasoning();
 		PrintingHelper.printSet(funcRoleIdentifier.getFunctionalRoles());
 		PrintingHelper.printSet(funcRoleIdentifier.getInverseFunctionalRoles());
 
@@ -134,7 +134,7 @@ public class FunctionalRoleIdentifierHermitTest {
 
 		RoleReasoner funcRoleIdentifier = new HermitRoleReasoner(tboxRboxAxioms);
 
-		funcRoleIdentifier.roleReasoning();
+		funcRoleIdentifier.doReasoning();
 		PrintingHelper.printSet(funcRoleIdentifier.getFunctionalRoles());
 		PrintingHelper.printSet(funcRoleIdentifier.getInverseFunctionalRoles());
 
@@ -170,7 +170,7 @@ public class FunctionalRoleIdentifierHermitTest {
 		tboxRboxAxioms.add(tranInvS);
 
 		RoleReasoner roleReasoner = new HermitRoleReasoner(tboxRboxAxioms);
-		roleReasoner.roleReasoning();
+		roleReasoner.doReasoning();
 		
 		
 	

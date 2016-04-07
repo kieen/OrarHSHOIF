@@ -61,7 +61,7 @@ public class HermitRoleReasoner implements RoleReasoner {
 	}
 
 	@Override
-	public void roleReasoning() {
+	public void doReasoning() {
 		createOWLOntologyWithRoleAxiomsForComputingRoleHierarchy();
 		hermit = new Reasoner(owlOntologyWithRoleAxiomsOnly);
 		hermit.classifyObjectProperties();

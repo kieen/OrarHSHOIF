@@ -1,17 +1,19 @@
 package orar.io.ontologyreader;
 
-import orar.data.NormalizationDataFactory;
-import orar.dlfragmentvalidator.ValidatorDataFactory;
-import orar.modeling.ontology.MapbasedOrarOntology;
-import orar.modeling.ontology.OrarOntology;
-
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectInverseOf;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
+
+import orar.dlfragmentvalidator.ValidatorDataFactory;
+import orar.modeling.ontology.MapbasedOrarOntology;
+import orar.modeling.ontology.OrarOntology;
 
 /**
  * Convert an OWLAPI ontology into the internal ontology data structure.
@@ -80,11 +82,22 @@ public class OntologyConverter {
 		for (OWLObjectPropertyAssertionAxiom assertion : owlOntology.getAxioms(AxiomType.OBJECT_PROPERTY_ASSERTION,
 				true)) {
 
-			OWLNamedIndividual subject = assertion.getSubject().asOWLNamedIndividual();
-			OWLObjectProperty property = assertion.getProperty().asOWLObjectProperty();
-			OWLNamedIndividual object = assertion.getObject().asOWLNamedIndividual();
+			OWLIndividual subject = assertion.getSubject();
+			OWLObjectPropertyExpression property = assertion.getProperty();
+			OWLIndividual object = assertion.getObject();
+			if (property instanceof OWLObjectProperty) {
+				if (subject instanceof OWLNamedIndividual && object instanceof OWLNamedIndividual) {
+					this.internalOntology.addRoleAssertion(subject.asOWLNamedIndividual(),
+							property.asOWLObjectProperty(), object.asOWLNamedIndividual());
+				}
+			}
 
-			this.internalOntology.addRoleAssertion(subject, property, object);
+			if (property instanceof OWLObjectInverseOf) {
+				if (subject instanceof OWLNamedIndividual && object instanceof OWLNamedIndividual) {
+					this.internalOntology.addRoleAssertion(object.asOWLNamedIndividual(), property.getNamedProperty(),
+							subject.asOWLNamedIndividual());
+				}
+			}
 
 		}
 	}

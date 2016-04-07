@@ -35,9 +35,10 @@ public interface AssertionTransporter {
 	 */
 	public RoleAssertionList getNewlyAddedRoleAssertions();
 	
+
 	/**
 	 * @return new sameas assertions haven added to the original ABox.
 	 *         This will be used as an input for the rule engine.
 	 */
-	public List<Set<OWLNamedIndividual>> getNewlyAddedSameasAssertions();
+	public Set<Set<OWLNamedIndividual>> getNewlyAddedSameasAssertions();
 }

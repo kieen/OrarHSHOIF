@@ -1,6 +1,7 @@
 package orar.refinement.assertiontransferring;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 	protected final DataForTransferingEntailments dataForTransferingEntailments;
 	// output
 	protected final RoleAssertionList newRoleAssertions;
-	protected final List<Set<OWLNamedIndividual>> newSameasAssertions;
+	protected final Set<Set<OWLNamedIndividual>> newSameasAssertions;
 
 	public AssertionTransporterTemplate(OrarOntology orarOntoloy) {
 		this.orarOntology = orarOntoloy;
@@ -47,7 +48,7 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 		this.config = Configuration.getInstance();
 		this.dataForTransferingEntailments = DataForTransferingEntailments.getInstance();
 		this.newRoleAssertions = new RoleAssertionList();
-		this.newSameasAssertions = new ArrayList<>();
+		this.newSameasAssertions = new HashSet<>();
 	}
 
 	@Override
@@ -243,7 +244,7 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 	}
 
 	@Override
-	public List<Set<OWLNamedIndividual>> getNewlyAddedSameasAssertions() {
+	public Set<Set<OWLNamedIndividual>> getNewlyAddedSameasAssertions() {
 		return this.newSameasAssertions;
 	}
 }

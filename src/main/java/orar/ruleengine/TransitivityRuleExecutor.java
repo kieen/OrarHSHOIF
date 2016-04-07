@@ -35,7 +35,7 @@ public class TransitivityRuleExecutor implements RuleExecutor {
 	public void materialize() {
 		// get all transitive role assertions.
 		Queue<OWLObjectPropertyAssertionAxiom> todoTranRoleAssertions = getAllTransitiveRoleAssertions();
-		logger.info("all tran role assertions:"+todoTranRoleAssertions);
+//		logger.info("all tran role assertions:"+todoTranRoleAssertions);
 		while (!todoTranRoleAssertions.isEmpty()) {
 			OWLObjectPropertyAssertionAxiom roleT_a_b = todoTranRoleAssertions.poll();
 			OWLNamedIndividual a = roleT_a_b.getSubject().asOWLNamedIndividual();

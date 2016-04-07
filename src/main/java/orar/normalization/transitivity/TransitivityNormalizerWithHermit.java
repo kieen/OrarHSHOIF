@@ -52,7 +52,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 		this.eliminationIsDone = false;
 		this.config = Configuration.getInstance();
 	}
-
+//	private 
 	@Override
 	public void normalizeTransitivity() {
 		OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
@@ -89,7 +89,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 	private Set<OWLSubClassOfAxiom> generateAxiomsSimulatingTransitivity() {
 
 		Set<OWLSubClassOfAxiom> generatedAxioms = new HashSet<>();
-
+		//TODO: we should computed it in rolereasoning.
 		hermit.precomputeInferences(InferenceType.OBJECT_PROPERTY_HIERARCHY);
 		Set<OWLObjectPropertyExpression> allTransRoles = getTransitiveRoles();
 		Set<OWLSubClassOfAxiom> todoSubClassAxioms = getSubClassOfAxioms();
