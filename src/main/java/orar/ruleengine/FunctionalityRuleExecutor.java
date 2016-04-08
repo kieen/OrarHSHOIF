@@ -36,14 +36,14 @@ public class FunctionalityRuleExecutor implements RuleExecutor {
 	private void mergePredecessorsOfInvFunctionalRole() {
 		// for inverse functional roles
 		Set<OWLObjectProperty> allInvFuncRoles = this.metaDataOfOntology.getInverseFunctionalRoles();
-		logger.info("********DEBUG**** allInvFuncRoles: "+allInvFuncRoles);
+//		logger.info("********DEBUG**** allInvFuncRoles: "+allInvFuncRoles);
 		for (OWLObjectProperty eachInvFuncRole : allInvFuncRoles) {
 			Set<OWLNamedIndividual> allObjects = this.orarOntology.getObjectsInRoleAssertions(eachInvFuncRole);
-			logger.info("********DEBUG**** allObjects: "+allObjects);
+//			logger.info("********DEBUG**** allObjects: "+allObjects);
 			for (OWLNamedIndividual eachObject : allObjects) {
 				Set<OWLNamedIndividual> allSubjects = this.orarOntology
 						.getPredecessorsTakingEqualityIntoAccount(eachObject, eachInvFuncRole);
-				logger.info("********DEBUG**** allSubjects: "+allSubjects);
+//				logger.info("********DEBUG**** allSubjects: "+allSubjects);
 				if (allSubjects.size() > 1) {
 					this.newSameasAssertions.add(allSubjects);
 				}
@@ -55,13 +55,13 @@ public class FunctionalityRuleExecutor implements RuleExecutor {
 	private void mergeSuccessorsOfFunctionalRole() {
 		Set<OWLObjectProperty> allFuncRoles = this.metaDataOfOntology.getFunctionalRoles();
 		for (OWLObjectProperty eachFuncRole : allFuncRoles) {
-			logger.info("functional role: " + eachFuncRole);
+//			logger.info("functional role: " + eachFuncRole);
 			Set<OWLNamedIndividual> allSubjects = this.orarOntology.getSubjectsInRoleAssertions(eachFuncRole);
 			for (OWLNamedIndividual eachSubject : allSubjects) {
-				logger.info("each Subject: " + eachSubject);
+//				logger.info("each Subject: " + eachSubject);
 				Set<OWLNamedIndividual> allObjects = this.orarOntology
 						.getSuccessorsTakingEqualityIntoAccount(eachSubject, eachFuncRole);
-				logger.info("all objects:" + allObjects);
+//				logger.info("all objects:" + allObjects);
 				if (allObjects.size() > 1) {
 					this.newSameasAssertions.add(allObjects);
 				}

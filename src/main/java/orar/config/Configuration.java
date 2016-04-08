@@ -14,7 +14,7 @@ public class Configuration {
 	private final String koncludeConfigFileName;
 	private final String savedOntologyFileName;
 
-	private int numberOfTypePerOntology = 30000;// Default value
+	private int numberOfTypePerOntology = 300;// Default value
 
 	private Configuration() {
 		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/newestversion_11_Sept_2015/Konclude";// default

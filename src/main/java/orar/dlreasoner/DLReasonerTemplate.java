@@ -102,6 +102,7 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 	 */
 	private void computeEntailedSameasAssertions() {
 		Set<OWLNamedIndividual> allIndividuals = this.owlOntology.getIndividualsInSignature(true);
+//		logger.info("***DEBUG*** individuals in signatures:"+allIndividuals);
 		for (OWLNamedIndividual indiv : allIndividuals) {
 			Set<OWLNamedIndividual> equivalentIndividuals = reasoner.getSameIndividuals(indiv).getEntities();
 
@@ -116,6 +117,7 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 	private void computeEntailedRoleAssertions() {
 		Set<OWLNamedIndividual> allIndividuals = this.owlOntology.getIndividualsInSignature(true);
 		Set<OWLObjectProperty> allRoles = this.owlOntology.getObjectPropertiesInSignature(true);
+		allRoles.remove(this.dataFactory.getOWLTopObjectProperty());
 		for (OWLNamedIndividual individual : allIndividuals) {
 			for (OWLObjectProperty role : allRoles) {
 				Set<OWLNamedIndividual> objects = reasoner.getObjectPropertyValues(individual, role).getFlattened();

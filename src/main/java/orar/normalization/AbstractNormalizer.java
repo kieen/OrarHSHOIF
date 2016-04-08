@@ -281,6 +281,7 @@ public abstract class AbstractNormalizer implements Normalizer {
 			Set<OWLAxiom> ABoxAxiom = this.inputOntology.getABoxAxioms(true);
 			manager.addAxioms(normalizedOntology, ABoxAxiom);
 			manager.addAxioms(normalizedOntology, aboxAxiomsByNomalizingNominals);
+			
 
 		} catch (OWLOntologyCreationException e) {
 			e.printStackTrace();

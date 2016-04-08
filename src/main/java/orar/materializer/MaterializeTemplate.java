@@ -69,31 +69,39 @@ public abstract class MaterializeTemplate implements Materializer {
 		 * (1). Get meta info of the ontology, e.g. role hierarchy, entailed
 		 * func/tran roles
 		 */
+		logger.info("Performing role reasoning ...");
 		doRoleReasoning();
 
 		/*
 		 * (2). Compute deductive closure of equality, trans, functionality, and
 		 * role subsumsion.
 		 */
+		logger.info("First time computing deductive closure...");
 		ruleEngine.materialize();
 		/*
 		 * Start loop from (3)--()
 		 */
 		boolean updated = true;
+		logger.info("Starting the abstraction refinement loop...");
+		int currentLoop = this.numberOfRefinements + 1;
+		logger.info("Loop number: " + currentLoop);
 		while (updated) {
 			/*
 			 * (3). Compute types
 			 */
+			logger.info("Computing types...");
 			Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals = this.typeComputor
 					.computeTypes(this.normalizedORAROntology);
+			logger.info("Number of types:"+typeMap2Individuals.size());
 			/*
 			 * (4). Generate the abstractions
 			 */
+			logger.info("Generating abstractions ...");
 			List<OWLOntology> abstractions = getAbstractions(typeMap2Individuals);
 			/*
 			 * (5). Materialize abstractions
 			 */
-
+			logger.info("Materializing the abstractions ...");
 			Map<OWLNamedIndividual, Set<OWLClass>> entailedAbstractConceptAssertions = new HashMap<>();
 			AbstractRoleAssertionBox entailedAbstractRoleAssertion = new AbstractRoleAssertionBox();
 			Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap = new HashMap<>();
@@ -110,6 +118,7 @@ public abstract class MaterializeTemplate implements Materializer {
 			/*
 			 * (6). Transfer assertions to the original ABox
 			 */
+			logger.info("Transferring the entailments ...");
 			AssertionTransporter assertionTransporter = getAssertionTransporter(entailedAbstractConceptAssertions,
 					entailedAbstractRoleAssertion, entailedSameasMap);
 			assertionTransporter.updateOriginalABox();
@@ -122,10 +131,14 @@ public abstract class MaterializeTemplate implements Materializer {
 				/*
 				 * (7). Compute deductive closure
 				 */
+				logger.info("Computing deductive closure wrt new entailments ...");
 				ruleEngine.addTodoRoleAsesrtions(newlyAddedRoleAssertions.getSetOfRoleAssertions());
 				ruleEngine.addTodoSameasAssertions(newlyAddedSameasAssertions);
 				ruleEngine.incrementalMaterialize();
+
 			}
+			logger.info("Finish loop: " + currentLoop);
+			currentLoop=this.numberOfRefinements+1;
 		}
 	}
 

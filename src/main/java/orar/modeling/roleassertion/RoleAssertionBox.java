@@ -46,6 +46,12 @@ public interface RoleAssertionBox {
 	 */
 	public Set<OWLObjectPropertyAssertionAxiom> getOWLAPIRoleAssertions();
 
+//	/**
+//	 * @param subject
+//	 * @return get a set of role assertions where {@code subject} is the subject
+//	 */
+//	public Set<OWLObjectPropertyAssertionAxiom> getOWLAPIRoleAssertions(OWLNamedIndividual subject);
+
 	/**
 	 * @param role
 	 * @return a set of subjects occurring in all role assertions of the

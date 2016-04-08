@@ -204,4 +204,12 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 		return predecessorAssertionsAsMap;
 	}
 
+//	@Override
+//	public Set<OWLObjectPropertyAssertionAxiom> getOWLAPIRoleAssertions(OWLNamedIndividual subject) {
+//		Map<OWLObjectProperty, Set<OWLNamedIndividual>> sucessorMap = this.roleAssertionMapWithSubjectAsKey.get(subject);
+//		Set<OWLObjectPropertyAssertionAxiom> roleAssertions;
+//		if(sucessorMap ==null)
+//		return null;
+//	}
+
 }

@@ -1,8 +1,11 @@
 package orar.modeling.ontology;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -27,7 +30,7 @@ import orar.modeling.sameas.MapbasedSameAsBox;
 import orar.modeling.sameas.SameAsBox;
 
 public class MapbasedOrarOntology implements OrarOntology {
-	private static final Logger logger= Logger.getLogger(MapbasedOrarOntology.class);
+	private static final Logger logger = Logger.getLogger(MapbasedOrarOntology.class);
 	/*
 	 * TBox axioms
 	 */
@@ -183,17 +186,17 @@ public class MapbasedOrarOntology implements OrarOntology {
 		OWLDataFactory owlDataFactory = manager.getOWLDataFactory();
 		OWLClass thingConcept = OWLManager.getOWLDataFactory().getOWLThing();
 		Set<OWLNamedIndividual> allIndividuals = this.getIndividualsInSignature();
-		Set<OWLClassAssertionAxiom> conceptAssertions= new HashSet<>();
-		for (OWLNamedIndividual a:allIndividuals){
+		Set<OWLClassAssertionAxiom> conceptAssertions = new HashSet<>();
+		for (OWLNamedIndividual a : allIndividuals) {
 			Set<OWLNamedIndividual> sameasOfa = this.getSameIndividuals(a);
 			sameasOfa.add(a);
-//			logger.info(" ***********sameas a:"+sameasOfa);
-			Set<OWLClass> assertedConcepts= new HashSet<>(); 
-			for (OWLNamedIndividual eachInd:sameasOfa){
+			// logger.info(" ***********sameas a:"+sameasOfa);
+			Set<OWLClass> assertedConcepts = new HashSet<>();
+			for (OWLNamedIndividual eachInd : sameasOfa) {
 				assertedConcepts.addAll(this.getAssertedConcepts(eachInd));
 			}
-//			logger.info(" ***********asserted concepts:"+assertedConcepts);
-			for (OWLClass eachConcept:assertedConcepts){
+			// logger.info(" ***********asserted concepts:"+assertedConcepts);
+			for (OWLClass eachConcept : assertedConcepts) {
 				boolean isNotIndividualByNormalization = !ValidatorDataFactory.getInstance()
 						.getNamedIndividualGeneratedDuringValidation().contains(a);
 				boolean isNotConceptByNormalization = !NormalizationDataFactory.getInstance()
@@ -205,7 +208,7 @@ public class MapbasedOrarOntology implements OrarOntology {
 					conceptAssertions.add(classAssertion);
 				}
 			}
-			
+
 		}
 		return conceptAssertions;
 	}
@@ -216,9 +219,37 @@ public class MapbasedOrarOntology implements OrarOntology {
 	}
 
 	@Override
-	public Set<OWLClassAssertionAxiom> getOWLAPIRoleAssertionsWITHOUTNormalizationSymbols() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<OWLObjectPropertyAssertionAxiom> getOWLAPIRoleAssertionsWITHOUTNormalizationSymbols() {
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		OWLDataFactory owlDataFactory = manager.getOWLDataFactory();
+		Set<OWLNamedIndividual> allIndividuals = this.getIndividualsInSignature();
+		Set<OWLObjectPropertyAssertionAxiom> resultingRoleAssertions = new HashSet<>();
+
+		for (OWLNamedIndividual ind_a : allIndividuals) {
+			Set<OWLNamedIndividual> sameasOf_a = getSameIndividuals(ind_a);
+			sameasOf_a.add(ind_a);
+			for (OWLNamedIndividual ind_b : sameasOf_a) {
+				Map<OWLObjectProperty, Set<OWLNamedIndividual>> succesorAssertionAsMap = this.roleAssertionBox
+						.getSuccesorRoleAssertionsAsMap(ind_b);
+				if (succesorAssertionAsMap == null) {
+					continue;
+				}
+
+				Iterator<Entry<OWLObjectProperty, Set<OWLNamedIndividual>>> iterator = succesorAssertionAsMap.entrySet()
+						.iterator();
+				while (iterator.hasNext()) {
+					Entry<OWLObjectProperty, Set<OWLNamedIndividual>> entry = iterator.next();
+					OWLObjectProperty role = entry.getKey();
+					Set<OWLNamedIndividual> objects_c = entry.getValue();
+					for (OWLNamedIndividual ind_c : objects_c) {
+						OWLObjectPropertyAssertionAxiom newAssertion = owlDataFactory
+								.getOWLObjectPropertyAssertionAxiom(role, ind_a, ind_c);
+						resultingRoleAssertions.add(newAssertion);
+					}
+				}
+			}
+		}
+		return resultingRoleAssertions;
 	}
 
 	@Override
@@ -373,14 +404,32 @@ public class MapbasedOrarOntology implements OrarOntology {
 
 	@Override
 	public int getNumberOfConceptAssertions() {
-		
+
 		return this.conceptAssertionBox.getNumberOfConceptAssertions();
 	}
 
 	@Override
 	public int getNumberOfRoleAssertions() {
-		
+
 		return this.roleAssertionBox.getNumberOfRoleAssertions();
+	}
+
+	@Override
+	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getEntailedSameasAssertions() {
+		Set<OWLNamedIndividual> allIndividuals = getIndividualsInSignature();
+//		logger.info("***DEBUG*** all Individuals:"+allIndividuals);
+		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> allEntailedSameasMap = new HashMap<>(
+				getSameasBox().getSameasMap());
+		for (OWLNamedIndividual ind : allIndividuals) {
+			Set<OWLNamedIndividual> existingInds = allEntailedSameasMap.get(ind);
+			if (existingInds == null) {
+				existingInds = new HashSet<>();
+				existingInds.add(ind);
+			}
+			existingInds.add(ind);
+			allEntailedSameasMap.put(ind, existingInds);
+		}
+		return allEntailedSameasMap;
 	}
 
 }

@@ -22,6 +22,7 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 	private RuleExecutor tranRule;
 	private RuleExecutor funcRule;
 	private List<RuleExecutor> ruleExecutors;
+	private long reasoningTime;
 
 	public SemiNaiveRuleEngine(OrarOntology orarOntology) {
 		this.orarOntology = orarOntology;
@@ -42,12 +43,16 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 
 	@Override
 	public void materialize() {
+		long starTime = System.currentTimeMillis();
 		for (RuleExecutor ruleEx : this.ruleExecutors) {
 			ruleEx.materialize();
 			this.todoRoleAssertions.addAll(ruleEx.getNewRoleAssertions());
 			this.todoSameasAssertions.addAll(ruleEx.getNewSameasAssertions());
 		}
 		incrementalMaterialize();
+		long endTime = System.currentTimeMillis();
+		this.reasoningTime=(endTime-starTime)/1000;
+		logger.info("Reasoning time for deductive closure computing in this step: "+ this.reasoningTime);
 	}
 
 	@Override
@@ -91,6 +96,12 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 	public void addTodoRoleAsesrtions(Set<OWLObjectPropertyAssertionAxiom> odoRoleAssertions) {
 		this.todoRoleAssertions.addAll(odoRoleAssertions);
 
+	}
+
+	@Override
+	public long getReasoningTime() {
+	
+		return this.reasoningTime;
 	}
 
 }

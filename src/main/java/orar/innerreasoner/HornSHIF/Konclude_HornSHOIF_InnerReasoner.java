@@ -83,7 +83,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHIF_InnerReasonerTemp
 		 * way to make sure that Konclude server is ready.
 		 */
 		try {
-			Thread.sleep(3000); // 1000 milliseconds is one second.
+			Thread.sleep(5000); // 1000 milliseconds is one second.
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
@@ -95,7 +95,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHIF_InnerReasonerTemp
 		watchdog.destroyProcess();
 		// TODO: it works so far but it could be improved.
 		try {
-			Thread.sleep(3000); // 1000 milliseconds is one second.
+			Thread.sleep(5000); // 1000 milliseconds is one second.
 		} catch (InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}

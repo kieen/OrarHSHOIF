@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import com.google.common.collect.MapDifference;
+
 /**
  * @author T.Kien Tran
  */
@@ -45,6 +47,23 @@ public class PrintingHelper {
 			loggerOfHelper.info("===================");
 		}
 
+	}
+
+	public static <K, V> void printMapDifference(MapDifference<K, V> map) {
+
+		if (map == null) {
+			loggerOfHelper.info("null");
+		}
+
+		loggerOfHelper.info("Maps are equal? " + map.areEqual());
+
+		if (!map.areEqual()) {
+			loggerOfHelper.info("Entires only on the left:");
+			printMap(map.entriesOnlyOnLeft());
+			loggerOfHelper.info("Entires only on the right:");
+			printMap(map.entriesOnlyOnRight());
+			
+		}
 	}
 
 	public static <K, V> void printMap(Logger logger, Map<K, V> map) {

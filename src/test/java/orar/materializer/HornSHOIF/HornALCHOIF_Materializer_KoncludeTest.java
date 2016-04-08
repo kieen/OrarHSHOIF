@@ -7,17 +7,16 @@ import junit.framework.Assert;
 import orar.completenesschecker.CompletenessChecker;
 import orar.completenesschecker.CompletenessCheckerHorn;
 import orar.config.Configuration;
-import orar.config.DebugLevel;
 import orar.config.LogInfo;
-import orar.data.MetaDataOfOntology;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
+import orar.dlreasoner.KoncludeDLReasoner;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
 import orar.modeling.ontology.OrarOntology;
 
-public class HornALCHOIF_Materializer_Hermit_Test {
+public class HornALCHOIF_Materializer_KoncludeTest {
 
 	/**
 	 * No new entailments
@@ -107,6 +106,7 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 	@Test
 	public void testFunctional7() {
 		String ontologyPath = "src/test/resources/main/testFunctional7.owl";
+
 		haveTheSameResults(ontologyPath);
 	}
 
@@ -148,13 +148,13 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 		haveTheSameResults(ontologyPath);
 	}
 
-	//
-	// @Test
-	// public void testUOBM_OX() {
-	//
-	// String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
-	// haveTheSameResults(ontologyPath);
-	// }
+	
+	 @Test
+	 public void testUOBM_OX() {
+	
+	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
+	 haveTheSameResults(ontologyPath);
+	 }
 	 @Test
 	 public void testLUBM() {
 	
@@ -168,15 +168,14 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 	 * @param ontologyPath
 	 */
 	private void haveTheSameResults(String ontologyPath) {
-		MetaDataOfOntology.getInstance().clear();
-		Configuration.getInstance().getDebuglevels().clear();
+
 		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
 				LogInfo.COMPARED_RESULT_INFO);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
 
-		Materializer materializer = new HornSHOIF_Materialization_Hermit(normalizedOrarOntology);
+		Materializer materializer = new HornSHOIF_Materialization_Konclude(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology
@@ -184,14 +183,13 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 		System.out.println("Loading ontology for a DL Reasoner....");
 		OWLOntology owlOntology = ontoReader.getOWLAPIOntology(ontologyPath);
 
-		DLReasoner koncludeRealizer = new HermitDLReasoner(owlOntology);
+		DLReasoner koncludeRealizer = new KoncludeDLReasoner(owlOntology);
 
-		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
+		CompletenessChecker checker = new CompletenessCheckerHorn(materializer,koncludeRealizer);
 		checker.computeEntailments();
 
-		 Assert.assertTrue(checker.isConceptAssertionComplete());
-		Assert.assertTrue(checker.isRoleAssertionComplete());
-		 Assert.assertTrue(checker.isSameasComplete());
+		Assert.assertTrue(checker.isConceptAssertionComplete());
+	
 
 	}
 }

@@ -80,4 +80,9 @@ public class MapbasedSameAsBox implements SameAsBox {
 		}
 		return updated;
 	}
+
+	@Override
+	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getSameasMap() {
+		return new HashMap<>(this.sameAsMap);
+	}
 }

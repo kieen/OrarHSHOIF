@@ -1,6 +1,5 @@
 package orar.ruleengine;
 
-import java.util.Queue;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -15,7 +14,10 @@ public interface RuleEngine {
 	public void incrementalMaterialize();
 
 	public OrarOntology getOntology();
+
+	public void addTodoSameasAssertions(Set<Set<OWLNamedIndividual>> todoSameasAssertions);
+
+	public void addTodoRoleAsesrtions(Set<OWLObjectPropertyAssertionAxiom> odoRoleAssertions);
 	
-	public void addTodoSameasAssertions( Set<Set<OWLNamedIndividual>> todoSameasAssertions);
-	public void addTodoRoleAsesrtions(Set<OWLObjectPropertyAssertionAxiom>odoRoleAssertions);
+	public long getReasoningTime();
 }

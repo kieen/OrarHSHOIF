@@ -52,9 +52,11 @@ public interface OrarOntology {
 	 * Number of assertions when the ontology was first created: getters
 	 */
 	public int getNumberOfInputConceptAssertions();
+
 	public int getNumberOfConceptAssertions();
 
 	public int getNumberOfInputRoleAssertions();
+
 	public int getNumberOfRoleAssertions();
 
 	/*
@@ -87,9 +89,9 @@ public interface OrarOntology {
 	 * This method is not efficient and only used for checking
 	 * correctness/comparing results with other tools via OWLAPI.
 	 * 
-	 * @return a set of OWLAPI concept assertions after removing those of
-	 *         concepts/individuals generated during normalization and profile
-	 *         validation phase.
+	 * @return a set of OWLAPI concept assertions (taking sameas into account)
+	 *         after removing those of concepts/individuals generated during
+	 *         normalization and profile validation phase.
 	 */
 	public Set<OWLClassAssertionAxiom> getOWLAPIConceptAssertionsWHITOUTNormalizationSymbols();
 
@@ -115,7 +117,7 @@ public interface OrarOntology {
 	 *         concepts/individuals generated during normalization and profile
 	 *         validation phase.
 	 */
-	public Set<OWLClassAssertionAxiom> getOWLAPIRoleAssertionsWITHOUTNormalizationSymbols();
+	public Set<OWLObjectPropertyAssertionAxiom> getOWLAPIRoleAssertionsWITHOUTNormalizationSymbols();
 
 	/*
 	 * Methods for DL fragments
@@ -209,26 +211,42 @@ public interface OrarOntology {
 			OWLNamedIndividual objectIndividual);
 
 	public Set<OWLNamedIndividual> getPredecessors(OWLNamedIndividual object, OWLObjectProperty role);
+
 	/**
 	 * @param object
 	 * @param role
 	 * @return get a copy of all Predecessors
 	 */
-	public Set<OWLNamedIndividual> getPredecessorsTakingEqualityIntoAccount(OWLNamedIndividual object, OWLObjectProperty role);
+	public Set<OWLNamedIndividual> getPredecessorsTakingEqualityIntoAccount(OWLNamedIndividual object,
+			OWLObjectProperty role);
+
 	public Set<OWLNamedIndividual> getSuccessors(OWLNamedIndividual subject, OWLObjectProperty role);
+
 	/**
 	 * @param subject
 	 * @param role
 	 * @return get a copy of all Successors
 	 */
-	public Set<OWLNamedIndividual> getSuccessorsTakingEqualityIntoAccount(OWLNamedIndividual subject, OWLObjectProperty role);
+	public Set<OWLNamedIndividual> getSuccessorsTakingEqualityIntoAccount(OWLNamedIndividual subject,
+			OWLObjectProperty role);
 
 	/*
 	 * others
 	 */
 	public SameAsBox getSameasBox();
+
+	/**
+	 * @return entailed sameas assertion as a map. Note that this include (a
+	 *         equivalent a) for every individuals a. And note that in the
+	 *         datastructure we store only sameas assertions in which a has a
+	 *         really different equivalent individual, e.g. b.
+	 */
+	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getEntailedSameasAssertions();
+
 	public Set<OWLNamedIndividual> getSubjectsInRoleAssertions(OWLObjectProperty role);
+
 	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role);
+
 	public boolean addSameasAssertion(Set<OWLNamedIndividual> setOfSameasIndividuals);
 
 }

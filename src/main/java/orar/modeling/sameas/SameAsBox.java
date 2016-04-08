@@ -40,4 +40,8 @@ public interface SameAsBox {
 
 	
 	public boolean addSameasAssertions(Set<OWLNamedIndividual> setOfSameasIndividuals);
+	/**
+	 * @return a copy of sameas map.
+	 */
+	public Map<OWLNamedIndividual,Set<OWLNamedIndividual>> getSameasMap();
 }

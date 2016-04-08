@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>kien</groupId>
-  <artifactId>OrarHSHOIF</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <!-- Output to jar format -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>kien</groupId>
+	<artifactId>OrarHSHOIF</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<!-- Output to jar format -->
 	<packaging>jar</packaging>
-	
+
 	<dependencies>
 		<!-- explanation -->
 		<dependency>
@@ -43,7 +44,7 @@
 		<dependency>
 			<groupId>net.sourceforge.owlapi</groupId>
 			<artifactId>owlapi-api</artifactId>
-			<version>3.5.1</version>
+			<version>3.5.4</version>
 		</dependency>
 		<!-- Junit -->
 		<dependency>
@@ -117,19 +118,24 @@
 			<artifactId>commons-cli</artifactId>
 			<version>1.3.1</version>
 		</dependency>
-
+		<!-- google java libs , currently use only in testing-->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
-<!-- 		<resources> -->
-<!-- 			<resource> -->
-<!-- 				<directory>src/main/resources</directory> -->
-<!-- 				<targetPath>${project.build.directory}</targetPath> -->
-<!-- 				<includes> -->
-<!-- 					<include>log4j.properties</include> -->
-<!-- 				</includes> -->
-<!-- 			</resource> -->
-<!-- 		</resources> -->
+		<!-- <resources> -->
+		<!-- <resource> -->
+		<!-- <directory>src/main/resources</directory> -->
+		<!-- <targetPath>${project.build.directory}</targetPath> -->
+		<!-- <includes> -->
+		<!-- <include>log4j.properties</include> -->
+		<!-- </includes> -->
+		<!-- </resource> -->
+		<!-- </resources> -->
 
 
 		<plugins>
@@ -164,7 +170,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-<!-- 							<mainClass>orar.commandline.OrarCLI</mainClass> -->
+							<!-- <mainClass>orar.commandline.OrarCLI</mainClass> -->
 							<mainClass>orar.commandline.OWLReasonerCLI</mainClass>
 						</manifest>
 						<manifestEntries>
