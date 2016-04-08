@@ -208,7 +208,7 @@ public class SemiNaiveRuleEngineTest {
 	}
 	
 	@Test
-	public void testCorbunLUBM(){
+	public void seeHowFastWithCorbunLUBM(){
 		/*
 		 * Load ontology where TBox and ABox are in separated files.
 		 */

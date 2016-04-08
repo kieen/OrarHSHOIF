@@ -29,6 +29,7 @@ public class HermitRoleReasoner implements RoleReasoner {
 	private final Set<OWLObjectProperty> inverseFunctionalRoles;
 	private final Set<OWLObjectProperty> transitiveRoles;
 	private final Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> subRoleMaps;
+	private final Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> inverseRoleMap;
 	// Others
 	private final Set<OWLAxiom> tboxRboxAxioms;
 	private OWLOntology owlOntologyWithRoleAxiomsOnly;
@@ -42,6 +43,7 @@ public class HermitRoleReasoner implements RoleReasoner {
 
 		this.tboxRboxAxioms = tboxRboxAxioms;
 		this.owlDataFactory = OWLManager.getOWLDataFactory();
+		this.inverseRoleMap= new HashMap<>();
 
 	}
 
@@ -65,6 +67,7 @@ public class HermitRoleReasoner implements RoleReasoner {
 		createOWLOntologyWithRoleAxiomsForComputingRoleHierarchy();
 		hermit = new Reasoner(owlOntologyWithRoleAxiomsOnly);
 		hermit.classifyObjectProperties();
+		createMapFromRoleToItsInverses();
 		computRoleHierarchy();
 		computeTransitiveRoles();
 		computeSubRolesOfDefinedFunctionalRoles();
@@ -232,5 +235,53 @@ public class HermitRoleReasoner implements RoleReasoner {
 
 		return this.transitiveRoles;
 	}
+	private void createMapFromRoleToItsInverses() {
+		Set<OWLInverseObjectPropertiesAxiom> allInverseRoleAxioms = AxiomOfSpecificTypeGetter
+				.getInverseObjectPropertyAxioms(this.tboxRboxAxioms);
+		
+//		logger.info("***DEBUG*** allInverseRoleAxioms:"+allInverseRoleAxioms);
+//		Pause.pause();
+		
+		for (OWLInverseObjectPropertiesAxiom invroleAxiom : allInverseRoleAxioms) {
+			OWLObjectPropertyExpression left = invroleAxiom.getFirstProperty().getSimplified();
+			OWLObjectPropertyExpression right = invroleAxiom.getSecondProperty().getSimplified();
+
+			// add entry for left
+			if (left instanceof OWLObjectProperty) {
+				addEntryToIverseRoleMap(left.asOWLObjectProperty(), right);
+			} else if (left instanceof OWLObjectInverseOf) {
+				addEntryToIverseRoleMap(left.getNamedProperty(), this.owlDataFactory.getOWLObjectInverseOf(right));
+			}
+
+			// add entry for right
+			if (right instanceof OWLObjectProperty) {
+				addEntryToIverseRoleMap(right.asOWLObjectProperty(), left);
+			} else if (right instanceof OWLObjectInverseOf) {
+				addEntryToIverseRoleMap(right.getNamedProperty(), this.owlDataFactory.getOWLObjectInverseOf(left));
+			}
+
+		}
+	}
+	/**
+	 * add value to the existing value of the key.
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	private void addEntryToIverseRoleMap(OWLObjectProperty key, OWLObjectPropertyExpression value) {
+		Set<OWLObjectPropertyExpression> existingValues = this.inverseRoleMap.get(key);
+		if (existingValues == null) {
+			existingValues = new HashSet<>();
+		}
+		existingValues.add(value);
+		this.inverseRoleMap.put(key, existingValues);
+	}
+
+	@Override
+	public Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> getInverseRoleMap() {
+	
+		return this.inverseRoleMap;
+	}
+
 
 }

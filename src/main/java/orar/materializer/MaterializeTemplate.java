@@ -156,6 +156,8 @@ public abstract class MaterializeTemplate implements Materializer {
 		this.metaDataOfOntology.getFunctionalRoles().addAll(roleReasoner.getFunctionalRoles());
 		this.metaDataOfOntology.getInverseFunctionalRoles().addAll(roleReasoner.getInverseFunctionalRoles());
 		this.metaDataOfOntology.getTransitiveRoles().addAll(roleReasoner.getTransitiveRoles());
+		this.metaDataOfOntology.getInverseRoleMap().putAll(roleReasoner.getInverseRoleMap());
+		this.metaDataOfOntology.getSubRoleMap().putAll(roleReasoner.getRoleHierarchyAsMap());
 	}
 
 	protected abstract InnerReasoner getInnerReasoner(OWLOntology abstraction);

@@ -41,5 +41,7 @@ public interface RoleReasoner {
 	 * @return a set of (entailed) transitive atomic roles
 	 */
 	public Set<OWLObjectProperty> getTransitiveRoles();
+	
+	public Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> getInverseRoleMap();
 
 }

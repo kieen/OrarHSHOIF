@@ -64,7 +64,7 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 			OWLNamedIndividual eachObjectOf_R) {
 		if (this.orarOntology.addRoleAssertion(eachSubjectOf_R, eacAtomicSuperRoleOf_R, eachObjectOf_R)) {
 			this.isABoxExtended = true;
-			if (isTranOrCountingRole(eacAtomicSuperRoleOf_R)) {
+			if (isTranOrCountingOrInverseRole(eacAtomicSuperRoleOf_R)) {
 				OWLObjectPropertyAssertionAxiom newRoleAssertion = this.dataFactory
 						.getOWLObjectPropertyAssertionAxiom(eacAtomicSuperRoleOf_R, eachSubjectOf_R, eachObjectOf_R);
 				this.newRoleAssertions.add(newRoleAssertion);
@@ -73,10 +73,11 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 
 	}
 
-	private boolean isTranOrCountingRole(OWLObjectProperty role) {
+	private boolean isTranOrCountingOrInverseRole(OWLObjectProperty role) {
 		return (this.metaDataOfOntology.getTransitiveRoles().contains(role)
 				|| this.metaDataOfOntology.getFunctionalRoles().contains(role)
-				|| this.metaDataOfOntology.getInverseFunctionalRoles().contains(role));
+				|| this.metaDataOfOntology.getInverseFunctionalRoles().contains(role)
+				|| this.metaDataOfOntology.getInverseRoleMap().keySet().contains(role));
 
 	}
 

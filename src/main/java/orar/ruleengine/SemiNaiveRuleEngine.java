@@ -21,6 +21,7 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 	private RuleExecutor subroRule;
 	private RuleExecutor tranRule;
 	private RuleExecutor funcRule;
+	private RuleExecutor inverseRule;
 	private List<RuleExecutor> ruleExecutors;
 	private long reasoningTime;
 
@@ -33,12 +34,14 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 		this.funcRule = new FunctionalityRuleExecutor(orarOntology);
 		this.tranRule = new TransitivityRuleExecutor(orarOntology);
 		this.subroRule = new SubRoleRuleExecutor(orarOntology);
+		this.inverseRule = new InverseRoleRuleExecutor(orarOntology);
+
 		this.ruleExecutors = new ArrayList<>();
 		this.ruleExecutors.add(sameasRule);
 		this.ruleExecutors.add(subroRule);
 		this.ruleExecutors.add(tranRule);
 		this.ruleExecutors.add(funcRule);
-
+		this.ruleExecutors.add(inverseRule);
 	}
 
 	@Override
@@ -51,8 +54,8 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 		}
 		incrementalMaterialize();
 		long endTime = System.currentTimeMillis();
-		this.reasoningTime=(endTime-starTime)/1000;
-		logger.info("Reasoning time for deductive closure computing in this step: "+ this.reasoningTime);
+		this.reasoningTime = (endTime - starTime) / 1000;
+		logger.info("Reasoning time for deductive closure computing in this step: " + this.reasoningTime);
 	}
 
 	@Override
@@ -100,7 +103,7 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 
 	@Override
 	public long getReasoningTime() {
-	
+
 		return this.reasoningTime;
 	}
 

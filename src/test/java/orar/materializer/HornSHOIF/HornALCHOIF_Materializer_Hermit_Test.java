@@ -7,7 +7,6 @@ import junit.framework.Assert;
 import orar.completenesschecker.CompletenessChecker;
 import orar.completenesschecker.CompletenessCheckerHorn;
 import orar.config.Configuration;
-import orar.config.DebugLevel;
 import orar.config.LogInfo;
 import orar.data.MetaDataOfOntology;
 import orar.dlreasoner.DLReasoner;
@@ -155,12 +154,13 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 	// String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
 	// haveTheSameResults(ontologyPath);
 	// }
-	 @Test
-	 public void testLUBM() {
-	
-	 String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
+	@Test
+	public void testLUBM() {
+
+		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
+		haveTheSameResults(ontologyPath);
+	}
+
 	/**
 	 * Compare result by Abstraction and by OWLReasoner; assert that they have
 	 * the same result.
@@ -189,9 +189,9 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
 		checker.computeEntailments();
 
-		 Assert.assertTrue(checker.isConceptAssertionComplete());
+		Assert.assertTrue(checker.isConceptAssertionComplete());
 		Assert.assertTrue(checker.isRoleAssertionComplete());
-		 Assert.assertTrue(checker.isSameasComplete());
+		Assert.assertTrue(checker.isSameasComplete());
 
 	}
 }
