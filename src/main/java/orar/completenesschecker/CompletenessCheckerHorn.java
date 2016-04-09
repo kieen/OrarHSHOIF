@@ -62,7 +62,10 @@ public class CompletenessCheckerHorn implements CompletenessChecker {
 				.getOWLAPIConceptAssertionsWHITOUTNormalizationSymbols();
 		this.entailedRoleAssertionByAbstraction = orarOntology.getOWLAPIRoleAssertionsWITHOUTNormalizationSymbols();
 		this.entailedSameasMapByAbstraction = orarOntology.getEntailedSameasAssertions();
-
+		logger.info("Number of derived concept assertions by abstraction materializer:"
+				+ entailedConceptAssertionByAbstraction.size());
+		logger.info("Number of derived role assertions by abstraction materializer:"
+				+ entailedRoleAssertionByAbstraction.size());
 		/*
 		 * get result by owlrealizer
 		 */

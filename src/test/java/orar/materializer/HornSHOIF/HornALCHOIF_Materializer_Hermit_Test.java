@@ -10,6 +10,7 @@ import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.data.MetaDataOfOntology;
 import orar.dlreasoner.DLReasoner;
+import orar.dlreasoner.FactDLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
@@ -147,13 +148,18 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 		haveTheSameResults(ontologyPath);
 	}
 
-	//
-	// @Test
-	// public void testUOBM_OX() {
-	//
-	// String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
-	// haveTheSameResults(ontologyPath);
-	// }
+	
+	@Test
+	 public void testUOBM_OXSmall() {
+	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small2.owl";
+	 haveTheSameResults(ontologyPath);
+	 }
+	 @Test
+	 public void testUOBM_OX() {
+	
+	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
+	 haveTheSameResults(ontologyPath);
+	 }
 	@Test
 	public void testLUBM() {
 

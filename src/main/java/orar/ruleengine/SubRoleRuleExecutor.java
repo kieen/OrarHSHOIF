@@ -3,6 +3,7 @@ package orar.ruleengine;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -13,8 +14,10 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 
 import orar.data.MetaDataOfOntology;
 import orar.modeling.ontology.OrarOntology;
+import orar.util.Pause;
 
 public class SubRoleRuleExecutor implements RuleExecutor {
+	private final Logger logger = Logger.getLogger(SubRoleRuleExecutor.class);
 	private final Set<OWLObjectPropertyAssertionAxiom> newRoleAssertions;
 	private final OrarOntology orarOntology;
 	private final MetaDataOfOntology metaDataOfOntology;
@@ -33,7 +36,11 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 	public void materialize() {
 		Set<OWLObjectProperty> allRolesHavingSuperRoles = this.metaDataOfOntology.getSubRoleMap().keySet();
 		for (OWLObjectProperty R : allRolesHavingSuperRoles) {
+//			logger.info("***DEBUG*** R "+ R);
+//			Pause.pause();
 			Set<OWLNamedIndividual> allSubjectsOf_R = this.orarOntology.getSubjectsInRoleAssertions(R);
+//			logger.info("***DEBUG***allSubjectsOf_R "+ allSubjectsOf_R);
+//			Pause.pause();
 			for (OWLNamedIndividual eachSubjectOf_R : allSubjectsOf_R) {
 				Set<OWLNamedIndividual> allObjectsOf_R = this.orarOntology.getSuccessors(eachSubjectOf_R, R);
 				Set<? extends OWLObjectPropertyExpression> allSuperRolesOf_R = this.metaDataOfOntology.getSubRoleMap()
@@ -44,6 +51,8 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 						OWLObjectProperty eacAtomicSuperRoleOf_R = eachSuperRoleOf_R.asOWLObjectProperty();
 						for (OWLNamedIndividual eachObjectOf_R : allObjectsOf_R) {
 							addRoleAssertion(eachSubjectOf_R, eacAtomicSuperRoleOf_R, eachObjectOf_R);
+//							logger.info("***DEBUG***add "+ eachSubjectOf_R+ ","+ eacAtomicSuperRoleOf_R+ ","+ eachObjectOf_R);
+//							Pause.pause();
 						}
 					}
 					// case of inverse role
@@ -77,7 +86,7 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 		return (this.metaDataOfOntology.getTransitiveRoles().contains(role)
 				|| this.metaDataOfOntology.getFunctionalRoles().contains(role)
 				|| this.metaDataOfOntology.getInverseFunctionalRoles().contains(role)
-				|| this.metaDataOfOntology.getInverseRoleMap().keySet().contains(role));
+				);
 
 	}
 

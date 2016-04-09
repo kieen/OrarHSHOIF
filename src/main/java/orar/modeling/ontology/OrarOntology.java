@@ -243,8 +243,18 @@ public interface OrarOntology {
 	 */
 	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getEntailedSameasAssertions();
 
+	/**
+	 * @param role
+	 * @return a copy of subjects occurring in role assertions of the role
+	 *         {@code role}
+	 */
 	public Set<OWLNamedIndividual> getSubjectsInRoleAssertions(OWLObjectProperty role);
 
+	/**
+	 * @param role
+	 * @return a copy of objects occurring in role assertions of the role
+	 *         {@code role}
+	 */
 	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role);
 
 	public boolean addSameasAssertion(Set<OWLNamedIndividual> setOfSameasIndividuals);

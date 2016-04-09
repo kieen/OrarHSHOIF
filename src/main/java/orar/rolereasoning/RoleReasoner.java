@@ -42,6 +42,6 @@ public interface RoleReasoner {
 	 */
 	public Set<OWLObjectProperty> getTransitiveRoles();
 	
-	public Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> getInverseRoleMap();
+//	public Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> getInverseRoleMap();
 
 }

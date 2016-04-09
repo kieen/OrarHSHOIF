@@ -158,7 +158,7 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 	public Set<OWLNamedIndividual> getSubjectsInRoleAssertions(OWLObjectProperty role) {
 		Set<OWLNamedIndividual> subjects = this.roleAssertionMapWithRoleAsKeyAndSubjectAsValue.get(role);
 		if (subjects != null) {
-			return subjects;
+			return new HashSet<>(subjects);
 		} else {
 			return new HashSet<>();
 		}
@@ -168,7 +168,7 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role) {
 		Set<OWLNamedIndividual> subjects = this.roleAssertionMapWithRoleAsKeyAndObjectAsValue.get(role);
 		if (subjects != null) {
-			return subjects;
+			return new HashSet<>(subjects);
 		} else {
 			return new HashSet<>();
 		}

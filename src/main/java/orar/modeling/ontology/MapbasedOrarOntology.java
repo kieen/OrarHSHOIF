@@ -242,9 +242,13 @@ public class MapbasedOrarOntology implements OrarOntology {
 					OWLObjectProperty role = entry.getKey();
 					Set<OWLNamedIndividual> objects_c = entry.getValue();
 					for (OWLNamedIndividual ind_c : objects_c) {
+						Set<OWLNamedIndividual> sameasOf_c = this.getSameIndividuals(ind_c);
+						sameasOf_c.add(ind_c);
+						for (OWLNamedIndividual eachSameOfc:sameasOf_c){
 						OWLObjectPropertyAssertionAxiom newAssertion = owlDataFactory
-								.getOWLObjectPropertyAssertionAxiom(role, ind_a, ind_c);
+								.getOWLObjectPropertyAssertionAxiom(role, ind_a, eachSameOfc);
 						resultingRoleAssertions.add(newAssertion);
+						}
 					}
 				}
 			}

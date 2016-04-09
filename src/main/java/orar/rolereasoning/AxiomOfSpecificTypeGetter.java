@@ -158,7 +158,8 @@ public class AxiomOfSpecificTypeGetter {
 		for (OWLAxiom axiom : tboxRboxAxioms) {
 			if (axiom.isOfType(AxiomType.SUB_OBJECT_PROPERTY) || axiom.isOfType(AxiomType.INVERSE_OBJECT_PROPERTIES)
 					|| axiom.isOfType(AxiomType.SYMMETRIC_OBJECT_PROPERTY)
-					|| axiom.isOfType(AxiomType.EQUIVALENT_OBJECT_PROPERTIES)) {
+					|| axiom.isOfType(AxiomType.EQUIVALENT_OBJECT_PROPERTIES)
+					|| axiom.isOfType(AxiomType.TRANSITIVE_OBJECT_PROPERTY)) {
 				resultingAxioms.add(axiom);
 			}
 		}

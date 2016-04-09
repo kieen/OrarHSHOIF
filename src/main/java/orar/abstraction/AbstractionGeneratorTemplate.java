@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -32,7 +33,7 @@ import orar.type.IndividualType;
  *
  */
 public abstract class AbstractionGeneratorTemplate implements AbstractionGenerator {
-
+	private final Logger logger =Logger.getLogger(AbstractionGeneratorTemplate.class);
 	protected final DataForTransferingEntailments sharedMap;
 	protected final MetaDataOfOntology sharedData;
 
@@ -71,6 +72,11 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 	public List<OWLOntology> getAbstractOntologies(int numberOfTypePerOntology) {
 		Set<IndividualType> types = typeMap2Individuals.keySet();
 		List<OWLOntology> resultingAbstractOntologies = new ArrayList<>();
+		if (numberOfTypePerOntology==0) {
+			logger.error("Ontology is empty.");
+			System.exit(1);
+			
+		}
 		int totalNumberOfTypes = types.size();
 		int numberOfOntologies = totalNumberOfTypes / numberOfTypePerOntology
 				+ (totalNumberOfTypes % numberOfTypePerOntology == 0 ? 0 : 1);
