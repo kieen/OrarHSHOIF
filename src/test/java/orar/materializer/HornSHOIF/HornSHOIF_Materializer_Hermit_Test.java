@@ -192,6 +192,22 @@ public class HornSHOIF_Materializer_Hermit_Test {
 	}
 
 	@Test
+	public void testRoleAssertionByTran1() {
+		Configuration.getInstance().addAllDebugInfos();
+		String ontologyPath = "src/test/resources/main/HornALCHOIF/testRoleAssertionByTran1.owl";
+
+		haveTheSameResults(ontologyPath);
+	}
+
+	@Test
+	public void testRoleAssertionByTran2() {
+		Configuration.getInstance().addAllDebugInfos();
+		String ontologyPath = "src/test/resources/main/HornALCHOIF/testRoleAssertionByTran2.owl";
+
+		haveTheSameResults(ontologyPath);
+	}
+
+	@Test
 	 public void testUOBM_OXSmall() {
 	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small1.owl";
 	 haveTheSameResults(ontologyPath);
