@@ -8,14 +8,18 @@ import orar.completenesschecker.CompletenessChecker;
 import orar.completenesschecker.CompletenessCheckerHorn;
 import orar.config.Configuration;
 import orar.config.LogInfo;
+import orar.data.AbstractDataFactory;
 import orar.data.MetaDataOfOntology;
+import orar.data.NormalizationDataFactory;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.FactDLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
+import orar.dlreasoner.PelletDLReasoner;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
 import orar.modeling.ontology.OrarOntology;
+import orar.util.PrintingHelper;
 
 public class HornALCHOIF_Materializer_Hermit_Test {
 
@@ -147,11 +151,49 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 
 		haveTheSameResults(ontologyPath);
 	}
+	@Test
+	public void testNominalConcept() {
+		Configuration.getInstance().addAllDebugInfos();
+		String ontologyPath = "src/test/resources/main/HornALCHOIF/testNominalConcept.owl";
 
+		haveTheSameResults(ontologyPath);
+	}
 	
 	@Test
+	public void testNonTrivialRoleAssertion() {
+		Configuration.getInstance().addAllDebugInfos();
+		String ontologyPath = "src/test/resources/main/HornALCHOIF/testNonTrivialRoleAssertion.owl";
+
+		haveTheSameResults(ontologyPath);
+	}
+	@Test
+	public void testRoleAssertionWithNominal() {
+		Configuration.getInstance().addAllDebugInfos();
+		String ontologyPath = "src/test/resources/main/HornALCHOIF/testRoleAssertionWithNominal.owl";
+
+		haveTheSameResults(ontologyPath);
+	}
+
+	@SuppressWarnings("Hermit failed to do reasoning over the abstraction: java.util.ConcurrentModificationException") 
+	@Test
+	public void testRoleAssertionByNominalConcept() {
+		Configuration.getInstance().addAllDebugInfos();
+		String ontologyPath = "src/test/resources/main/HornALCHOIF/testRoleAssertionByNominalConcept.owl";
+
+		haveTheSameResults(ontologyPath);
+	}
+
+	@Test
+	public void testRoleAssertionByNominalConcept2() {
+		Configuration.getInstance().addAllDebugInfos();
+		String ontologyPath = "src/test/resources/main/HornALCHOIF/testRoleAssertionByNominalConcept2.owl";
+
+		haveTheSameResults(ontologyPath);
+	}
+
+	@Test
 	 public void testUOBM_OXSmall() {
-	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small2.owl";
+	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small1.owl";
 	 haveTheSameResults(ontologyPath);
 	 }
 	 @Test
@@ -174,6 +216,8 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 	 * @param ontologyPath
 	 */
 	private void haveTheSameResults(String ontologyPath) {
+		AbstractDataFactory.getInstance().clear();
+		NormalizationDataFactory.getInstance().clear();
 		MetaDataOfOntology.getInstance().clear();
 		Configuration.getInstance().getDebuglevels().clear();
 		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
@@ -190,9 +234,11 @@ public class HornALCHOIF_Materializer_Hermit_Test {
 		System.out.println("Loading ontology for a DL Reasoner....");
 		OWLOntology owlOntology = ontoReader.getOWLAPIOntology(ontologyPath);
 
-		DLReasoner koncludeRealizer = new HermitDLReasoner(owlOntology);
-
-		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
+		DLReasoner dlReasoner = new HermitDLReasoner(owlOntology);
+//		koncludeRealizer.computeEntailments();
+//		PrintingHelper.printSet(koncludeRealizer.getEntailedRoleAssertions());
+		
+		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, dlReasoner);
 		checker.computeEntailments();
 
 		Assert.assertTrue(checker.isConceptAssertionComplete());

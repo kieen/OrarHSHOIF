@@ -137,4 +137,17 @@ public class AbstractRoleAssertionBox {
 		this.xyRoleAssertionsForType.addAll(abstractRoleAssertionBox.getXyRoleAssertionsForType());
 		this.zxRoleAssertionsForType.addAll(abstractRoleAssertionBox.getZxRoleAssertionsForType());
 	}
+
+	@Override
+	public String toString() {
+		return "AbstractRoleAssertionBox [xyRoleAssertionsForType=" + xyRoleAssertionsForType
+				+ ", zxRoleAssertionsForType=" + zxRoleAssertionsForType + ", loopRoleAssertions=" + loopRoleAssertions
+				+ ", uxRoleAssertionsForCTypeAndType=" + uxRoleAssertionsForCTypeAndType + "]";
+	}
+
+	public int getSize() {
+		return this.loopRoleAssertions.getSize() + this.uxRoleAssertionsForCTypeAndType.getSize()
+				+ this.xyRoleAssertionsForType.getSize() + this.zxRoleAssertionsForType.getSize();
+	}
+
 }

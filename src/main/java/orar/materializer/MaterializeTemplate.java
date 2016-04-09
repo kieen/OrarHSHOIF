@@ -27,6 +27,7 @@ import orar.rolereasoning.RoleReasoner;
 import orar.ruleengine.RuleEngine;
 import orar.ruleengine.SemiNaiveRuleEngine;
 import orar.type.IndividualType;
+import orar.util.PrintingHelper;
 
 public abstract class MaterializeTemplate implements Materializer {
 	// input & output
@@ -106,13 +107,18 @@ public abstract class MaterializeTemplate implements Materializer {
 			AbstractRoleAssertionBox entailedAbstractRoleAssertion = new AbstractRoleAssertionBox();
 			Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap = new HashMap<>();
 			for (OWLOntology abstraction : abstractions) {
+				logger.info("***DEBUG*** abstract ontology:");
+				PrintingHelper.printSet(abstraction.getAxioms());
 				InnerReasoner innerReasoner = getInnerReasoner(abstraction);
 				innerReasoner.computeEntailments();
 				// we can use putAll since individuals in different abstractsion
 				// are
 				// disjointed.
+				
 				entailedAbstractConceptAssertions.putAll(innerReasoner.getEntailedConceptAssertionsAsMap());
 				entailedAbstractRoleAssertion.addAll(innerReasoner.getEntailedRoleAssertions());
+				logger.info("***DEBUG*** entailed abstract role assertions:");
+				logger.info("number of assertions:"+innerReasoner.getEntailedRoleAssertions().getSize());
 				entailedSameasMap.putAll(innerReasoner.getSameAsMap());
 			}
 			/*
