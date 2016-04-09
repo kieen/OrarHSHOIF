@@ -15,6 +15,7 @@ import orar.abstraction.AbstractionGenerator;
 import orar.abstraction.BasicTypeComputor;
 import orar.abstraction.TypeComputor;
 import orar.config.Configuration;
+import orar.data.AbstractDataFactory;
 import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
 import orar.innerreasoner.InnerReasoner;
@@ -85,8 +86,10 @@ public abstract class MaterializeTemplate implements Materializer {
 		boolean updated = true;
 		logger.info("Starting the abstraction refinement loop...");
 		int currentLoop = this.numberOfRefinements + 1;
-		logger.info("Loop number: " + currentLoop);
 		while (updated) {
+			logger.info("Current loop: " + currentLoop);
+			this.dataForTransferringEntailments.clear();
+			AbstractDataFactory.getInstance().clear();
 			/*
 			 * (3). Compute types
 			 */
@@ -107,8 +110,8 @@ public abstract class MaterializeTemplate implements Materializer {
 			AbstractRoleAssertionBox entailedAbstractRoleAssertion = new AbstractRoleAssertionBox();
 			Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap = new HashMap<>();
 			for (OWLOntology abstraction : abstractions) {
-				logger.info("***DEBUG*** abstract ontology:");
-				PrintingHelper.printSet(abstraction.getAxioms());
+//				logger.info("***DEBUG*** abstract ontology:");
+//				PrintingHelper.printSet(abstraction.getAxioms());
 				InnerReasoner innerReasoner = getInnerReasoner(abstraction);
 				innerReasoner.computeEntailments();
 				// we can use putAll since individuals in different abstractsion
