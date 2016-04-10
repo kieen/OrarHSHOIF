@@ -31,7 +31,6 @@ import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
-import orar.innerreasoner.InnerReasoner;
 import orar.innerreasoner.HornSHOIF.Hermit_HornSHOIF_InnerReasoner;
 import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
 import orar.util.DefaultTestDataFactory;
@@ -134,8 +133,8 @@ public class Hermit_HornSHOIF_InnerReasonerTest {
 		PrintingHelper.printString("===Result by a DL reasoner:===");
 		PrintingHelper.printSet(expectedResult);
 
-		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
-		hermitInnerReasoner.computeEntailments();
+		InnerReasoner hermitInnerReasoner = computeEntailmentsByInnerReasoner(ontology);
+
 		AbstractRoleAssertionBox entailedRoleAssertionBox = hermitInnerReasoner.getEntailedRoleAssertions();
 		Set<OWLObjectPropertyAssertionAxiom> actualResult = entailedRoleAssertionBox.getSetOfRoleAssertions();
 		PrintingHelper.printString("+++Result by an inner reasoner:+++");
@@ -218,8 +217,7 @@ public class Hermit_HornSHOIF_InnerReasonerTest {
 		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> expectedResult = new HashMap<>();
 		expectedResult.put(a, testData.getSetOfIndividuals(b));
 
-		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
-		hermitInnerReasoner.computeEntailments();
+		InnerReasoner hermitInnerReasoner = computeEntailmentsByInnerReasoner(ontology);
 		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> actualResult = hermitInnerReasoner.getSameAsMap();
 
 		PrintingHelper.printString("+++Result by an inner reasoner:+++");
@@ -316,8 +314,7 @@ public class Hermit_HornSHOIF_InnerReasonerTest {
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(T, a, b));
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(T, o, b));
 
-		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
-		hermitInnerReasoner.computeEntailments();
+		InnerReasoner hermitInnerReasoner = computeEntailmentsByInnerReasoner(ontology);
 		Set<OWLObjectPropertyAssertionAxiom> actualResult = hermitInnerReasoner.getEntailedRoleAssertions()
 				.getSetOfRoleAssertions();
 
@@ -384,7 +381,7 @@ public class Hermit_HornSHOIF_InnerReasonerTest {
 		 * axiom6: invFunc(F)
 		 * 
 		 */
-		 OWLInverseFunctionalObjectPropertyAxiom invFunc_F = dataFactory.getOWLInverseFunctionalObjectPropertyAxiom(F);
+		OWLInverseFunctionalObjectPropertyAxiom invFunc_F = dataFactory.getOWLInverseFunctionalObjectPropertyAxiom(F);
 		ontManager.addAxiom(ontology, invFunc_F);
 
 		/*
@@ -394,7 +391,7 @@ public class Hermit_HornSHOIF_InnerReasonerTest {
 		OWLObjectSomeValuesFrom existsF_B = dataFactory.getOWLObjectSomeValuesFrom(F, B);
 		OWLSubClassOfAxiom axiom6 = dataFactory.getOWLSubClassOfAxiom(A, existsF_B);
 		ontManager.addAxiom(ontology, axiom6);
-		
+
 		/*
 		 * prepare some information used in optimization, e.g. trans role,
 		 * marked abstract individuals,...
@@ -427,8 +424,7 @@ public class Hermit_HornSHOIF_InnerReasonerTest {
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(F, b, o));
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(F, b, a));
 
-		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
-		hermitInnerReasoner.computeEntailments();
+		InnerReasoner hermitInnerReasoner = computeEntailmentsByInnerReasoner(ontology);
 		Set<OWLObjectPropertyAssertionAxiom> actualResult = hermitInnerReasoner.getEntailedRoleAssertions()
 				.getSetOfRoleAssertions();
 
@@ -516,8 +512,7 @@ public class Hermit_HornSHOIF_InnerReasonerTest {
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(F, a, b));
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(R, a, b));
 
-		InnerReasoner hermitInnerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
-		hermitInnerReasoner.computeEntailments();
+		InnerReasoner hermitInnerReasoner = computeEntailmentsByInnerReasoner(ontology);
 		Set<OWLObjectPropertyAssertionAxiom> actualResult = hermitInnerReasoner.getEntailedRoleAssertions()
 				.getSetOfRoleAssertions();
 
@@ -533,4 +528,16 @@ public class Hermit_HornSHOIF_InnerReasonerTest {
 		PrintingHelper.printSet(dlReasonerResult);
 	}
 
+	private InnerReasoner computeEntailmentsByInnerReasoner(OWLOntology ontology) {
+		/*
+		 * Test with the reasoner
+		 */
+		InnerReasoner innerReasoner = new Hermit_HornSHOIF_InnerReasoner(ontology);
+		/*
+		 * Note that since not all reasoners run correctly. If you test Pellet
+		 * and Fact with the same test cases, some will fail.
+		 */
+		innerReasoner.computeEntailments();
+		return innerReasoner;
+	}
 }

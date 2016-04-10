@@ -3,7 +3,7 @@ package orar.materializer.HornSHOIF;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import orar.innerreasoner.InnerReasoner;
-import orar.innerreasoner.HornSHIF.Fact_HornSHOIF_InnerReasoner;
+import orar.innerreasoner.HornSHOIF.Fact_HornSHOIF_InnerReasoner;
 import orar.modeling.ontology.OrarOntology;
 
 public class HornSHOIF_Materialization_Fact extends HornSHOIF_Materializer {

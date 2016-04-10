@@ -5,9 +5,9 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 
-public class Pellet_HornSHOIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
+public class Pellet_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
 
-	public Pellet_HornSHOIF_InnerReasoner(OWLOntology owlOntology) {
+	public Pellet_HornSHIF_InnerReasoner(OWLOntology owlOntology) {
 		super(owlOntology);
 
 	}

@@ -16,10 +16,13 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
+import orar.config.Configuration;
+import orar.config.DebugLevel;
 import orar.data.AbstractDataFactory;
 import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
 import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
+import orar.util.PrintingHelper;
 
 public abstract class InnerReasonerTemplate implements InnerReasoner {
 	/*
@@ -29,7 +32,10 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 	protected final Map<OWLNamedIndividual, Set<OWLNamedIndividual>> sameAsMap;
 	protected final AbstractRoleAssertionBox roleAssertionList;
 	protected long reasoningTime;
-
+	/*
+	 * Config
+	 */
+	protected final Configuration config = Configuration.getInstance();
 	/*
 	 * others
 	 */
@@ -104,6 +110,11 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		 * add axioms to mark singleton concepts
 		 */
 		this.axiomsAdder.addMarkingAxioms();
+		if (this.config.getDebuglevels()
+				.contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+			logger.info("***DEBUG*** Ontololgy after adding marking axioms:");
+			PrintingHelper.printSet(this.owlOntology.getAxioms());
+		}
 		/*
 		 * get the reasoner
 		 */
@@ -120,7 +131,7 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 
 		computeEntailedConceptAssertions();
 		computeEntailedRoleAssertions();
-		computeEntailedSameasAssertions();//varies in Horn-SHIF and Horn-SHOIF
+		computeEntailedSameasAssertions();// varies in Horn-SHIF and Horn-SHOIF
 		long endTime = System.currentTimeMillis();
 		this.entailmentComputed = true;
 		this.reasoningTime = (endTime - startTime) / 1000; // get seconds

@@ -15,7 +15,6 @@ import orar.data.MetaDataOfOntology;
 import orar.data.NormalizationDataFactory;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
-import orar.dlreasoner.KoncludeDLReasoner;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
@@ -160,6 +159,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 
 		haveTheSameResults(ontologyPath);
 	}
+
 	@Test
 	public void testRoleAssertionWithNominal() {
 		Configuration.getInstance().addAllDebugInfos();
@@ -168,7 +168,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		haveTheSameResults(ontologyPath);
 	}
 
-	@SuppressWarnings("Hermit failed to do reasoning over the abstraction: java.util.ConcurrentModificationException") 
+	@SuppressWarnings("Hermit and Konclude failed to do reasoning over the abstraction: java.util.ConcurrentModificationException/ OWLLink error. Pellet and Fact pass this test case")
 	@Test
 	public void testRoleAssertionByNominalConcept() {
 		Configuration.getInstance().addAllDebugInfos();
@@ -202,23 +202,25 @@ public class HornSHOIF_Materializer_KoncludeTest {
 	}
 
 	@Test
-	 public void testUOBM_OXSmall() {
-	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small1.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
+	public void testUOBM_OXSmall() {
+		String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small1.owl";
+		haveTheSameResults(ontologyPath);
+	}
 
-	 @Test
-	 public void testUOBM_OX() {
-	
-	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
-	 @Test
-	 public void testLUBM() {
-	
-	 String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
+	@Test
+	public void testUOBM_OX() {
+
+		String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
+		haveTheSameResults(ontologyPath);
+	}
+
+	@Test
+	public void testLUBM() {
+
+		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
+		haveTheSameResults(ontologyPath);
+	}
+
 	/**
 	 * Compare result by Abstraction and by OWLReasoner; assert that they have
 	 * the same result.
@@ -230,10 +232,11 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		NormalizationDataFactory.getInstance().clear();
 		MetaDataOfOntology.getInstance().clear();
 		DataForTransferingEntailments.getInstance().clear();
-		
+
 		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
 				LogInfo.COMPARED_RESULT_INFO);
-		Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY);
+		Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,
+				DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
@@ -248,12 +251,12 @@ public class HornSHOIF_Materializer_KoncludeTest {
 
 		DLReasoner koncludeRealizer = new HermitDLReasoner(owlOntology);
 
-		CompletenessChecker checker = new CompletenessCheckerHorn(materializer,koncludeRealizer);
+		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
 		checker.computeEntailments();
 
-//		Assert.assertTrue(checker.isConceptAssertionComplete());
+		// Assert.assertTrue(checker.isConceptAssertionComplete());
 		Assert.assertTrue(checker.isSameasComplete());
-//		Assert.assertTrue(checker.isRoleAssertionComplete());
+		// Assert.assertTrue(checker.isRoleAssertionComplete());
 
 	}
 }

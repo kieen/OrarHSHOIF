@@ -17,11 +17,15 @@ public class Configuration {
 	private int numberOfTypePerOntology = 300;// Default value
 
 	private Configuration() {
-		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/newestversion_11_Sept_2015/Konclude";// default
-		koncludeConfigFileName="/Users/kien/konclude/newestversion_11_Sept_2015/konclude-load-config.xml";
-//		koncludeConfigFileName="/data/kien/benchmark/software/konclude-load-config.xml";
-		 savedOntologyFileName = "ontologyForKonclude.funcionalsyntax.owl";
-		
+		// default is newestversion_11_Sept_2015/Konclude. This allows to get
+		// role asesrtions with atomic only. getting inverse role assertions failed.
+//		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/newestversion_11_Sept_2015/Konclude";
+
+		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/konclude062/Binaries/Konclude";
+		koncludeConfigFileName = "/Users/kien/konclude/newestversion_11_Sept_2015/konclude-load-config.xml";
+		// koncludeConfigFileName="/data/kien/benchmark/software/konclude-load-config.xml";
+		savedOntologyFileName = "ontologyForKonclude.funcionalsyntax.owl";
+
 		this.logInfos = new HashSet<>();
 		this.debuglevels = new HashSet<>();
 	}
@@ -83,10 +87,8 @@ public class Configuration {
 	}
 
 	public void addAllDebugInfos() {
-		addDebugLevels(DebugLevel.ABSTRACTION_CREATION,
-				DebugLevel.TYPE_COMPUTING,
-				DebugLevel.UPDATING_CONCEPT_ASSERTION, DebugLevel.REASONING,
-				DebugLevel.MERGING_INDIVIDUALS_DIRECTLY,
+		addDebugLevels(DebugLevel.ABSTRACTION_CREATION, DebugLevel.TYPE_COMPUTING,
+				DebugLevel.UPDATING_CONCEPT_ASSERTION, DebugLevel.REASONING, DebugLevel.MERGING_INDIVIDUALS_DIRECTLY,
 				DebugLevel.MERGING_INDIVIDUALS_BYABSTRACTION);
 	}
 
@@ -97,5 +99,5 @@ public class Configuration {
 	public String getSavedOntologyFileName() {
 		return savedOntologyFileName;
 	}
-	
+
 }

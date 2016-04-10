@@ -3,7 +3,7 @@ package orar.materializer.HornSHIF;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import orar.innerreasoner.InnerReasoner;
-import orar.innerreasoner.HornSHIF.Konclude_HornSHOIF_InnerReasoner;
+import orar.innerreasoner.HornSHIF.Konclude_HornSHIF_InnerReasoner;
 import orar.modeling.ontology.OrarOntology;
 
 public class HornSHIF_Materialization_Konclude extends HornSHIF_Materializer {
@@ -15,7 +15,7 @@ public class HornSHIF_Materialization_Konclude extends HornSHIF_Materializer {
 
 	@Override
 	protected InnerReasoner getInnerReasoner(OWLOntology abstraction) {
-		InnerReasoner reasoner = new Konclude_HornSHOIF_InnerReasoner(abstraction);
+		InnerReasoner reasoner = new Konclude_HornSHIF_InnerReasoner(abstraction);
 		return reasoner;
 	}
 

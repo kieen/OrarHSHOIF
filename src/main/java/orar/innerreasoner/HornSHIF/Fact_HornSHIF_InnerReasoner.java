@@ -6,9 +6,9 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
 import uk.ac.manchester.cs.jfact.JFactFactory;
 
-public class Fact_HornSHOIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
+public class Fact_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
 
-	public Fact_HornSHOIF_InnerReasoner(OWLOntology owlOntology) {
+	public Fact_HornSHIF_InnerReasoner(OWLOntology owlOntology) {
 		super(owlOntology);
 
 	}

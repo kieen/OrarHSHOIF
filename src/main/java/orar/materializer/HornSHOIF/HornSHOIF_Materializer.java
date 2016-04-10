@@ -1,7 +1,6 @@
 package orar.materializer.HornSHOIF;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,14 +10,12 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import orar.abstraction.AbstractionGenerator;
-import orar.abstraction.HornSHIF.HornSHIF_AbstractionGenerator;
 import orar.abstraction.HornSHOIF.HornSHOIF_AbstractionGenerator;
 import orar.innerreasoner.InnerReasoner;
 import orar.materializer.MaterializeTemplate;
 import orar.modeling.ontology.OrarOntology;
 import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
 import orar.refinement.assertiontransferring.AssertionTransporter;
-import orar.refinement.assertiontransferring.HornSHIF.HornSHIF_AssertionTransporter;
 import orar.refinement.assertiontransferring.HornSHOIF.HornSHOIF_AssertionTransporter;
 import orar.type.IndividualType;
 

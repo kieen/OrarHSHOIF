@@ -4,9 +4,9 @@ import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
-public class Hermit_HornSHOIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
+public class Hermit_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
 
-	public Hermit_HornSHOIF_InnerReasoner(OWLOntology owlOntology) {
+	public Hermit_HornSHIF_InnerReasoner(OWLOntology owlOntology) {
 		super(owlOntology);
 
 	}

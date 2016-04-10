@@ -16,19 +16,20 @@ import org.semanticweb.owlapi.owllink.OWLlinkReasonerConfiguration;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
 import orar.config.Configuration;
+import orar.innerreasoner.HornSHOIF.HornSHOIF_InnerReasonerTemplate;
 
-public class Konclude_HornSHOIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
+public class Konclude_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
 	private int portNumber;
 	private ExecuteWatchdog watchdog;
-	private static Logger logger = Logger.getLogger(Konclude_HornSHOIF_InnerReasoner.class);
+	private static Logger logger = Logger.getLogger(Konclude_HornSHIF_InnerReasoner.class);
 
-	public Konclude_HornSHOIF_InnerReasoner(OWLOntology owlOntology) {
+	public Konclude_HornSHIF_InnerReasoner(OWLOntology owlOntology) {
 		super(owlOntology);
 		this.portNumber = 8080;// default value
 
 	}
 
-	public Konclude_HornSHOIF_InnerReasoner(OWLOntology ontology, int portNumber) {
+	public Konclude_HornSHIF_InnerReasoner(OWLOntology ontology, int portNumber) {
 		super(ontology);
 		this.portNumber = portNumber;
 	}

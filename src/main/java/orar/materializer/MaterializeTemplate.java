@@ -137,12 +137,16 @@ public abstract class MaterializeTemplate implements Materializer {
 
 				entailedAbstractConceptAssertions.putAll(innerReasoner.getEntailedConceptAssertionsAsMap());
 				entailedAbstractRoleAssertion.addAll(innerReasoner.getEntailedRoleAssertions());
+				entailedSameasMap.putAll(innerReasoner.getSameAsMap());
 				if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
 					logger.info(
-							"***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed role assertions by abstract ontoogy:");
-					logger.info("number of assertions:" + innerReasoner.getEntailedRoleAssertions().getSize());
+							"***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed Role assertions by abstract ontoogy:");
+					PrintingHelper.printSet(entailedAbstractRoleAssertion.getSetOfRoleAssertions());
+					
+					logger.info(
+							"***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed Concept assertions by abstract ontoogy:");
+					PrintingHelper.printMap(entailedAbstractConceptAssertions);
 				}
-				entailedSameasMap.putAll(innerReasoner.getSameAsMap());
 			}
 			/*
 			 * (6). Transfer assertions to the original ABox
