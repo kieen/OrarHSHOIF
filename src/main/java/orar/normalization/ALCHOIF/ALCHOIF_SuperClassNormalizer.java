@@ -6,14 +6,16 @@ import orar.normalization.ALCHOI.ALCHOI_SuperClassNormalizer;
 
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
+import org.semanticweb.owlapi.model.OWLObjectOneOf;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
 /**
- * Normalize SuperClass of SubClassOfAxiom.
- * Nominals also are collected.
+ * Normalize SuperClass of SubClassOfAxiom. Nominals also are collected.
  * 
  * @author kien
  *
@@ -48,10 +50,19 @@ public class ALCHOIF_SuperClassNormalizer extends ALCHOI_SuperClassNormalizer {
 
 		}
 
+		if (filler instanceof OWLObjectOneOf) {
+			OWLObjectOneOf objectOneOf = (OWLObjectOneOf) filler;
+			for (OWLIndividual ind : objectOneOf.getIndividuals()) {
+				if (ind instanceof OWLNamedIndividual) {
+					this.metaDataOfOntology.getNominals().add(ind.asOWLNamedIndividual());
+				}
+			}
+			return ce;
+		}
+
 		OWLObjectPropertyExpression propertyExp = ce.getProperty();
 		OWLClass subFreshClass = replaceBySubFreshClass(filler);
-		return owlDataFactory.getOWLObjectSomeValuesFrom(propertyExp,
-				subFreshClass);
+		return owlDataFactory.getOWLObjectSomeValuesFrom(propertyExp, subFreshClass);
 	}
 
 }

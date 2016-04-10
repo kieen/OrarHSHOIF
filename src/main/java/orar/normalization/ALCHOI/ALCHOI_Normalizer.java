@@ -1,10 +1,10 @@
 package orar.normalization.ALCHOI;
 
-import orar.normalization.AbstractNormalizer;
+import orar.normalization.NormalizerTemplate;
 
 import org.semanticweb.owlapi.model.OWLOntology;
 
-public class ALCHOI_Normalizer extends AbstractNormalizer {
+public class ALCHOI_Normalizer extends NormalizerTemplate {
 
 	public ALCHOI_Normalizer(OWLOntology inputOntology) {
 		super(inputOntology);

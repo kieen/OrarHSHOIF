@@ -209,22 +209,27 @@ public class HornSHOIF_Materializer_Hermit_Test {
 	}
 
 	@Test
-	 public void testUOBM_OXSmall() {
-	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small1.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
-	 @Test
-	 public void testUOBM_OX() {
-	
-	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
-	@Test
 	public void testLUBM() {
-
 		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
 		haveTheSameResults(ontologyPath);
 	}
+
+	@Test
+	 public void testUOBM_OXSmall4() {
+	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small4.owl";
+	 haveTheSameResults(ontologyPath);
+	 }
+//	@Test
+//	 public void testUOBM_OXSmall1() {
+//	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small1.owl";
+//	 haveTheSameResults(ontologyPath);
+//	 }
+//	 @Test
+//	 public void testUOBM_OX() {
+//	
+//	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
+//	 haveTheSameResults(ontologyPath);
+//	 }
 
 	/**
 	 * Compare result by Abstraction and by OWLReasoner; assert that they have

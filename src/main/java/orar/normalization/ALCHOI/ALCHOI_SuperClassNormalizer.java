@@ -48,13 +48,13 @@ public class ALCHOI_SuperClassNormalizer implements SuperClassNormalizer {
 	protected final NormalizationDataFactory normalizerDataFactory;
 	private static Logger logger = Logger.getLogger(ALCHOI_SuperClassNormalizer.class);
 	private SubClassNormalizer subClassNormalizer;
-	protected final MetaDataOfOntology sharedData;
+	protected final MetaDataOfOntology metaDataOfOntology;
 
 	public ALCHOI_SuperClassNormalizer(Stack<OWLSubClassOfAxiom> stack) {
 		this.stack = stack;
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		normalizerDataFactory = NormalizationDataFactory.getInstance();
-		sharedData = MetaDataOfOntology.getInstance();
+		metaDataOfOntology = MetaDataOfOntology.getInstance();
 
 	}
 
@@ -158,7 +158,7 @@ public class ALCHOI_SuperClassNormalizer implements SuperClassNormalizer {
 
 	@Override
 	public OWLClassExpression visit(OWLObjectHasValue ce) {
-		sharedData.getNominals().add(ce.getValue().asOWLNamedIndividual());
+		metaDataOfOntology.getNominals().add(ce.getValue().asOWLNamedIndividual());
 		return ce;
 
 	}
@@ -199,7 +199,7 @@ public class ALCHOI_SuperClassNormalizer implements SuperClassNormalizer {
 	public OWLClassExpression visit(OWLObjectOneOf ce) {
 		Set<OWLIndividual> inds = ce.getIndividuals();
 		for (OWLIndividual ind : inds) {
-			sharedData.getNominals().add(ind.asOWLNamedIndividual());
+			metaDataOfOntology.getNominals().add(ind.asOWLNamedIndividual());
 		}
 		return ce;
 	}

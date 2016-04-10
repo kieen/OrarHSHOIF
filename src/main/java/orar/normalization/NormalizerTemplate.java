@@ -29,7 +29,7 @@ import org.semanticweb.owlapi.model.OWLOntologyID;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
-public abstract class AbstractNormalizer implements Normalizer {
+public abstract class NormalizerTemplate implements Normalizer {
 	protected Stack<OWLSubClassOfAxiom> subClassAxiomStack;
 	protected final Set<OWLAxiom> normalizedSubClassAxioms;
 	protected final OWLOntology inputOntology;
@@ -39,7 +39,7 @@ public abstract class AbstractNormalizer implements Normalizer {
 	protected final Set<OWLAxiom> aboxAxiomsByNomalizingNominals;
 
 	protected final Set<OWLAxiom> axiomsByNormalizingNominals;
-	protected static Logger logger = Logger.getLogger(AbstractNormalizer.class);
+	protected static Logger logger = Logger.getLogger(NormalizerTemplate.class);
 	protected int numberOfNormalizedAxioms;
 	protected SubClassNormalizer subClassNormalizer;
 	protected SuperClassNormalizer superClassNormalizer;
@@ -50,7 +50,7 @@ public abstract class AbstractNormalizer implements Normalizer {
 
 	protected final Configuration config;
 
-	public AbstractNormalizer(OWLOntology inputOntology) {
+	public NormalizerTemplate(OWLOntology inputOntology) {
 		this.config = Configuration.getInstance();
 		this.inputOntology = inputOntology;
 		this.subClassAxiomStack = new Stack<OWLSubClassOfAxiom>();

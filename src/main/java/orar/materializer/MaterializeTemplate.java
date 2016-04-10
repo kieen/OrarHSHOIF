@@ -15,6 +15,7 @@ import orar.abstraction.AbstractionGenerator;
 import orar.abstraction.BasicTypeComputor;
 import orar.abstraction.TypeComputor;
 import orar.config.Configuration;
+import orar.config.DebugLevel;
 import orar.data.AbstractDataFactory;
 import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
@@ -96,12 +97,25 @@ public abstract class MaterializeTemplate implements Materializer {
 			logger.info("Computing types...");
 			Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals = this.typeComputor
 					.computeTypes(this.normalizedORAROntology);
-			logger.info("Number of types:"+typeMap2Individuals.size());
+			logger.info("Number of types:" + typeMap2Individuals.size());
+
+			if (config.getDebuglevels().contains(DebugLevel.TYPE_COMPUTING)) {
+				logger.info("***DEBUG*** Types:");
+				PrintingHelper.printMap(typeMap2Individuals);
+			}
 			/*
 			 * (4). Generate the abstractions
 			 */
 			logger.info("Generating abstractions ...");
 			List<OWLOntology> abstractions = getAbstractions(typeMap2Individuals);
+			if (config.getDebuglevels().contains(DebugLevel.ABSTRACTION_CREATION)) {
+				logger.info("***DEBUG*** abstractions:");
+				logger.info("Number of abstractions: " + abstractions.size());
+				for (OWLOntology abs : abstractions) {
+					logger.info("===Abstraction ontology:====");
+					PrintingHelper.printSet(abs.getAxioms());
+				}
+			}
 			/*
 			 * (5). Materialize abstractions
 			 */
@@ -110,18 +124,24 @@ public abstract class MaterializeTemplate implements Materializer {
 			AbstractRoleAssertionBox entailedAbstractRoleAssertion = new AbstractRoleAssertionBox();
 			Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap = new HashMap<>();
 			for (OWLOntology abstraction : abstractions) {
-//				logger.info("***DEBUG*** abstract ontology:");
-//				PrintingHelper.printSet(abstraction.getAxioms());
+				if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
+					logger.info("***DEBUG REASONING_ABSTRACTONTOLOGY *** for abstract ontology:");
+					PrintingHelper.printSet(abstraction.getAxioms());
+				}
+
 				InnerReasoner innerReasoner = getInnerReasoner(abstraction);
 				innerReasoner.computeEntailments();
 				// we can use putAll since individuals in different abstractsion
 				// are
 				// disjointed.
-				
+
 				entailedAbstractConceptAssertions.putAll(innerReasoner.getEntailedConceptAssertionsAsMap());
 				entailedAbstractRoleAssertion.addAll(innerReasoner.getEntailedRoleAssertions());
-				logger.info("***DEBUG*** entailed abstract role assertions:");
-				logger.info("number of assertions:"+innerReasoner.getEntailedRoleAssertions().getSize());
+				if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
+					logger.info(
+							"***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed role assertions by abstract ontoogy:");
+					logger.info("number of assertions:" + innerReasoner.getEntailedRoleAssertions().getSize());
+				}
 				entailedSameasMap.putAll(innerReasoner.getSameAsMap());
 			}
 			/*
@@ -147,7 +167,7 @@ public abstract class MaterializeTemplate implements Materializer {
 
 			}
 			logger.info("Finish loop: " + currentLoop);
-			currentLoop=this.numberOfRefinements+1;
+			currentLoop = this.numberOfRefinements + 1;
 		}
 	}
 
@@ -165,7 +185,7 @@ public abstract class MaterializeTemplate implements Materializer {
 		this.metaDataOfOntology.getFunctionalRoles().addAll(roleReasoner.getFunctionalRoles());
 		this.metaDataOfOntology.getInverseFunctionalRoles().addAll(roleReasoner.getInverseFunctionalRoles());
 		this.metaDataOfOntology.getTransitiveRoles().addAll(roleReasoner.getTransitiveRoles());
-//		this.metaDataOfOntology.getInverseRoleMap().putAll(roleReasoner.getInverseRoleMap());
+		// this.metaDataOfOntology.getInverseRoleMap().putAll(roleReasoner.getInverseRoleMap());
 		this.metaDataOfOntology.getSubRoleMap().putAll(roleReasoner.getRoleHierarchyAsMap());
 	}
 
