@@ -168,7 +168,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		haveTheSameResults(ontologyPath);
 	}
 
-	@SuppressWarnings("Hermit and Konclude failed to do reasoning over the abstraction: java.util.ConcurrentModificationException/ OWLLink error. Pellet and Fact pass this test case")
+	@SuppressWarnings("Hermit and Konclude failed to do reasoning over the abstraction: java.util.ConcurrentModificationException/ OWLLink error. However, Pellet and Fact pass this test case")
 	@Test
 	public void testRoleAssertionByNominalConcept() {
 		Configuration.getInstance().addAllDebugInfos();
