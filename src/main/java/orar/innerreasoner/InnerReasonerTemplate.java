@@ -123,8 +123,8 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		computeEntailedSameasAssertions();//varies in Horn-SHIF and Horn-SHOIF
 		long endTime = System.currentTimeMillis();
 		this.entailmentComputed = true;
-		dispose();
 		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
+		dispose();
 	}
 
 	private void computeEntailedRoleAssertions() {

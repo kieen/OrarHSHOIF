@@ -9,6 +9,7 @@ import orar.completenesschecker.CompletenessCheckerHorn;
 import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.data.AbstractDataFactory;
+import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
 import orar.data.NormalizationDataFactory;
 import orar.dlreasoner.DLReasoner;
@@ -235,6 +236,8 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		AbstractDataFactory.getInstance().clear();
 		NormalizationDataFactory.getInstance().clear();
 		MetaDataOfOntology.getInstance().clear();
+		DataForTransferingEntailments.getInstance().clear();
+		
 		Configuration.getInstance().getDebuglevels().clear();
 		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
 				LogInfo.COMPARED_RESULT_INFO);

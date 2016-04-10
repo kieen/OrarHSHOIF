@@ -213,7 +213,7 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 					//
 					// }
 					if (config.getDebuglevels().contains(DebugLevel.UPDATING_CONCEPT_ASSERTION)) {
-						logger.info("*** Update concept assertions in the original ABox ***");
+						logger.info("***DEBUG Update concept assertions in the original ABox ***");
 						logger.info("Individual:" + originalInd);
 						logger.info("has new concepts:" + concepts);
 						logger.info("Reason: get from concept assertion of the abstract individual:" + abstractInd);
