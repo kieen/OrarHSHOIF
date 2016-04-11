@@ -10,7 +10,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import orar.io.aboxstreamreader.ABoxStreamReader;
-import orar.io.aboxstreamreader.JenaABoxStreamReader;
+import orar.io.aboxstreamreader.JenaMultipleABoxesStreamReader;
 
 public class StreamOntologyReader2OWLAPI {
 
@@ -41,7 +41,7 @@ public class StreamOntologyReader2OWLAPI {
 		Set<OWLClass> definedClasses = this.owlOntologyTBox
 				.getClassesInSignature(true);
 
-		this.aboxReader = new JenaABoxStreamReader(definedObjectProperties,
+		this.aboxReader = new JenaMultipleABoxesStreamReader(definedObjectProperties,
 				definedClasses, aboxListFileName, owlOntology);
 
 	}

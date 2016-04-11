@@ -17,14 +17,14 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-public class JenaABoxStreamReader implements ABoxStreamReader {
+public class JenaMultipleABoxesStreamReader implements ABoxStreamReader {
 
 	private final StreamRDFBase streamRDFReader;
 	private final Set<String> aboxList;
 	private boolean aboxesAreParsed = false;
-	private final static Logger logger = Logger.getLogger(JenaABoxStreamReader.class);
+	private final static Logger logger = Logger.getLogger(JenaMultipleABoxesStreamReader.class);
 
-	public JenaABoxStreamReader(Set<OWLObjectProperty> definedObjectProperties, Set<OWLClass> definedClasses,
+	public JenaMultipleABoxesStreamReader(Set<OWLObjectProperty> definedObjectProperties, Set<OWLClass> definedClasses,
 			String aboxListFile, OrarOntology internalOntology) {
 
 		this.streamRDFReader = new JenaStreamRDF2InternalModel(definedObjectProperties, definedClasses,
@@ -33,7 +33,7 @@ public class JenaABoxStreamReader implements ABoxStreamReader {
 
 	}
 
-	public JenaABoxStreamReader(Set<OWLObjectProperty> definedObjectProperties, Set<OWLClass> definedClasses,
+	public JenaMultipleABoxesStreamReader(Set<OWLObjectProperty> definedObjectProperties, Set<OWLClass> definedClasses,
 			String aboxListFile, OWLOntology owlOntology) {
 
 		this.streamRDFReader = new JenaStreamRDF2OWLAPI(definedObjectProperties, definedClasses, owlOntology);

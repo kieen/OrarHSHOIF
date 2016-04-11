@@ -17,6 +17,10 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
+import orar.config.Configuration;
+import orar.config.LogInfo;
+import orar.config.StatisticVocabulary;
+
 public abstract class DLReasonerTemplate implements DLReasoner {
 	private Logger logger = Logger.getLogger(DLReasonerTemplate.class);
 	protected final Set<OWLClassAssertionAxiom> conceptAssertions;
@@ -27,6 +31,7 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 	protected OWLReasoner reasoner;
 	protected OWLDataFactory dataFactory;
 	boolean entailmentComputed;
+	private final Configuration config = Configuration.getInstance();
 
 	public DLReasonerTemplate(OWLOntology owlOntology) {
 		this.conceptAssertions = new HashSet<>();
@@ -95,6 +100,9 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 		this.entailmentComputed = true;
 		dispose();
 		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
+		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
+			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTime);
+		}
 	}
 
 	/**
@@ -102,7 +110,7 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 	 */
 	private void computeEntailedSameasAssertions() {
 		Set<OWLNamedIndividual> allIndividuals = this.owlOntology.getIndividualsInSignature(true);
-//		logger.info("***DEBUG*** individuals in signatures:"+allIndividuals);
+		// logger.info("***DEBUG*** individuals in signatures:"+allIndividuals);
 		for (OWLNamedIndividual indiv : allIndividuals) {
 			Set<OWLNamedIndividual> equivalentIndividuals = reasoner.getSameIndividuals(indiv).getEntities();
 

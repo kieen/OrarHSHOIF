@@ -258,5 +258,6 @@ public interface OrarOntology {
 	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role);
 
 	public boolean addSameasAssertion(Set<OWLNamedIndividual> setOfSameasIndividuals);
-
+	public void increaseNumberOfInputConceptAssertions(int addedNumber);
+	public void increaseNumberOfInputRoleAssertions(int addedNumber);
 }

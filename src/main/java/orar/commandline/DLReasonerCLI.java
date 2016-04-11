@@ -20,9 +20,9 @@ import orar.dlreasoner.PelletDLReasoner;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 
-public class OWLReasonerCLI {
+public class DLReasonerCLI {
 	private static Configuration config = Configuration.getInstance();
-	private static Logger logger = Logger.getLogger(OWLReasonerCLI.class);
+	private static Logger logger = Logger.getLogger(DLReasonerCLI.class);
 
 	public static void main(String[] args) {
 		Options options = new Options();
@@ -107,15 +107,10 @@ public class OWLReasonerCLI {
 			OWLOntology owlOntology = getOWLOntology(commandLine);
 			DLReasoner DLReasoner = getDLReasoner(commandLine, owlOntology);
 
-			long startTime = System.currentTimeMillis();
-			// DLReasoner.computeConceptAssertions();
 			DLReasoner.computeEntailments();
-			long endTime = System.currentTimeMillis();
-			long runTime = (endTime - startTime) / 1000;
+
 			String reasonerName = commandLine.getOptionValue(Argument.REASONER);
-			if (config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
-				logger.info(reasonerName + "; " + "Materialization time (in second):" + runTime);
-			}
+			logger.info("DLReasoner: " + reasonerName);
 
 		} catch (ParseException exp) {
 			// oops, something went wrong

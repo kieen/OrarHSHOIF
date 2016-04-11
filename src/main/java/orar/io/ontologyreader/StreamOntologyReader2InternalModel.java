@@ -11,7 +11,7 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import orar.io.aboxstreamreader.ABoxStreamReader;
-import orar.io.aboxstreamreader.JenaABoxStreamReader;
+import orar.io.aboxstreamreader.JenaMultipleABoxesStreamReader;
 import orar.modeling.ontology.MapbasedOrarOntology;
 import orar.modeling.ontology.OrarOntology;
 
@@ -39,7 +39,7 @@ public class StreamOntologyReader2InternalModel {
 		Set<OWLObjectProperty> definedObjectProperties = this.owlOntologyTBox.getObjectPropertiesInSignature(true);
 		Set<OWLClass> definedClasses = this.owlOntologyTBox.getClassesInSignature(true);
 
-		this.aboxReader = new JenaABoxStreamReader(definedObjectProperties, definedClasses, aboxListFileName,
+		this.aboxReader = new JenaMultipleABoxesStreamReader(definedObjectProperties, definedClasses, aboxListFileName,
 				internalOntology);
 
 	}
@@ -78,7 +78,9 @@ public class StreamOntologyReader2InternalModel {
 		for (OWLClassAssertionAxiom classAssertion : owlOntologyTBox.getAxioms(AxiomType.CLASS_ASSERTION, true)) {
 			OWLNamedIndividual individual = classAssertion.getIndividual().asOWLNamedIndividual();
 			OWLClass owlClass = classAssertion.getClassExpression().asOWLClass();
-			this.internalOntology.addConceptAssertion(individual, owlClass);
+			if (this.internalOntology.addConceptAssertion(individual, owlClass)) {
+				this.internalOntology.increaseNumberOfInputConceptAssertions(1);
+			}
 		}
 	}
 
@@ -90,7 +92,9 @@ public class StreamOntologyReader2InternalModel {
 			OWLObjectProperty property = assertion.getProperty().asOWLObjectProperty();
 			OWLNamedIndividual object = assertion.getObject().asOWLNamedIndividual();
 
-			this.internalOntology.addRoleAssertion(subject, property, object);
+			if (this.internalOntology.addRoleAssertion(subject, property, object)){
+				this.internalOntology.increaseNumberOfInputRoleAssertions(1);
+			}
 
 		}
 	}

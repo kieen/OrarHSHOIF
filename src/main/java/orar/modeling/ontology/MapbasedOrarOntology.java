@@ -436,4 +436,16 @@ public class MapbasedOrarOntology implements OrarOntology {
 		return allEntailedSameasMap;
 	}
 
+	@Override
+	public void increaseNumberOfInputConceptAssertions(int addedNumber) {
+		this.numberOfInputConceptAssertions+=addedNumber;
+		
+	}
+
+	@Override
+	public void increaseNumberOfInputRoleAssertions(int addedNumber) {
+		this.numberOfInputRoleAssertions+=addedNumber;
+		
+	}
+
 }

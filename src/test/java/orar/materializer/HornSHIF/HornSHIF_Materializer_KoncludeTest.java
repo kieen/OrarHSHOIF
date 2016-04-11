@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import orar.completenesschecker.CompletenessChecker;
 import orar.completenesschecker.CompletenessCheckerHorn;
 import orar.config.Configuration;
+import orar.config.DebugLevel;
 import orar.config.LogInfo;
 import orar.data.AbstractDataFactory;
 import orar.data.DataForTransferingEntailments;
@@ -19,7 +20,7 @@ import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
 import orar.modeling.ontology.OrarOntology;
 
-public class HornSHIF_Materializer_HermitTest {
+public class HornSHIF_Materializer_KoncludeTest {
 
 	@Test
 	public void testLUBM() {
@@ -40,14 +41,15 @@ public class HornSHIF_Materializer_HermitTest {
 		MetaDataOfOntology.getInstance().clear();
 		DataForTransferingEntailments.getInstance().clear();
 
-		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME, LogInfo.LOADING_TIME);
-		// Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,
-		// DebugLevel.ADDING_MARKING_AXIOMS);
+		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
+				LogInfo.COMPARED_RESULT_INFO);
+//		Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,
+//				DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
 
-		Materializer materializer = new HornSHIF_Materialization_Hermit(normalizedOrarOntology);
+		Materializer materializer = new HornSHIF_Materialization_Konclude(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology

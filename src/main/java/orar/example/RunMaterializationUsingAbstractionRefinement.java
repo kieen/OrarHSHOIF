@@ -21,7 +21,7 @@ import orar.modeling.ontology.OrarOntology;
  * @author kien
  *
  */
-public class AbstractionRefinementMaterializationWithHermit {
+public class RunMaterializationUsingAbstractionRefinement {
 
 	static String tboxFileName = "src/test/resources/uobm-ox/tbox/univ-bench-dl-ox.owl";
 	static String aboxListFileName = "src/test/resources/uobm-ox/abox/aboxListOf2.txt";
@@ -43,7 +43,7 @@ public class AbstractionRefinementMaterializationWithHermit {
 
 		// long startAbstraction = System.currentTimeMillis();
 		Materializer materializer = new HornSHOIF_Materialization_Hermit(normalizedOrarOntology);
-		materializer.materialize();
+//		materializer.materialize();
 
 	}
 

@@ -107,7 +107,7 @@ public class JenaABoxStreamReaderTest {
 		Set<OWLClass> defiedConcepts = tbox.getClassesInSignature(true);
 
 		OrarOntology orarOntology = new MapbasedOrarOntology();
-		ABoxStreamReader aboxStreamReader = new JenaABoxStreamReader(definedRoles, defiedConcepts, aboxListFile,
+		ABoxStreamReader aboxStreamReader = new JenaMultipleABoxesStreamReader(definedRoles, defiedConcepts, aboxListFile,
 				orarOntology);
 		aboxStreamReader.readABoxes();
 		return orarOntology;

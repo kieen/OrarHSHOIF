@@ -18,7 +18,7 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
     <Ontology rdf:about="file:/Users/kien/git/ORAR-HSHOIF/src/test/resources/uobm-ox/abox/univ1.owl">
-        <imports rdf:resource="http://semantics.crl.ibm.com/univ-bench-dl.owl"/>
+        <imports rdf:resource="file:/Users/kien/git/ORAR-HSHOIF/src/test/resources/uobm-ox/tbox/univ-bench-dl-ox.owl"/>
     </Ontology>
     
 
