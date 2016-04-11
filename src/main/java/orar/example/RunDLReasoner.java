@@ -23,7 +23,7 @@ public class RunDLReasoner {
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.LOADING_TIME, LogInfo.REASONING_TIME);
 		runWithSeperatedTBoxAndABoxes();
 
-//		runWithCombinedTBoxAndABoxes();
+		runWithCombinedTBoxAndABoxes();
 	}
 
 	public static void runWithSeperatedTBoxAndABoxes() {
