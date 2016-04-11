@@ -143,19 +143,19 @@ public class AbstractDataFactory {
 		return IRI_BASE_FRESHCONCEPT;
 	}
 
-	public static long getxCounter() {
+	public  long getxCounter() {
 		return xCounter;
 	}
 
-	public static long getyCounter() {
+	public  long getyCounter() {
 		return yCounter;
 	}
 
-	public static long getzCounter() {
+	public  long getzCounter() {
 		return zCounter;
 	}
 	
-	public static long getuCounter() {
+	public  long getuCounter() {
 		return uCounter;
 	}
 

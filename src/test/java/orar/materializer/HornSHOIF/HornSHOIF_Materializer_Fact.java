@@ -13,7 +13,6 @@ import orar.data.AbstractDataFactory;
 import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
 import orar.data.NormalizationDataFactory;
-import orar.dlfragmentvalidator.ValidatorDataFactory;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.FactDLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
@@ -24,7 +23,7 @@ import orar.materializer.Materializer;
 import orar.modeling.ontology.OrarOntology;
 import orar.util.PrintingHelper;
 
-public class HornSHOIF_Materializer_Hermit_Test {
+public class HornSHOIF_Materializer_Fact {
 
 	/**
 	 * No new entailments
@@ -210,22 +209,22 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		haveTheSameResults(ontologyPath);
 	}
 
-	@Test
-	public void testLUBM() {
-		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
-		haveTheSameResults(ontologyPath);
-	}
-
-	@Test
-	 public void testUOBM_OXSmall4() {
-	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
-	@Test
-	 public void testUOBM_OXSmall1() {
-	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small1.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
+//	@Test
+//	public void testLUBM() {
+//		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
+//		haveTheSameResults(ontologyPath);
+//	}
+//
+//	@Test
+//	 public void testUOBM_OXSmall4() {
+//	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small4.owl";
+//	 haveTheSameResults(ontologyPath);
+//	 }
+//	@Test
+//	 public void testUOBM_OXSmall1() {
+//	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small1.owl";
+//	 haveTheSameResults(ontologyPath);
+//	 }
 //	 @Test
 //	 public void testUOBM_OX() {
 //	
@@ -244,19 +243,17 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		NormalizationDataFactory.getInstance().clear();
 		MetaDataOfOntology.getInstance().clear();
 		DataForTransferingEntailments.getInstance().clear();
-		ValidatorDataFactory.getInstance().clear();
 		
 		Configuration.getInstance().getDebuglevels().clear();
-		Configuration.getInstance().addLoginfoLevels( LogInfo.STATISTIC);
-//		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
-//				LogInfo.COMPARED_RESULT_INFO, LogInfo.STATISTIC);
-//		Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,DebugLevel.ADDING_MARKING_AXIOMS);
+		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
+				LogInfo.COMPARED_RESULT_INFO);
+		Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,DebugLevel.ADDING_MARKING_AXIOMS);
 		
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
 
-		Materializer materializer = new HornSHOIF_Materialization_Hermit(normalizedOrarOntology);
+		Materializer materializer = new HornSHOIF_Materialization_Fact(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology

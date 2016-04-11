@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -16,6 +17,8 @@ import orar.abstraction.BasicTypeComputor;
 import orar.abstraction.TypeComputor;
 import orar.config.Configuration;
 import orar.config.DebugLevel;
+import orar.config.LogInfo;
+import orar.config.StatisticVocabulary;
 import orar.data.AbstractDataFactory;
 import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
@@ -34,7 +37,7 @@ import orar.util.PrintingHelper;
 public abstract class MaterializeTemplate implements Materializer {
 	// input & output
 	protected final OrarOntology normalizedORAROntology;
-	private int numberOfRefinements;
+	private int currentLoop;
 	private int reasoningTimeInSeconds;
 	protected final Configuration config;
 	// logging
@@ -42,6 +45,7 @@ public abstract class MaterializeTemplate implements Materializer {
 	// shared data
 	protected final DataForTransferingEntailments dataForTransferringEntailments;
 	protected final MetaDataOfOntology metaDataOfOntology;
+	protected final AbstractDataFactory abstractDataFactory = AbstractDataFactory.getInstance();
 	// fields that vary in implementations
 	protected AbstractionGenerator abstractionGenerator;
 	// other fields for the algorithm
@@ -52,7 +56,7 @@ public abstract class MaterializeTemplate implements Materializer {
 	public MaterializeTemplate(OrarOntology normalizedOrarOntology) {
 		// input & output
 		this.normalizedORAROntology = normalizedOrarOntology;
-		this.numberOfRefinements = -1;
+		this.currentLoop = 0;
 		this.reasoningTimeInSeconds = -1;
 		this.config = Configuration.getInstance();
 		// shared data
@@ -86,19 +90,24 @@ public abstract class MaterializeTemplate implements Materializer {
 		 */
 		boolean updated = true;
 		logger.info("Starting the abstraction refinement loop...");
-		int currentLoop = this.numberOfRefinements + 1;
+		
 		while (updated) {
+			currentLoop = this.currentLoop + 1;
 			logger.info("Current loop: " + currentLoop);
-			this.dataForTransferringEntailments.clear();
-			AbstractDataFactory.getInstance().clear();
+
 			/*
 			 * (3). Compute types
 			 */
 			logger.info("Computing types...");
 			Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals = this.typeComputor
 					.computeTypes(this.normalizedORAROntology);
-			logger.info("Number of types:" + typeMap2Individuals.size());
+			// logging
+			if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+				logger.info(StatisticVocabulary.CURRENT_LOOP + currentLoop + ";" + StatisticVocabulary.NUMBER_OF_TYPES
+						+ typeMap2Individuals.size());
+			}
 
+			// logging
 			if (config.getDebuglevels().contains(DebugLevel.TYPE_COMPUTING)) {
 				logger.info("***DEBUG*** Types:");
 				PrintingHelper.printMap(typeMap2Individuals);
@@ -108,14 +117,50 @@ public abstract class MaterializeTemplate implements Materializer {
 			 */
 			logger.info("Generating abstractions ...");
 			List<OWLOntology> abstractions = getAbstractions(typeMap2Individuals);
+
+			// logging debug
 			if (config.getDebuglevels().contains(DebugLevel.ABSTRACTION_CREATION)) {
-				logger.info("***DEBUG*** abstractions:");
-				logger.info("Number of abstractions: " + abstractions.size());
+				logger.info("*** DEBUG*** Number of abstraction ontologies: " + abstractions.size());
 				for (OWLOntology abs : abstractions) {
-					logger.info("===Abstraction ontology:====");
+					logger.info("=== Abstraction ontolog(ies):====");
 					PrintingHelper.printSet(abs.getAxioms());
 				}
 			}
+
+			// logging statistic
+			if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+				// logging abstract individuals
+				logger.info(StatisticVocabulary.CURRENT_LOOP + currentLoop + ";" + StatisticVocabulary.NUMBER_OF_X
+						+ this.abstractDataFactory.getxCounter());
+				logger.info(StatisticVocabulary.CURRENT_LOOP + currentLoop + ";" + StatisticVocabulary.NUMBER_OF_U
+						+ this.abstractDataFactory.getuCounter());
+				long yandz = this.abstractDataFactory.getyCounter() + this.abstractDataFactory.getzCounter();
+				logger.info(StatisticVocabulary.CURRENT_LOOP + currentLoop + ";" + StatisticVocabulary.NUMBER_OF_YZ
+						+ yandz);
+
+				long numberOfAbstractIndividuals = this.abstractDataFactory.getxCounter()
+						+ this.abstractDataFactory.getuCounter() + yandz;
+				logger.info(StatisticVocabulary.CURRENT_LOOP + currentLoop + ";"
+						+ StatisticVocabulary.NUMBER_OF_ABSTRACT_INDIVIDUALS + numberOfAbstractIndividuals);
+
+				// logging size related info
+				int abstractConceptAssertions = 0;
+				int abstractRoleAssertions = 0;
+				int abstractAssertions = 0;
+
+				for (OWLOntology abs : abstractions) {
+					abstractConceptAssertions += abs.getAxiomCount(AxiomType.CLASS_ASSERTION, true);
+					abstractRoleAssertions += abs.getAxiomCount(AxiomType.OBJECT_PROPERTY_ASSERTION, true);
+				}
+				abstractAssertions = abstractConceptAssertions + abstractRoleAssertions;
+				logger.info(StatisticVocabulary.CURRENT_LOOP + currentLoop + ";"
+						+ StatisticVocabulary.NUMBER_OF_ABSTRACT_CONCEPTASSERTIONS + abstractConceptAssertions);
+				logger.info(StatisticVocabulary.CURRENT_LOOP + currentLoop + ";"
+						+ StatisticVocabulary.NUMBER_OF_ABSTRACT_ROLEASSERTIONS + abstractRoleAssertions);
+				logger.info(StatisticVocabulary.CURRENT_LOOP + currentLoop + ";"
+						+ StatisticVocabulary.NUMBER_OF_ABSTRACT_ASSERTIONS + abstractAssertions);
+			}
+
 			/*
 			 * (5). Materialize abstractions
 			 */
@@ -125,7 +170,7 @@ public abstract class MaterializeTemplate implements Materializer {
 			Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap = new HashMap<>();
 			for (OWLOntology abstraction : abstractions) {
 				if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
-					logger.info("***DEBUG REASONING_ABSTRACTONTOLOGY *** for abstract ontology:");
+					logger.info("***DEBUG*** Abstraction ontology:");
 					PrintingHelper.printSet(abstraction.getAxioms());
 				}
 
@@ -142,7 +187,7 @@ public abstract class MaterializeTemplate implements Materializer {
 					logger.info(
 							"***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed Role assertions by abstract ontoogy:");
 					PrintingHelper.printSet(entailedAbstractRoleAssertion.getSetOfRoleAssertions());
-					
+
 					logger.info(
 							"***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed Concept assertions by abstract ontoogy:");
 					PrintingHelper.printMap(entailedAbstractConceptAssertions);
@@ -157,7 +202,6 @@ public abstract class MaterializeTemplate implements Materializer {
 			assertionTransporter.updateOriginalABox();
 			updated = assertionTransporter.isABoxExtended();
 			if (updated) {
-				this.numberOfRefinements++;
 				RoleAssertionList newlyAddedRoleAssertions = assertionTransporter.getNewlyAddedRoleAssertions();
 				Set<Set<OWLNamedIndividual>> newlyAddedSameasAssertions = assertionTransporter
 						.getNewlyAddedSameasAssertions();
@@ -171,7 +215,19 @@ public abstract class MaterializeTemplate implements Materializer {
 
 			}
 			logger.info("Finish loop: " + currentLoop);
-			currentLoop = this.numberOfRefinements + 1;
+			
+			/*
+			 * clear temporarily data for abstract individuals, mapping,
+			 * types...
+			 * 
+			 */
+			this.dataForTransferringEntailments.clear();
+			AbstractDataFactory.getInstance().clear();
+		}
+		// logging statistics
+		if (this.config.getLogInfos().contains(LogInfo.STATISTIC)) {
+			int numberOfRefinements = currentLoop-1;
+			logger.info(StatisticVocabulary.NUMBER_OF_REFINEMENTS + numberOfRefinements);
 		}
 	}
 
@@ -198,7 +254,7 @@ public abstract class MaterializeTemplate implements Materializer {
 	@Override
 	public int getNumberOfRefinements() {
 
-		return this.numberOfRefinements;
+		return this.currentLoop;
 	}
 
 	@Override

@@ -77,6 +77,9 @@ public class Configuration {
 	public void clearDebugLevels() {
 		this.debuglevels.clear();
 	}
+	public void clearLogInfoLevels() {
+		this.logInfos.clear();
+	}
 
 	public int getNumberOfTypePerOntology() {
 		return numberOfTypePerOntology;

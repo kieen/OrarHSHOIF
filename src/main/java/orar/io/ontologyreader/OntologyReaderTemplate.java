@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -12,12 +11,14 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import orar.config.Configuration;
 import orar.config.DebugLevel;
 import orar.config.LogInfo;
+import orar.config.StatisticVocabulary;
 import orar.dlfragmentvalidator.OWLOntologyValidator;
 import orar.modeling.ontology.OrarOntology;
 import orar.normalization.Normalizer;
 import orar.normalization.transitivity.TransitivityNormalizer;
 import orar.normalization.transitivity.TransitivityNormalizerWithHermit;
 import orar.util.OntologyInfo;
+import orar.util.OntologyStatistic;
 
 public abstract class OntologyReaderTemplate implements OntologyReader {
 	protected Normalizer normalizer;
@@ -47,24 +48,19 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		OrarOntology internalOntology = converter.getInternalOntology();
 		internalOntology.setActualDLConstructors(profileValidator.getDLConstructors());
 
-		if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
-			logger.info("Information of the input ontology.");
-			logger.info("Ontology file:" + ontologyFileName);
-
-			logger.info("Number of individuals:" + internalOntology.getIndividualsInSignature().size());
-			long numberOfCA = internalOntology.getNumberOfInputConceptAssertions();
-			logger.info("Number of concept assertions:" + numberOfCA);
-			long numberOfRA = internalOntology.getNumberOfInputRoleAssertions();
-			logger.info("Number of role assertions:" + numberOfRA);
-			long totalOfAssertions = numberOfCA + numberOfRA;
-			logger.info("Number of concept assertions + role asesrtions:" + totalOfAssertions);
-		}
+//		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+//			logger.info("Information of the input ontology.");
+//			logger.info("Ontology file:" + ontologyFileName);
+//
+//			OntologyStatistic.printInputOntologyInfo(internalOntology);
+//
+//		}
 
 		long endParsing = System.currentTimeMillis();
 		long parsingTimeInSecond = (endParsing - startParsing) / 1000;
 
 		if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
-			logger.info("Time (in second) for loading ontology: " + parsingTimeInSecond);
+			logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
 		}
 		return internalOntology;
 
@@ -79,8 +75,9 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 	 */
 	private OWLOntology getNormalizedOWLAPIOntology(String fileNameToOWLAPIOntology) {
 		try {
+			long startParsing = System.currentTimeMillis();
 			/*
-			 * Read the tboxFile
+			 * Read the file
 			 */
 			OWLOntology inputOntology = getInputOWLAPIOntology(fileNameToOWLAPIOntology);
 
@@ -102,6 +99,11 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 
 			OWLOntology ontologyInNormalFormWithAddedAuxiliaryAxiomsForTransitivity = getOntologyWithAuxiliaryAxiomsForTransitivity(
 					ontologyInNormalForm);
+			long endParsing = System.currentTimeMillis();
+			long parsingTimeInSecond = (endParsing - startParsing) / 1000;
+			if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
+				logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
+			}
 
 			return ontologyInNormalFormWithAddedAuxiliaryAxiomsForTransitivity;
 		} catch (OWLOntologyCreationException e) {
@@ -120,16 +122,14 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		logger.info("Using OWLAPI to read the ontology:" + owlOntologyFileName + " ...");
 		OWLOntology inputOntology;
 		inputOntology = manager.loadOntologyFromOntologyDocument(new File(owlOntologyFileName));
-		/*
-		 * Logging:start
-		 */
-		if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
-			logger.info("Statistic of the input ontology:" + owlOntologyFileName);
-			OntologyInfo.printSize(inputOntology);
+
+		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+			logger.info("Information of the input ontology.");
+			logger.info("Ontology file:" + owlOntologyFileName);
+
+			OntologyStatistic.printOWLOntologyInfo(inputOntology);
+
 		}
-		/*
-		 * Logging:end
-		 */
 
 		return inputOntology;
 	}
@@ -153,8 +153,9 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 	private OWLOntology getOntologyInTheNormalForm(OWLOntology ontologyInTargetDLFragment) {
 		normalizer = getNormalizer(ontologyInTargetDLFragment);
 		OWLOntology ontologyInNormalForm = normalizer.getNormalizedOntology();
-		logger.info("Number of class assertions in Normalized Ontology:"
-				+ ontologyInNormalForm.getAxioms(AxiomType.CLASS_ASSERTION, true).size());
+		// logger.info("Number of class assertions in Normalized Ontology:"
+		// + ontologyInNormalForm.getAxioms(AxiomType.CLASS_ASSERTION,
+		// true).size());
 		manager.removeOntology(ontologyInTargetDLFragment);
 		return ontologyInNormalForm;
 	}
@@ -206,15 +207,18 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 
 		OrarOntology internalOntology = streamReader.getOntology();
 		internalOntology.setActualDLConstructors(profileValidator.getDLConstructors());
-		if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
-			printOntologyInfo(internalOntology);
+		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {	
+			logger.info("ABoxList file:" + aboxListFileName);
+			logger.info("ABox statistic:");
+			OntologyStatistic.printInputABoxOrarOntologyInfo(internalOntology);
+
 		}
 
 		long endParsing = System.currentTimeMillis();
 		long parsingTimeInSecond = (endParsing - startParsing) / 1000;
 
 		if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
-			logger.info("Time (in second) for loading ontology: " + parsingTimeInSecond);
+			logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
 		}
 		return internalOntology;
 
@@ -243,7 +247,7 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 			long parsingTimeInSecond = (endParsing - startParsing) / 1000;
 
 			if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
-				logger.info("Time (in second) for loading ontology: " + parsingTimeInSecond);
+				logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
 			}
 
 			return profiledOntology;
@@ -276,15 +280,17 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 			StreamOntologyReader2OWLAPI streamReader = new StreamOntologyReader2OWLAPI(profiledOntology, aboxListFile);
 
 			OWLOntology owlOntology = streamReader.getOWLAPIOntology();
-			if (config.getLogInfos().contains(LogInfo.INPUTONTOLOGY_INFO)) {
-				printOntologyInfo(owlOntology);
+			if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+				logger.info("TBox file: " + tboxFile);
+				logger.info("ABoxList file: " + aboxListFile);
+				OntologyStatistic.printOWLOntologyInfo(owlOntology);
 			}
 
 			long endParsing = System.currentTimeMillis();
 			long parsingTimeInSecond = (endParsing - startParsing) / 1000;
 
 			if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
-				logger.info("Time (in second) for loading ontology: " + parsingTimeInSecond);
+				logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
 			}
 
 			return owlOntology;
@@ -295,30 +301,4 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		return null;
 	}
 
-	private void printOntologyInfo(OrarOntology internalOntology) {
-		logger.info("Information of the input ontology.");
-
-		logger.info("Number of individuals:" + internalOntology.getIndividualsInSignature().size());
-
-		long numberOfCA = internalOntology.getNumberOfInputConceptAssertions();
-		logger.info("Number of concept assertions:" + numberOfCA);
-
-		long numberOfRA = internalOntology.getNumberOfInputRoleAssertions();
-		logger.info("Number of role assertions:" + numberOfRA);
-
-		long totalOfAssertions = numberOfCA + numberOfRA;
-		logger.info("Number of concept assertions + role asesrtions:" + totalOfAssertions);
-	}
-
-	private void printOntologyInfo(OWLOntology owlOntology) {
-		logger.info("Information of the input ontology.");
-
-		logger.info("Number of individuals:" + owlOntology.getIndividualsInSignature(true).size());
-		long numberOfCA = owlOntology.getAxioms(AxiomType.CLASS_ASSERTION, true).size();
-		logger.info("Number of concept assertions:" + numberOfCA);
-		long numberOfRA = owlOntology.getAxioms(AxiomType.OBJECT_PROPERTY_ASSERTION, true).size();
-		logger.info("Number of role assertions:" + numberOfRA);
-		long totalOfAssertions = numberOfCA + numberOfRA;
-		logger.info("Number of concept assertions + role asesrtions:" + totalOfAssertions);
-	}
 }
