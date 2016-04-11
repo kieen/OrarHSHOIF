@@ -38,7 +38,7 @@ public abstract class MaterializeTemplate implements Materializer {
 	// input & output
 	protected final OrarOntology normalizedORAROntology;
 	private int currentLoop;
-	private int reasoningTimeInSeconds;
+	private long reasoningTimeInSeconds;
 	protected final Configuration config;
 	// logging
 	private static final Logger logger = Logger.getLogger(MaterializeTemplate.class);
@@ -71,7 +71,7 @@ public abstract class MaterializeTemplate implements Materializer {
 
 	@Override
 	public void materialize() {
-		// TODO: get reasoning time
+		long startTime = System.currentTimeMillis();
 		/*
 		 * (1). Get meta info of the ontology, e.g. role hierarchy, entailed
 		 * func/tran roles
@@ -90,7 +90,7 @@ public abstract class MaterializeTemplate implements Materializer {
 		 */
 		boolean updated = true;
 		logger.info("Starting the abstraction refinement loop...");
-		
+
 		while (updated) {
 			currentLoop = this.currentLoop + 1;
 			logger.info("Current loop: " + currentLoop);
@@ -215,7 +215,7 @@ public abstract class MaterializeTemplate implements Materializer {
 
 			}
 			logger.info("Finish loop: " + currentLoop);
-			
+
 			/*
 			 * clear temporarily data for abstract individuals, mapping,
 			 * types...
@@ -226,8 +226,16 @@ public abstract class MaterializeTemplate implements Materializer {
 		}
 		// logging statistics
 		if (this.config.getLogInfos().contains(LogInfo.STATISTIC)) {
-			int numberOfRefinements = currentLoop-1;
+			int numberOfRefinements = currentLoop - 1;
 			logger.info(StatisticVocabulary.NUMBER_OF_REFINEMENTS + numberOfRefinements);
+		}
+		long endTime = System.currentTimeMillis();
+		this.reasoningTimeInSeconds = (endTime - startTime) / 1000;
+		/*
+		 * logging
+		 */
+		if (config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
+			logger.info(StatisticVocabulary.TIME_REASONING_USING_ABSRTACTION + this.reasoningTimeInSeconds);
 		}
 	}
 
@@ -269,7 +277,7 @@ public abstract class MaterializeTemplate implements Materializer {
 	}
 
 	@Override
-	public int getReasoningTimeInSeconds() {
+	public long getReasoningTimeInSeconds() {
 		return this.reasoningTimeInSeconds;
 	}
 

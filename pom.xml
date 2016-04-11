@@ -171,7 +171,7 @@
 					<archive>
 						<manifest>
 							<!-- <mainClass>orar.commandline.OrarCLI</mainClass> -->
-							<mainClass>orar.commandline.OWLReasonerCLI</mainClass>
+							<mainClass>orar.commandline.OrarCLI</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>.</Class-Path>

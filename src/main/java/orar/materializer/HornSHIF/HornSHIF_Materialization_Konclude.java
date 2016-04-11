@@ -7,15 +7,26 @@ import orar.innerreasoner.HornSHIF.Konclude_HornSHIF_InnerReasoner;
 import orar.modeling.ontology.OrarOntology;
 
 public class HornSHIF_Materialization_Konclude extends HornSHIF_Materializer {
+	private int port = 8080;
 
 	public HornSHIF_Materialization_Konclude(OrarOntology normalizedOrarOntology) {
 		super(normalizedOrarOntology);
 
 	}
 
+	public HornSHIF_Materialization_Konclude(OrarOntology normalizedOrarOntology, int port) {
+		super(normalizedOrarOntology);
+		this.port = port;
+	}
+
 	@Override
 	protected InnerReasoner getInnerReasoner(OWLOntology abstraction) {
-		InnerReasoner reasoner = new Konclude_HornSHIF_InnerReasoner(abstraction);
+		InnerReasoner reasoner;
+		if (port == 8080) {
+			reasoner = new Konclude_HornSHIF_InnerReasoner(abstraction);
+		} else {
+			reasoner = new Konclude_HornSHIF_InnerReasoner(abstraction, this.port);
+		}
 		return reasoner;
 	}
 

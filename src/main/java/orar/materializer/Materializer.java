@@ -21,5 +21,5 @@ public interface Materializer {
 	 */
 	public OrarOntology getOrarOntology();
 
-	public int getReasoningTimeInSeconds();
+	public long getReasoningTimeInSeconds();
 }

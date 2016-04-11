@@ -31,7 +31,7 @@ public class AbstractionRefinementMaterializationWithHermit {
 	public static void main(String[] args) throws OWLOntologyCreationException {
 		Configuration.getInstance().clearDebugLevels();
 		Configuration.getInstance().clearLogInfoLevels();
-		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.PARSING_TIME);
+		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.LOADING_TIME);
 		runWithSeperatedTBoxAndABoxes();
 //		runWithCombinedTBoxAndABoxes();
 

@@ -59,7 +59,7 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		long endParsing = System.currentTimeMillis();
 		long parsingTimeInSecond = (endParsing - startParsing) / 1000;
 
-		if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
+		if (config.getLogInfos().contains(LogInfo.LOADING_TIME)) {
 			logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
 		}
 		return internalOntology;
@@ -101,7 +101,7 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 					ontologyInNormalForm);
 			long endParsing = System.currentTimeMillis();
 			long parsingTimeInSecond = (endParsing - startParsing) / 1000;
-			if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
+			if (config.getLogInfos().contains(LogInfo.LOADING_TIME)) {
 				logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
 			}
 
@@ -217,7 +217,7 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		long endParsing = System.currentTimeMillis();
 		long parsingTimeInSecond = (endParsing - startParsing) / 1000;
 
-		if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
+		if (config.getLogInfos().contains(LogInfo.LOADING_TIME)) {
 			logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
 		}
 		return internalOntology;
@@ -246,7 +246,7 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 			long endParsing = System.currentTimeMillis();
 			long parsingTimeInSecond = (endParsing - startParsing) / 1000;
 
-			if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
+			if (config.getLogInfos().contains(LogInfo.LOADING_TIME)) {
 				logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
 			}
 
@@ -289,7 +289,7 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 			long endParsing = System.currentTimeMillis();
 			long parsingTimeInSecond = (endParsing - startParsing) / 1000;
 
-			if (config.getLogInfos().contains(LogInfo.PARSING_TIME)) {
+			if (config.getLogInfos().contains(LogInfo.LOADING_TIME)) {
 				logger.info(StatisticVocabulary.TIME_LOADING_INPUT + parsingTimeInSecond);
 			}
 
