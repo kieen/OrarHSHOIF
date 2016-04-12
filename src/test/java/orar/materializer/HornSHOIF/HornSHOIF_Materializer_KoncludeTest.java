@@ -203,17 +203,18 @@ public class HornSHOIF_Materializer_KoncludeTest {
 
 	@Test
 	public void testUOBM_OXSmall() {
-		String ontologyPath = "src/test/resources/uobm-ox/u1ABoxAndTBox/univ0-small6.owl";
+
+		String ontologyPath = "src/test/resources/uobm-ox/u1ABoxAndTBox/univ0-small4.owl";
 		haveTheSameResults(ontologyPath);
 	}
 
 	@Test
-	public void testUOBM_OX() {
-
-		String ontologyPath = "src/test/resources/uobm-ox/u1ABoxAndTBox/univ0.owl";
+	public void testUOBM_OXSmaller() {
+		String ontologyPath = "src/test/resources/uobm-ox/u1ABoxAndTBox/univ0-small6.owl";
 		haveTheSameResults(ontologyPath);
 	}
 
+	
 	@Test
 	public void testLUBM() {
 
@@ -260,9 +261,9 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
 		checker.computeEntailments();
 
-		// Assert.assertTrue(checker.isConceptAssertionComplete());
+		 Assert.assertTrue(checker.isConceptAssertionComplete());
 		Assert.assertTrue(checker.isSameasComplete());
-		// Assert.assertTrue(checker.isRoleAssertionComplete());
+		 Assert.assertTrue(checker.isRoleAssertionComplete());
 
 	}
 
