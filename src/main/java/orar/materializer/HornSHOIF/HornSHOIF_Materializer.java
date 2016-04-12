@@ -28,7 +28,6 @@ public abstract class HornSHOIF_Materializer extends MaterializeTemplate {
 
 	@Override
 	protected List<OWLOntology> getAbstractions(Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
-
 		AbstractionGenerator abstractionGenerator = new HornSHOIF_AbstractionGenerator(normalizedORAROntology,
 				typeMap2Individuals);
 		List<OWLOntology> abstractions = new ArrayList<>();

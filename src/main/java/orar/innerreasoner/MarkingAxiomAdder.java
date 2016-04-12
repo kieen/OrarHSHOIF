@@ -1,6 +1,8 @@
 package orar.innerreasoner;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -33,17 +35,21 @@ import orar.data.MetaDataOfOntology;
 public class MarkingAxiomAdder {
 	private MetaDataOfOntology metaDataOfOntology;
 	private final Set<OWLClass> singletonConcepts;
+	private final Set<OWLClass> predecessorOfSingletonConcepts;
 	private final Set<OWLClass> loopConcepts;
 	private final Set<OWLClass> hasTranConcepts;
+	private final Map<OWLClass, OWLObjectProperty> predecessorOfSingletonConceptMap2Role;
 
 	private OWLOntology owlOntology;
 	private final OWLDataFactory owlDataFactory;
 	private final String singletonConceptIRI = "http://www.orar.com#SingletonConcept";
+	private final String predecessorOfSingletonConceptIRI = "http://www.orar.com#PredecessorOfSingletonConcept";
 	private final String loopConceptIRI = "http://www.orar.com#LoopConcept";
 	private final String hasTranConceptIRI = "http://www.orar.com#HasTranConcept";
 
 	private final Configuration config;
 	private int singletonConceptCounter = 0;
+	private int predecessorOfSingletonConceptCounter = 0;
 	private int loopConceptCounter = 0;
 	private int hasTranConceptCounter = 0;
 
@@ -58,12 +64,15 @@ public class MarkingAxiomAdder {
 		this.ontoManager = OWLManager.createOWLOntologyManager();
 
 		this.singletonConcepts = new HashSet<>();
+		this.predecessorOfSingletonConcepts = new HashSet<>();
 		this.loopConcepts = new HashSet<>();
 		this.hasTranConcepts = new HashSet<>();
+		this.predecessorOfSingletonConceptMap2Role = new HashMap<>();
 	}
 
 	public void addMarkingAxioms() {
 		addAxiomsForSingletonConcept();
+
 		addAxiomsForSelfLoopConcepts();
 		addAxiomsForHasTranConcept();
 		if (config.getDebuglevels()
@@ -73,6 +82,43 @@ public class MarkingAxiomAdder {
 				logger.info(axiom);
 			}
 		}
+	}
+
+	/**
+	 * Only use this method for Konclude to limit the number of OWLLink Http
+	 * requests.
+	 */
+	public void addAxiomsForPredecessorOfSingletonConcept() {
+		/*
+		 * for each singleton concept SC, and reach role R. <br> we add:
+		 * exists.R.SC SubclassOf NewPreConcept. <br> we map: NewPreConcept --->
+		 * R<br> Latter, for each instance of NewPreConcept we query only
+		 * R-successors of it.
+		 */
+		Set<OWLObjectProperty> allRoles = this.owlOntology.getObjectPropertiesInSignature(true);
+		allRoles.remove(this.owlDataFactory.getOWLTopObjectProperty());
+		allRoles.remove(this.owlDataFactory.getOWLBottomObjectProperty());
+		for (OWLClass singletonConcept_C : this.getSingletonConcepts()) {
+			for (OWLObjectProperty role_R : allRoles) {
+				// TODO: restrict role???
+				OWLClass newPreConcept_D = getFreshPredecessorOfSingletonConcept();
+				OWLObjectSomeValuesFrom existRC = this.owlDataFactory.getOWLObjectSomeValuesFrom(role_R,
+						singletonConcept_C);
+				OWLSubClassOfAxiom newSubClassAxiom = this.owlDataFactory.getOWLSubClassOfAxiom(existRC,
+						newPreConcept_D);
+				this.ontoManager.addAxiom(owlOntology, newSubClassAxiom);
+				this.predecessorOfSingletonConceptMap2Role.put(newPreConcept_D, role_R);
+			}
+		}
+
+	}
+
+	private OWLClass getFreshPredecessorOfSingletonConcept() {
+		this.predecessorOfSingletonConceptCounter++;
+		String iriString = this.predecessorOfSingletonConceptIRI + this.predecessorOfSingletonConceptCounter;
+		OWLClass newConcept = owlDataFactory.getOWLClass(IRI.create(iriString));
+		this.predecessorOfSingletonConcepts.add(newConcept);
+		return newConcept;
 	}
 
 	private OWLClass getFreshSingletonConcept() {
@@ -97,6 +143,10 @@ public class MarkingAxiomAdder {
 		OWLClass newConcept = owlDataFactory.getOWLClass(IRI.create(iriString));
 		this.hasTranConcepts.add(newConcept);
 		return newConcept;
+	}
+
+	public Set<OWLClass> getPredecessorOfSingletonConcepts() {
+		return predecessorOfSingletonConcepts;
 	}
 
 	/**
@@ -209,6 +259,10 @@ public class MarkingAxiomAdder {
 
 	public String getHasTranConceptIRI() {
 		return hasTranConceptIRI;
+	}
+
+	public Map<OWLClass, OWLObjectProperty> getPredecessorOfSingletonConceptMap2Role() {
+		return predecessorOfSingletonConceptMap2Role;
 	}
 
 }

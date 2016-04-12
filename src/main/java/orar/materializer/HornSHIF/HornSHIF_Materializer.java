@@ -29,7 +29,12 @@ public abstract class HornSHIF_Materializer extends MaterializeTemplate {
 	@Override
 	protected List<OWLOntology> getAbstractions(Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
 		int numberOfTypesPerOntology = this.config.getNumberOfTypePerOntology();
-
+		/*
+		 * 
+		 */
+		if (numberOfTypesPerOntology < 0) {
+			numberOfTypesPerOntology = typeMap2Individuals.size();
+		}
 		AbstractionGenerator abstractionGenerator = new HornSHIF_AbstractionGenerator(normalizedORAROntology,
 				typeMap2Individuals);
 		List<OWLOntology> abstractions = abstractionGenerator.getAbstractOntologies(numberOfTypesPerOntology);
@@ -48,7 +53,5 @@ public abstract class HornSHIF_Materializer extends MaterializeTemplate {
 
 	@Override
 	protected abstract InnerReasoner getInnerReasoner(OWLOntology abstraction);
-
-	
 
 }

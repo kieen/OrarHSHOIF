@@ -186,9 +186,8 @@ public class JenaStreamRDF2OWLAPI extends StreamRDFBase {
 
 	@Override
 	public void finish() {
-		logger.info("===Begin:Statistic for this file/resource.===");
-		logger.info("Number of all parsed triples up to now: " + numberOfAllParsedTriples);
-		logger.info("===End:Statistic for this file/resource.===");
+
+		logger.info("Total number of all parsed triples up to now: " + numberOfAllParsedTriples);
 
 	}
 

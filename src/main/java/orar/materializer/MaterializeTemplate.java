@@ -94,7 +94,13 @@ public abstract class MaterializeTemplate implements Materializer {
 		while (updated) {
 			currentLoop = this.currentLoop + 1;
 			logger.info("Current loop: " + currentLoop);
-
+			/*
+			 * clear temporarily data for abstract individuals, mapping,
+			 * types...
+			 * 
+			 */
+			this.dataForTransferringEntailments.clear();
+			AbstractDataFactory.getInstance().clear();
 			/*
 			 * (3). Compute types
 			 */
@@ -117,7 +123,7 @@ public abstract class MaterializeTemplate implements Materializer {
 			 */
 			logger.info("Generating abstractions ...");
 			List<OWLOntology> abstractions = getAbstractions(typeMap2Individuals);
-
+			logger.info("Info:Number of abstraction ontolog(ies):" + abstractions.size());
 			// logging debug
 			if (config.getDebuglevels().contains(DebugLevel.ABSTRACTION_CREATION)) {
 				logger.info("*** DEBUG*** Number of abstraction ontologies: " + abstractions.size());
@@ -168,12 +174,14 @@ public abstract class MaterializeTemplate implements Materializer {
 			Map<OWLNamedIndividual, Set<OWLClass>> entailedAbstractConceptAssertions = new HashMap<>();
 			AbstractRoleAssertionBox entailedAbstractRoleAssertion = new AbstractRoleAssertionBox();
 			Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap = new HashMap<>();
+			int countMaterializedOntology = 0;// for monitoring only.
 			for (OWLOntology abstraction : abstractions) {
 				if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
 					logger.info("***DEBUG*** Abstraction ontology:");
 					PrintingHelper.printSet(abstraction.getAxioms());
 				}
-
+				countMaterializedOntology++;
+				logger.info("Info:Materializing abstraction: " + countMaterializedOntology);
 				InnerReasoner innerReasoner = getInnerReasoner(abstraction);
 				innerReasoner.computeEntailments();
 				// we can use putAll since individuals in different abstractsion
@@ -192,6 +200,7 @@ public abstract class MaterializeTemplate implements Materializer {
 							"***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed Concept assertions by abstract ontoogy:");
 					PrintingHelper.printMap(entailedAbstractConceptAssertions);
 				}
+
 			}
 			/*
 			 * (6). Transfer assertions to the original ABox
@@ -216,13 +225,7 @@ public abstract class MaterializeTemplate implements Materializer {
 			}
 			logger.info("Finish loop: " + currentLoop);
 
-			/*
-			 * clear temporarily data for abstract individuals, mapping,
-			 * types...
-			 * 
-			 */
-			this.dataForTransferringEntailments.clear();
-			AbstractDataFactory.getInstance().clear();
+			
 		}
 		// logging statistics
 		if (this.config.getLogInfos().contains(LogInfo.STATISTIC)) {

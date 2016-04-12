@@ -53,6 +53,8 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 	protected final Set<OWLNamedIndividual> instancesOfSingletonConcepts;
 	protected final Set<OWLNamedIndividual> instancesOfLoopConcepts;
 	protected final Set<OWLNamedIndividual> instancesOfHasTranConcepts;
+	protected final Set<OWLNamedIndividual> instancesOfPredecessorOfSingletonConcept;
+	protected final Set<OWLObjectProperty> rolesForPredecessorOfSingletonConcept;
 
 	public InnerReasonerTemplate(OWLOntology owlOntology) {
 		/*
@@ -77,6 +79,8 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		this.instancesOfSingletonConcepts = new HashSet<>();
 		this.instancesOfLoopConcepts = new HashSet<>();
 		this.instancesOfHasTranConcepts = new HashSet<>();
+		this.instancesOfPredecessorOfSingletonConcept = new HashSet<>();
+		this.rolesForPredecessorOfSingletonConcept = new HashSet<>();
 	}
 
 	@Override
@@ -110,8 +114,7 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		 * add axioms to mark singleton concepts
 		 */
 		this.axiomsAdder.addMarkingAxioms();
-		if (this.config.getDebuglevels()
-				.contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+		if (this.config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
 			logger.info("***DEBUG*** Ontololgy after adding marking axioms:");
 			PrintingHelper.printSet(this.owlOntology.getAxioms());
 		}
@@ -231,6 +234,13 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 				this.instancesOfLoopConcepts.addAll(instances);
 			} else if (this.axiomsAdder.getHasTranConcepts().contains(eachConceptName)) {
 				this.instancesOfHasTranConcepts.addAll(instances);
+			} else if (this.axiomsAdder.getPredecessorOfSingletonConcepts().contains(eachConceptName)) {
+				this.instancesOfPredecessorOfSingletonConcept.addAll(instances);
+				OWLObjectProperty roleUsedForQuery = this.axiomsAdder.getPredecessorOfSingletonConceptMap2Role()
+						.get(eachConceptName);
+				if (roleUsedForQuery != null) {
+					this.rolesForPredecessorOfSingletonConcept.add(roleUsedForQuery);
+				}
 			} else {
 				/*
 				 * filter out asserted instances

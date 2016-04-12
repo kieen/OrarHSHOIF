@@ -13,7 +13,6 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import orar.config.DebugLevel;
 import orar.innerreasoner.InnerReasonerTemplate;
-import orar.util.Pause;
 import orar.util.PrintingHelper;
 
 public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTemplate {
@@ -107,12 +106,12 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 			Set<OWLObjectProperty> allRoles = this.owlOntology.getObjectPropertiesInSignature(true);
 			allRoles.remove(this.dataFactory.getOWLTopObjectProperty());
 			allRoles.remove(this.dataFactory.getOWLBottomObjectProperty());
-			for (OWLObjectProperty role :allRoles) {
+			for (OWLObjectProperty role : allRoles) {
 				/*
 				 * query for assertion of the form role(eachU, ?x)
 				 */
 				Set<OWLNamedIndividual> objects = reasoner.getObjectPropertyValues(eachU, role).getFlattened();
-				
+
 				/*
 				 * retain only x-individuals
 				 */
@@ -121,21 +120,21 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 					this.roleAssertionList.addUX_RoleAssertionForCTypeAndType(eachU, role, eachObject);
 				}
 
-//				 logger.info("***DEBUG*** pause 1");
-//				 Pause.pause();
+				// logger.info("***DEBUG*** pause 1");
+				// Pause.pause();
 				/*
 				 * query for assertion of the form role(x, eachU)
 				 */
 				OWLObjectInverseOf inverseRole = this.dataFactory.getOWLObjectInverseOf(role);
-//				logger.info("inverseROle:"+inverseRole);
-//				logger.info("u:"+eachU);
-//				logger.info("before asering for inver rolse asesrtoin");
-//				Pause.pause();
+				// logger.info("inverseROle:"+inverseRole);
+				// logger.info("u:"+eachU);
+				// logger.info("before asering for inver rolse asesrtoin");
+				// Pause.pause();
 				Set<OWLNamedIndividual> subjects = reasoner.getObjectPropertyValues(eachU, inverseRole).getFlattened();
-//				logger.info("after asering for inver rolse asesrtoin");
-//				Pause.pause();
-//				logger.info("subjects: " +subjects);
-				
+				// logger.info("after asering for inver rolse asesrtoin");
+				// Pause.pause();
+				// logger.info("subjects: " +subjects);
+
 				/*
 				 * retain only x-individuals
 				 */
@@ -143,8 +142,9 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 				for (OWLNamedIndividual eachSubject : subjects) {
 					this.roleAssertionList.addUX_RoleAssertionForCTypeAndType(eachSubject, role, eachU);
 				}
-//				logger.info("***DEBUG*** pause 2: after query for inverse role asesrtions");
-//				 Pause.pause();
+				// logger.info("***DEBUG*** pause 2: after query for inverse
+				// role asesrtions");
+				// Pause.pause();
 			}
 		}
 	}
@@ -155,7 +155,14 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 	 */
 	@Override
 	protected void computeEntailedSameasAssertions() {
-		Set<OWLNamedIndividual> allIndividualsFromConceptType = this.abstractDataFactory.getUAbstractIndividuals();
+		// Set<OWLNamedIndividual> allIndividualsFromConceptType =
+		// this.abstractDataFactory.getUAbstractIndividuals();
+		// logger.info("***DEBUG***number of u
+		// individuals:"+this.abstractDataFactory.getUAbstractIndividuals().size());
+		Set<OWLNamedIndividual> allIndividualsFromConceptType = this.owlOntology.getIndividualsInSignature();
+		allIndividualsFromConceptType.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
+		// logger.info("***DEBUG***number of u individuals in the ontology:"+
+		// allIndividualsFromConceptType.size());
 		Queue<OWLNamedIndividual> todoIndividuals = new LinkedList<>(allIndividualsFromConceptType);
 		while (!todoIndividuals.isEmpty()) {
 			OWLNamedIndividual anIndividual = todoIndividuals.poll();

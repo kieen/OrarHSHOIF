@@ -41,7 +41,7 @@ public class AbstractDataFactory {
 		yAbstractIndividuals = new HashSet<OWLNamedIndividual>();
 		xAbstractIndividuals = new HashSet<OWLNamedIndividual>();
 		zAbstractIndividuals = new HashSet<OWLNamedIndividual>();
-		uAbstractIndividuals = new HashSet<>();
+		uAbstractIndividuals = new HashSet<OWLNamedIndividual>();
 		xCounter = 0;
 		yCounter = 0;
 		zCounter = 0;

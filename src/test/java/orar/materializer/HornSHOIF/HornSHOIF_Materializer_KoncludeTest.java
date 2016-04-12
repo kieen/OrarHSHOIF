@@ -7,7 +7,6 @@ import junit.framework.Assert;
 import orar.completenesschecker.CompletenessChecker;
 import orar.completenesschecker.CompletenessCheckerHorn;
 import orar.config.Configuration;
-import orar.config.DebugLevel;
 import orar.config.LogInfo;
 import orar.data.AbstractDataFactory;
 import orar.data.DataForTransferingEntailments;
@@ -15,6 +14,7 @@ import orar.data.MetaDataOfOntology;
 import orar.data.NormalizationDataFactory;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
+import orar.dlreasoner.KoncludeDLReasoner;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
@@ -203,14 +203,14 @@ public class HornSHOIF_Materializer_KoncludeTest {
 
 	@Test
 	public void testUOBM_OXSmall() {
-		String ontologyPath = "src/test/resources/uobm-ox/u1/univ0-small1.owl";
+		String ontologyPath = "src/test/resources/uobm-ox/u1ABoxAndTBox/univ0-small6.owl";
 		haveTheSameResults(ontologyPath);
 	}
 
 	@Test
 	public void testUOBM_OX() {
 
-		String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
+		String ontologyPath = "src/test/resources/uobm-ox/u1ABoxAndTBox/univ0.owl";
 		haveTheSameResults(ontologyPath);
 	}
 
@@ -219,6 +219,51 @@ public class HornSHOIF_Materializer_KoncludeTest {
 
 		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
 		haveTheSameResults(ontologyPath);
+	}
+
+	@Test
+	public void testUOBM_Origin() {
+		String ontologyTbox = "src/test/resources/uobm-origin/tbox/uobm-tbox-origin.owl";
+		String aboxList = "src/test/resources/uobm-origin/abox/aboxListOf2.txt";
+		haveTheSameResults(ontologyTbox, aboxList);
+	}
+
+	/**
+	 * Compare result by Abstraction and by OWLReasoner; assert that they have
+	 * the same result.
+	 * 
+	 * @param ontologyPath
+	 */
+	private void haveTheSameResults(String tbox, String aboxList) {
+		AbstractDataFactory.getInstance().clear();
+		NormalizationDataFactory.getInstance().clear();
+		MetaDataOfOntology.getInstance().clear();
+		DataForTransferingEntailments.getInstance().clear();
+
+		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME);
+		// Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,
+		// DebugLevel.ADDING_MARKING_AXIOMS);
+		System.out.println("Loading ontology for abstraction materializer....");
+		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
+		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(tbox, aboxList);
+
+		Materializer materializer = new HornSHOIF_Materialization_Konclude(normalizedOrarOntology);
+
+		/*
+		 * get result directly from Konclude reasoning over the input ontology
+		 */
+		System.out.println("Loading ontology for a DL Reasoner....");
+		OWLOntology owlOntology = ontoReader.getOWLAPIOntology(tbox, aboxList);
+
+		DLReasoner koncludeRealizer = new HermitDLReasoner(owlOntology);
+
+		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
+		checker.computeEntailments();
+
+		// Assert.assertTrue(checker.isConceptAssertionComplete());
+		Assert.assertTrue(checker.isSameasComplete());
+		// Assert.assertTrue(checker.isRoleAssertionComplete());
+
 	}
 
 	/**
@@ -232,11 +277,12 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		NormalizationDataFactory.getInstance().clear();
 		MetaDataOfOntology.getInstance().clear();
 		DataForTransferingEntailments.getInstance().clear();
+		Configuration.getInstance().clearDebugLevels();
+		Configuration.getInstance().clearLogInfoLevels();
 
-		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
-				LogInfo.COMPARED_RESULT_INFO);
-		Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,
-				DebugLevel.ADDING_MARKING_AXIOMS);
+		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME, LogInfo.LOADING_TIME);
+		// Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,
+		// DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
@@ -254,9 +300,9 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
 		checker.computeEntailments();
 
-		// Assert.assertTrue(checker.isConceptAssertionComplete());
+		Assert.assertTrue(checker.isConceptAssertionComplete());
 		Assert.assertTrue(checker.isSameasComplete());
-		// Assert.assertTrue(checker.isRoleAssertionComplete());
+		Assert.assertTrue(checker.isRoleAssertionComplete());
 
 	}
 }

@@ -14,12 +14,19 @@ public class Configuration {
 	private final String koncludeConfigFileName;
 	private final String savedOntologyFileName;
 
-	private int numberOfTypePerOntology = 300;// Default value
+	/*
+	 * number of types per abstraction ontology. Negative numbers are used for
+	 * non-splitting, e.g. put all types in one abstraction---there will be only
+	 * one resulting abstraction.
+	 */
+	private int numberOfTypePerOntology = -1;// Default value
 
 	private Configuration() {
 		// default is newestversion_11_Sept_2015/Konclude. This allows to get
-		// role asesrtions with atomic only. getting inverse role assertions failed.
-//		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/newestversion_11_Sept_2015/Konclude";
+		// role asesrtions with atomic only. getting inverse role assertions
+		// failed.
+//		 this.KONCLUDE_BINARY_PATH =
+//		 "/Users/kien/konclude/newestversion_11_Sept_2015/Konclude";
 
 		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/konclude062/Binaries/Konclude";
 		koncludeConfigFileName = "/Users/kien/konclude/newestversion_11_Sept_2015/konclude-load-config.xml";
@@ -77,6 +84,7 @@ public class Configuration {
 	public void clearDebugLevels() {
 		this.debuglevels.clear();
 	}
+
 	public void clearLogInfoLevels() {
 		this.logInfos.clear();
 	}
