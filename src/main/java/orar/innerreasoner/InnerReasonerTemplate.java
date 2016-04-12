@@ -115,8 +115,8 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		 */
 		this.axiomsAdder.addMarkingAxioms();
 		if (this.config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
-			logger.info("***DEBUG*** Ontololgy after adding marking axioms:");
-			PrintingHelper.printSet(this.owlOntology.getAxioms());
+//			logger.info("***DEBUG*** Ontololgy after adding marking axioms:");
+//			PrintingHelper.printSet(this.owlOntology.getAxioms());
 		}
 		/*
 		 * get the reasoner
@@ -258,6 +258,28 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 				instances.removeAll(this.abstractDataFactory.getUAbstractIndividuals());
 				putIndividual2ConceptMap(instances, eachConceptName);
 			}
+		}
+		// logging
+		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+			int numberOfIndividualQueryingForRoleAssertions = this.instancesOfHasTranConcepts.size()
+					+ this.instancesOfLoopConcepts.size() + this.instancesOfSingletonConcepts.size()
+					+ this.instancesOfPredecessorOfSingletonConcept.size();
+			
+			logger.info("***DEBUG*** number of all individuals used to query role asesrtions: "
+					+ numberOfIndividualQueryingForRoleAssertions);
+			
+			logger.info("***DEBUG*** number of instances of singleton conepts: "
+					+ this.instancesOfSingletonConcepts.size());
+			
+			logger.info("***DEBUG*** number of instances of concepts having trans neighbours: "
+					+ this.instancesOfHasTranConcepts.size());
+			
+			logger.info("***DEBUG*** number of instances of loop concepts: "
+					+ this.instancesOfLoopConcepts.size());
+			
+			logger.info("***DEBUG*** number of instances of predecessors of singleton concepts: "
+					+ this.instancesOfPredecessorOfSingletonConcept.size());
+			
 		}
 
 	}

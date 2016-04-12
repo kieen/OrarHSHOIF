@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import orar.completenesschecker.CompletenessChecker;
 import orar.completenesschecker.CompletenessCheckerHorn;
 import orar.config.Configuration;
+import orar.config.DebugLevel;
 import orar.config.LogInfo;
 import orar.data.AbstractDataFactory;
 import orar.data.DataForTransferingEntailments;
@@ -223,7 +224,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 	}
 
 	@Test
-	public void testUOBM_Origin() {
+	public void testUOBM_OriginSmall() {
 		String ontologyTbox = "src/test/resources/uobm-origin/tbox/uobm-tbox-origin.owl";
 		String aboxList = "src/test/resources/uobm-origin/abox/aboxListOf2.txt";
 		haveTheSameResults(ontologyTbox, aboxList);
@@ -242,8 +243,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		DataForTransferingEntailments.getInstance().clear();
 
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME);
-		// Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,
-		// DebugLevel.ADDING_MARKING_AXIOMS);
+		 Configuration.getInstance().addDebugLevels(DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(tbox, aboxList);
@@ -282,8 +282,8 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		Configuration.getInstance().clearLogInfoLevels();
 
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME, LogInfo.LOADING_TIME);
-		// Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,
-		// DebugLevel.ADDING_MARKING_AXIOMS);
+		 Configuration.getInstance().addDebugLevels(
+		 DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);

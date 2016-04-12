@@ -24,6 +24,7 @@ import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import orar.config.Configuration;
 import orar.config.DebugLevel;
 import orar.data.MetaDataOfOntology;
+import orar.util.PrintingHelper;
 
 /**
  * Add axioms to mark singleton concepts and individuals having counting role
@@ -82,6 +83,15 @@ public class MarkingAxiomAdder {
 				logger.info(axiom);
 			}
 		}
+
+		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+			logger.info("***DEBUG*** added Singleton Concepts:" + this.singletonConcepts.size());
+//			PrintingHelper.printSet(this.singletonConcepts);
+
+			logger.info("***DEBUG*** added Concepts having trans neighbours:" + this.hasTranConcepts.size());
+//			PrintingHelper.printSet(this.hasTranConcepts);
+
+		}
 	}
 
 	/**
@@ -109,6 +119,13 @@ public class MarkingAxiomAdder {
 				this.ontoManager.addAxiom(owlOntology, newSubClassAxiom);
 				this.predecessorOfSingletonConceptMap2Role.put(newPreConcept_D, role_R);
 			}
+		}
+
+		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+
+			logger.info("***DEBUG*** added Concepts are predecessors of singleton concepts:"
+					+ this.predecessorOfSingletonConcepts.size());
+//			PrintingHelper.printSet(this.predecessorOfSingletonConcepts);
 		}
 
 	}
