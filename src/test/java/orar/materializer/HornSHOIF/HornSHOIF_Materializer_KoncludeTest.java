@@ -229,6 +229,13 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		String aboxList = "src/test/resources/uobm-origin/abox/aboxListOf2.txt";
 		haveTheSameResults(ontologyTbox, aboxList);
 	}
+	
+	@Test
+	public void testUOBM_OX_Nominal() {
+		String ontologyTbox = "src/test/resources/uobm-ox-nominal/uobm-ox-nominal.owl";
+		String aboxList = "src/test/resources/uobm-origin/abox/aboxListOf2.txt";
+		haveTheSameResults(ontologyTbox, aboxList);
+	}
 
 	/**
 	 * Compare result by Abstraction and by OWLReasoner; assert that they have

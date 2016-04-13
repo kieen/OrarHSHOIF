@@ -41,4 +41,9 @@ public class BasicIndividualTypeFactory_UsingWeakHashMap implements BasicIndivid
 
 	}
 
+	@Override
+	public void clear() {
+		this.cache.clear();
+	}
+
 }

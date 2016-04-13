@@ -14,6 +14,8 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 
+import orar.config.Configuration;
+import orar.config.DebugLevel;
 import orar.modeling.ontology.OrarOntology;
 
 /**
@@ -32,6 +34,7 @@ import orar.modeling.ontology.OrarOntology;
  *
  */
 public class JenaStreamRDF2InternalModel extends StreamRDFBase {
+	private final Configuration config = Configuration.getInstance();
 	private final String OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
 	private final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 	private final String OWL_ONTOLOGY = OWL_NAMESPACE + "Ontology";
@@ -221,15 +224,17 @@ public class JenaStreamRDF2InternalModel extends StreamRDFBase {
 
 	@Override
 	public void finish() {
-		logger.info("===Begin:Statistic for this file/resource.===");
-		logger.info("Number of parsed triples: " + numberOfAllTriples);
+		if (this.config.getDebuglevels().contains(DebugLevel.STREAM_PARSING)) {
+			logger.info("===Begin:Statistic for this file/resource.===");
+			logger.info("Number of parsed triples: " + numberOfAllTriples);
 
-		logger.info("Number of declaried concept assertions: " + this.numberOfDeclairedConceptAssertions);
-		logger.info("Number of declaried role assertions: " + this.numberOfDeclariedRoleAssertions);
-		int numberOfDeclariedAssertions = this.numberOfDeclairedConceptAssertions
-				+ this.numberOfDeclariedRoleAssertions;
-		logger.info("Number of declaired concept and role assertions: " + numberOfDeclariedAssertions);
-		logger.info("===End:Statistic for this file/resource.===");
+			logger.info("Number of declaried concept assertions: " + this.numberOfDeclairedConceptAssertions);
+			logger.info("Number of declaried role assertions: " + this.numberOfDeclariedRoleAssertions);
+			int numberOfDeclariedAssertions = this.numberOfDeclairedConceptAssertions
+					+ this.numberOfDeclariedRoleAssertions;
+			logger.info("Number of declaired concept and role assertions: " + numberOfDeclariedAssertions);
+			logger.info("===End:Statistic for this file/resource.===");
+		}
 		/*
 		 * reset counter
 		 */

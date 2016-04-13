@@ -31,6 +31,7 @@ import orar.rolereasoning.HermitRoleReasoner;
 import orar.rolereasoning.RoleReasoner;
 import orar.ruleengine.RuleEngine;
 import orar.ruleengine.SemiNaiveRuleEngine;
+import orar.type.BasicIndividualTypeFactory_UsingWeakHashMap;
 import orar.type.IndividualType;
 import orar.util.PrintingHelper;
 
@@ -101,6 +102,7 @@ public abstract class MaterializeTemplate implements Materializer {
 			 */
 			this.dataForTransferringEntailments.clear();
 			AbstractDataFactory.getInstance().clear();
+			BasicIndividualTypeFactory_UsingWeakHashMap.getInstance().clear();
 			/*
 			 * (3). Compute types
 			 */
@@ -225,7 +227,6 @@ public abstract class MaterializeTemplate implements Materializer {
 			}
 			logger.info("Finish loop: " + currentLoop);
 
-			
 		}
 		// logging statistics
 		if (this.config.getLogInfos().contains(LogInfo.STATISTIC)) {
@@ -239,6 +240,15 @@ public abstract class MaterializeTemplate implements Materializer {
 		 */
 		if (config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
 			logger.info(StatisticVocabulary.TIME_REASONING_USING_ABSRTACTION + this.reasoningTimeInSeconds);
+		}
+		
+		if(config.getLogInfos().contains(LogInfo.STATISTIC)){
+			int numberOfMaterializedConceptAssertions=this.normalizedORAROntology.getNumberOfConceptAssertions();
+			int numberOfMaterializedRoleAssertions=this.normalizedORAROntology.getNumberOfRoleAssertions();
+			int numberOfMaterializedAssertions=numberOfMaterializedConceptAssertions+numberOfMaterializedRoleAssertions;
+			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_CONCEPTASSERTIONS+numberOfMaterializedConceptAssertions);
+			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ROLEASSERTIONS+numberOfMaterializedRoleAssertions);
+			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ASSERTIONS+numberOfMaterializedAssertions);
 		}
 	}
 

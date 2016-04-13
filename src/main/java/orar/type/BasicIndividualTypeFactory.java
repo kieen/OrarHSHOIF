@@ -8,4 +8,5 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 public interface BasicIndividualTypeFactory {
 	public IndividualType getIndividualType(Set<OWLClass> atomicConcepts, Set<OWLObjectProperty> preRoles,
 			Set<OWLObjectProperty> sucRoles);
+	public void clear();
 }
