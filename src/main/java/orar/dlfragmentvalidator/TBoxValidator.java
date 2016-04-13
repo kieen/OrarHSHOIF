@@ -36,7 +36,7 @@ public abstract class TBoxValidator {
 		if (!validatingDone) {
 			validate();
 		}
-		return axiomValidator.getDLConstructors();
+		return axiomValidator.getDLConstructorsInInputOntology();
 	}
 
 	public Set<OWLAxiom> getViolatedAxioms() {

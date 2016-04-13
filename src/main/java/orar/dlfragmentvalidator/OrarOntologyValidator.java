@@ -31,7 +31,7 @@ public abstract class OrarOntologyValidator {
 		if (!validatingDone) {
 			validateOWLOntology();
 		}
-		return axiomValidator.getDLConstructors();
+		return axiomValidator.getDLConstructorsInInputOntology();
 	}
 
 	public Set<OWLAxiom> getViolatedAxioms() {

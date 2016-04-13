@@ -3,8 +3,6 @@ package orar.dlfragmentvalidator;
 import java.util.HashSet;
 import java.util.Set;
 
-
-
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
@@ -24,23 +22,33 @@ public abstract class OWLOntologyValidator {
 	protected final DLFragment targetedDLFrangment;
 	protected String actualFragment;// DL fragment of the input ontology
 	protected boolean isInputOntologyInHorn = true;// default
+	protected final Set<DLConstructor> dlConstructorsInInputOntology;
+	protected final Set<DLConstructor> dlConstructorsInValidatedOntology;
 
-	public OWLOntologyValidator(OWLOntology inputOWLOntology,
-			DLFragment targetedDL) {
+	public OWLOntologyValidator(OWLOntology inputOWLOntology, DLFragment targetedDL) {
 		this.inputOWLOntology = inputOWLOntology;
 		this.validatedAxioms = new HashSet<>();
 		this.validatingDone = false;
 		this.targetedDLFrangment = targetedDL;
+		this.dlConstructorsInInputOntology = new HashSet<>();
+		this.dlConstructorsInValidatedOntology = new HashSet<>();
 		initAxiomValidator();
 	}
 
 	public abstract void initAxiomValidator();
 
-	public Set<DLConstructor> getDLConstructors() {
+	public Set<DLConstructor> getDLConstructorsInInputOntology() {
 		if (!validatingDone) {
 			validateOWLOntology();
 		}
-		return axiomValidator.getDLConstructors();
+		return axiomValidator.getDLConstructorsInInputOntology();
+	}
+	
+	public Set<DLConstructor> getDLConstructorsInValidatedOntology() {
+		if (!validatingDone) {
+			validateOWLOntology();
+		}
+		return axiomValidator.getDLConstructorsInValidatedOntology();
 	}
 
 	public Set<OWLAxiom> getViolatedAxioms() {
@@ -65,12 +73,10 @@ public abstract class OWLOntologyValidator {
 
 		IRI newIRI;
 		if (iri != null) {
-			newIRI = IRI.create(iri.toString() + "_in_"
-					+ this.targetedDLFrangment);
+			newIRI = IRI.create(iri.toString() + "_in_" + this.targetedDLFrangment);
 
 		} else {
-			newIRI = IRI.create("http://www.uniulm.ki/ontology/in_"
-					+ this.targetedDLFrangment);
+			newIRI = IRI.create("http://www.uniulm.ki/ontology/in_" + this.targetedDLFrangment);
 		}
 
 		try {
@@ -90,8 +96,7 @@ public abstract class OWLOntologyValidator {
 		allAxioms.addAll(this.inputOWLOntology.getTBoxAxioms(true));
 		allAxioms.addAll(this.inputOWLOntology.getRBoxAxioms(true));
 		allAxioms.addAll(this.inputOWLOntology.getABoxAxioms(true));
-		allAxioms
-				.addAll(this.inputOWLOntology.getAxioms(AxiomType.DECLARATION));
+		allAxioms.addAll(this.inputOWLOntology.getAxioms(AxiomType.DECLARATION));
 		/*
 		 * BE CAREFUL: method OWLOntology.getAxioms() does not return all
 		 * concept assertions. This is a bug of OWLAPI
@@ -105,13 +110,18 @@ public abstract class OWLOntologyValidator {
 		}
 		this.validatedAxioms.addAll(axiomValidator.getGeneratedAxioms());
 		this.validatingDone = true;
-		identifyActualDLFragmentOfTheInputOntology(inputOWLOntology,
-				this.axiomValidator.getDLConstructors());
-
+		/*
+		 * check Horn or Non-Horn
+		 */
+		checkTheOntologyInHornOrNonHorn(inputOWLOntology, this.axiomValidator.getDLConstructorsInInputOntology());
+		/*
+		 * get actual DL-Constructors in the input ontology
+		 */
+		this.dlConstructorsInInputOntology.addAll(this.axiomValidator.getDLConstructorsInInputOntology());
+		this.dlConstructorsInValidatedOntology.addAll(this.axiomValidator.getDLConstructorsInValidatedOntology());
 	}
 
-	private void identifyActualDLFragmentOfTheInputOntology(
-			OWLOntology inputOntology, Set<DLConstructor> constructors) {
+	private void checkTheOntologyInHornOrNonHorn(OWLOntology inputOntology, Set<DLConstructor> constructors) {
 
 		/*
 		 * get DLExpressivity
@@ -158,7 +168,7 @@ public abstract class OWLOntologyValidator {
 		return actualFragment;
 	}
 
-	public int getNumberOfMaxCardinalityAxioms(){
+	public int getNumberOfMaxCardinalityAxioms() {
 		return axiomValidator.getNumberOfCardinalityAxioms();
 	}
 }

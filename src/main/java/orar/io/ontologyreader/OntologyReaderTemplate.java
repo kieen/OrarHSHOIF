@@ -46,7 +46,7 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		OntologyConverter converter = new OntologyConverter(normalizedOWLAPIOntology);
 
 		OrarOntology internalOntology = converter.getInternalOntology();
-		internalOntology.setActualDLConstructors(profileValidator.getDLConstructors());
+		internalOntology.setActualDLConstructors(profileValidator.getDLConstructorsInInputOntology());
 
 //		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
 //			logger.info("Information of the input ontology.");
@@ -206,7 +206,10 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 				ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity, aboxListFileName);
 
 		OrarOntology internalOntology = streamReader.getOntology();
-		internalOntology.setActualDLConstructors(profileValidator.getDLConstructors());
+		internalOntology.setActualDLConstructors(profileValidator.getDLConstructorsInValidatedOntology());
+//		if (config.getDebuglevels().contains(DebugLevel.DL_FRAGMENT_VALIDATING)){
+//			logger.info("***DEBUG*** actual DL constructors:"+ internalOntology.getActualDLConstructors());
+//		}
 		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {	
 			logger.info("ABoxList file:" + aboxListFileName);
 			logger.info("ABox statistic:");

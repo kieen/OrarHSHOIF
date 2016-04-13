@@ -23,8 +23,8 @@ import orar.modeling.ontology.OrarOntology;
  */
 public class RunMaterializationUsingAbstractionRefinement {
 
-	static String tboxFileName = "src/test/resources/uobm-ox/tbox/univ-bench-dl-ox.owl";
-	static String aboxListFileName = "src/test/resources/uobm-ox/abox/aboxListOf2.txt";
+	static String tboxFileName = "src/test/resources/uobm_origintbox_oxforddata/uobmtbox_origin_workwith_oxford_generator.owl";
+	static String aboxListFileName = "src/test/resources/uobm_origintbox_oxforddata/aboxListOf2.txt";
 
 	static String combinedAboxAndTBox = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-tiny.owl";
 
@@ -43,7 +43,7 @@ public class RunMaterializationUsingAbstractionRefinement {
 
 		// long startAbstraction = System.currentTimeMillis();
 		Materializer materializer = new HornSHOIF_Materialization_Hermit(normalizedOrarOntology);
-//		materializer.materialize();
+		materializer.materialize();
 
 	}
 

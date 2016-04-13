@@ -34,17 +34,22 @@ import orar.dlfragmentvalidator.ValidatorDataFactory;
 public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<OWLClassExpression> {
 	protected final OWLDataFactory owlDataFactory;
 	protected final ValidatorDataFactory profilingFactory;
-	private final Set<DLConstructor> dlConstructors;
+	private final Set<DLConstructor> dlConstructorsInInputOntology;
+	private final Set<DLConstructor> dlConstructorsInValidatedOntology;
 	private int cardinalityCount = 0;
 
 	public ALCHOIF_SubClass_Validator() {
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		profilingFactory = ValidatorDataFactory.getInstance();
-		this.dlConstructors = new HashSet<>();
+		this.dlConstructorsInInputOntology = new HashSet<>();
+		this.dlConstructorsInValidatedOntology=new HashSet<>();
 	}
 
-	public Set<DLConstructor> getDlConstructors() {
-		return dlConstructors;
+	public Set<DLConstructor> getDlConstructorsInInputOntology() {
+		return dlConstructorsInInputOntology;
+	}
+	public Set<DLConstructor> getDlConstructorsInValidatedOntology() {
+		return dlConstructorsInValidatedOntology;
 	}
 
 	public int getNumberOfCardinalityAxioms() {
@@ -58,7 +63,8 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 
 	@Override
 	public OWLClassExpression visit(OWLObjectIntersectionOf ce) {
-		this.dlConstructors.add(DLConstructor.CONJUNCTION);
+		this.dlConstructorsInInputOntology.add(DLConstructor.CONJUNCTION);
+		this.dlConstructorsInValidatedOntology.add(DLConstructor.CONJUNCTION);
 		Set<OWLClassExpression> operands = ce.getOperands();
 		boolean violated = false;
 		for (OWLClassExpression operand : operands) {
@@ -78,7 +84,7 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 
 	@Override
 	public OWLClassExpression visit(OWLObjectUnionOf ce) {
-		this.dlConstructors.add(DLConstructor.Horn_DISJUNCTION);
+		this.dlConstructorsInInputOntology.add(DLConstructor.Horn_DISJUNCTION);
 		Set<OWLClassExpression> operands = ce.getOperands();
 		boolean violated = false;
 		for (OWLClassExpression operand : operands) {
@@ -90,6 +96,7 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 		}
 
 		if (!violated) {
+			this.dlConstructorsInValidatedOntology.add(DLConstructor.Horn_DISJUNCTION);
 			return ce;
 		}
 
@@ -98,16 +105,18 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 
 	@Override
 	public OWLClassExpression visit(OWLObjectComplementOf ce) {
-		this.dlConstructors.add(DLConstructor.NonHorn_DISJUNCTION);
+		this.dlConstructorsInInputOntology.add(DLConstructor.NonHorn_DISJUNCTION);
+		this.dlConstructorsInValidatedOntology.add(DLConstructor.NonHorn_DISJUNCTION);
 		return ce;
 	}
 
 	@Override
 	public OWLClassExpression visit(OWLObjectSomeValuesFrom ce) {
-		this.dlConstructors.add(DLConstructor.EXISTENTIAL_RESTRICTION);
+		this.dlConstructorsInInputOntology.add(DLConstructor.EXISTENTIAL_RESTRICTION);
 		OWLClassExpression filler = ce.getFiller();
 		OWLClassExpression profiledFiller = filler.accept(this);
 		if (profiledFiller != null) {
+			this.dlConstructorsInValidatedOntology.add(DLConstructor.EXISTENTIAL_RESTRICTION);
 			return ce;
 		} else {
 			return null;
@@ -116,14 +125,18 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 
 	@Override
 	public OWLClassExpression visit(OWLObjectAllValuesFrom ce) {
-		this.dlConstructors.add(DLConstructor.NonHorn_UNIVERSAL_RESTRICTION);
+		this.dlConstructorsInInputOntology.add(DLConstructor.NonHorn_UNIVERSAL_RESTRICTION);
+		this.dlConstructorsInValidatedOntology.add(DLConstructor.NonHorn_UNIVERSAL_RESTRICTION);
 		return ce;
 	}
 
 	@Override
 	public OWLClassExpression visit(OWLObjectHasValue ce) {
-		this.dlConstructors.add(DLConstructor.HASVALUE);
-		this.dlConstructors.add(DLConstructor.NOMINAL);
+		this.dlConstructorsInInputOntology.add(DLConstructor.HASVALUE);
+		this.dlConstructorsInInputOntology.add(DLConstructor.NOMINAL);
+		
+		this.dlConstructorsInValidatedOntology.add(DLConstructor.HASVALUE);
+		this.dlConstructorsInValidatedOntology.add(DLConstructor.NOMINAL);
 		/*
 		 * change anonymous individual to named individual
 		 */
@@ -139,7 +152,7 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 
 	@Override
 	public OWLClassExpression visit(OWLObjectMinCardinality ce) {
-		this.dlConstructors.add(DLConstructor.MIN_CARDINALITY);
+		this.dlConstructorsInInputOntology.add(DLConstructor.MIN_CARDINALITY);
 		int card = ce.getCardinality();
 		OWLClassExpression filler = ce.getFiller();
 		if (card == 1) {
@@ -148,6 +161,7 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 				/*
 				 * rewritten as ObjectSomeValueFrom
 				 */
+				this.dlConstructorsInValidatedOntology.add(DLConstructor.MIN_CARDINALITY);
 				return owlDataFactory.getOWLObjectSomeValuesFrom(ce.getProperty(), profiledFiller);
 			} else {
 				return null;
@@ -165,7 +179,7 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 
 	@Override
 	public OWLClassExpression visit(OWLObjectMaxCardinality ce) {
-		this.dlConstructors.add(DLConstructor.MAX_CARDINALITY);
+		this.dlConstructorsInInputOntology.add(DLConstructor.MAX_CARDINALITY_LEFT);
 		this.cardinalityCount++;
 		return null;
 	}
@@ -177,7 +191,8 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 
 	@Override
 	public OWLClassExpression visit(OWLObjectOneOf ce) {
-		this.dlConstructors.add(DLConstructor.NOMINAL);
+		this.dlConstructorsInInputOntology.add(DLConstructor.NOMINAL);
+//		this.dlConstructorsInValidatedOntology.add(DLConstructor.NOMINAL);
 		return ce;
 	}
 

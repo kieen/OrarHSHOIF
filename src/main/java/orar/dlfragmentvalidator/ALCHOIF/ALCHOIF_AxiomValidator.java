@@ -70,21 +70,23 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 													// map between type of axiom
 													// and
 													// axioms
-	protected final Set<DLConstructor> importantDLConstructors;
+	protected final Set<DLConstructor> dlConstructorsInInputOntology;
+	protected final Set<DLConstructor> dlConstructorsInValidatedOntology;
 	protected final ALCHOIF_SubClass_Validator subClassValidator;
 	protected final ALCHOIF_SuperClass_Validator superClassValidator;
 	protected final OWLDataFactory owlDataFact;
 	protected final ValidatorDataFactory validatorDataFactory;
 	/*
 	 * store generated axioms, which are part of violated axioms, e.g. C equiv
-	 * D, where C subClassof D is not in the profile but
-	 * D subClassOf C is in the profile.
+	 * D, where C subClassof D is not in the profile but D subClassOf C is in
+	 * the profile.
 	 */
 	protected Set<OWLAxiom> generatedAxioms;
 
 	public ALCHOIF_AxiomValidator() {
 		this.violatedAxioms = new HashSet<>();
-		this.importantDLConstructors = new HashSet<>();
+		this.dlConstructorsInInputOntology = new HashSet<>();
+		this.dlConstructorsInValidatedOntology = new HashSet<>();
 		this.subClassValidator = new ALCHOIF_SubClass_Validator();
 		this.superClassValidator = new ALCHOIF_SuperClass_Validator();
 		this.generatedAxioms = new HashSet<>();
@@ -93,10 +95,10 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 	}
 
 	@Override
-	public Set<DLConstructor> getDLConstructors() {
+	public Set<DLConstructor> getDLConstructorsInInputOntology() {
 		Set<DLConstructor> constructors = new HashSet<>();
-		constructors.addAll(this.importantDLConstructors);
-		constructors.addAll(this.subClassValidator.getDlConstructors());
+		constructors.addAll(this.dlConstructorsInInputOntology);
+		constructors.addAll(this.subClassValidator.getDlConstructorsInInputOntology());
 		constructors.addAll(this.superClassValidator.getDlConstructors());
 		return constructors;
 	}
@@ -138,10 +140,8 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 	public OWLAxiom visit(OWLSubClassOfAxiom axiom) {
 		OWLClassExpression subClass = axiom.getSubClass();
 		OWLClassExpression superClass = axiom.getSuperClass();
-		OWLClassExpression profiledSupClass = subClass
-				.accept(this.subClassValidator);
-		OWLClassExpression profiledSuperClass = superClass
-				.accept(this.superClassValidator);
+		OWLClassExpression profiledSupClass = subClass.accept(this.subClassValidator);
+		OWLClassExpression profiledSuperClass = superClass.accept(this.superClassValidator);
 		if (profiledSupClass == null || profiledSuperClass == null) {
 			this.violatedAxioms.add(axiom);
 			return null;
@@ -157,13 +157,11 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 		OWLObjectPropertyExpression role = axiom.getProperty();
 		OWLIndividual subject = axiom.getSubject();
 		OWLIndividual object = axiom.getObject();
-		OWLObjectProperty atomicRole = ValidatorDataFactory.getInstance()
-				.getFreshProperty();
-		OWLDisjointObjectPropertiesAxiom newAxiom = owlDataFact
-				.getOWLDisjointObjectPropertiesAxiom(atomicRole, role);
+		OWLObjectProperty atomicRole = ValidatorDataFactory.getInstance().getFreshProperty();
+		OWLDisjointObjectPropertiesAxiom newAxiom = owlDataFact.getOWLDisjointObjectPropertiesAxiom(atomicRole, role);
 		this.generatedAxioms.add(newAxiom);
-		OWLObjectPropertyAssertionAxiom atomicRoleAsertion = owlDataFact
-				.getOWLObjectPropertyAssertionAxiom(atomicRole, subject, object);
+		OWLObjectPropertyAssertionAxiom atomicRoleAsertion = owlDataFact.getOWLObjectPropertyAssertionAxiom(atomicRole,
+				subject, object);
 		return atomicRoleAsertion;
 	}
 
@@ -174,7 +172,7 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLReflexiveObjectPropertyAxiom axiom) {
-		this.importantDLConstructors.add(DLConstructor.REFLEXSIVEROLE);
+		this.dlConstructorsInInputOntology.add(DLConstructor.REFLEXSIVEROLE);
 		this.violatedAxioms.add(axiom);
 		return null;
 	}
@@ -260,7 +258,8 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLFunctionalObjectPropertyAxiom axiom) {
-		this.importantDLConstructors.add(DLConstructor.FUNCTIONALITY);
+		this.dlConstructorsInInputOntology.add(DLConstructor.FUNCTIONALITY);
+		this.dlConstructorsInValidatedOntology.add(DLConstructor.FUNCTIONALITY);
 		return axiom;
 	}
 
@@ -315,11 +314,9 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 		 * convert to atomic concept assertion if necessary
 		 */
 		OWLClass atomicConcept = validatorDataFactory.getFreshOWLClass();
-		OWLSubClassOfAxiom newSubClassOfAxiom = owlDataFact
-				.getOWLSubClassOfAxiom(atomicConcept, concept);
+		OWLSubClassOfAxiom newSubClassOfAxiom = owlDataFact.getOWLSubClassOfAxiom(atomicConcept, concept);
 		this.generatedAxioms.add(newSubClassOfAxiom);
-		OWLClassAssertionAxiom atomicConceptAssertion = owlDataFact
-				.getOWLClassAssertionAxiom(atomicConcept, ind);
+		OWLClassAssertionAxiom atomicConceptAssertion = owlDataFact.getOWLClassAssertionAxiom(atomicConcept, ind);
 		return atomicConceptAssertion;
 	}
 
@@ -328,8 +325,7 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 		/*
 		 * Split into SubClassOf axioms. Take one that is in the profile.
 		 */
-		List<OWLClassExpression> allConcepts = axiom
-				.getClassExpressionsAsList();
+		List<OWLClassExpression> allConcepts = axiom.getClassExpressionsAsList();
 		int size = allConcepts.size();
 		for (int i = 0; i < size - 1; i++)
 			for (int j = i + 1; j < size; j++) {
@@ -339,35 +335,25 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 				OWLClassExpression leftSize = allConcepts.get(i);
 				OWLClassExpression rightSize = allConcepts.get(j);
 				/*
-				 * Check if
-				 * A subclassof B
-				 * is Horn
+				 * Check if A subclassof B is Horn
 				 */
-				OWLClassExpression leftSizeAsSubClass = leftSize
-						.accept(subClassValidator);
-				OWLClassExpression rightSizeAsSuperClass = rightSize
-						.accept(superClassValidator);
+				OWLClassExpression leftSizeAsSubClass = leftSize.accept(subClassValidator);
+				OWLClassExpression rightSizeAsSuperClass = rightSize.accept(superClassValidator);
 				if (leftSizeAsSubClass != null && rightSizeAsSuperClass != null) {
-					OWLSubClassOfAxiom subClassOfAxiom1 = owlDataFact
-							.getOWLSubClassOfAxiom(leftSizeAsSubClass,
-									rightSizeAsSuperClass);
+					OWLSubClassOfAxiom subClassOfAxiom1 = owlDataFact.getOWLSubClassOfAxiom(leftSizeAsSubClass,
+							rightSizeAsSuperClass);
 					this.generatedAxioms.add(subClassOfAxiom1);
 				} else
 					this.violatedAxioms.add(axiom);
 
 				/*
-				 * Check if
-				 * B subClassOf A
-				 * is Horn
+				 * Check if B subClassOf A is Horn
 				 */
-				OWLClassExpression rightSizeAsSubClass = rightSize
-						.accept(subClassValidator);
-				OWLClassExpression leftSizeAsSuperClass = leftSize
-						.accept(superClassValidator);
+				OWLClassExpression rightSizeAsSubClass = rightSize.accept(subClassValidator);
+				OWLClassExpression leftSizeAsSuperClass = leftSize.accept(superClassValidator);
 				if (rightSizeAsSubClass != null && leftSizeAsSuperClass != null) {
-					OWLSubClassOfAxiom subClassOfAxiom2 = owlDataFact
-							.getOWLSubClassOfAxiom(rightSizeAsSubClass,
-									leftSizeAsSuperClass);
+					OWLSubClassOfAxiom subClassOfAxiom2 = owlDataFact.getOWLSubClassOfAxiom(rightSizeAsSubClass,
+							leftSizeAsSuperClass);
 					this.generatedAxioms.add(subClassOfAxiom2);
 				} else
 					this.violatedAxioms.add(axiom);
@@ -384,7 +370,7 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 	@Override
 	public OWLAxiom visit(OWLTransitiveObjectPropertyAxiom axiom) {
 		this.violatedAxioms.add(axiom);
-		this.importantDLConstructors.add(DLConstructor.TRANSITIVITY);
+		this.dlConstructorsInInputOntology.add(DLConstructor.TRANSITIVITY);
 		return null;
 	}
 
@@ -438,7 +424,14 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 	}
 
 	public int getNumberOfCardinalityAxioms() {
-		return subClassValidator.getNumberOfCardinalityAxioms()
-				+ superClassValidator.getNumberOfCardinalityAxioms();
+		return subClassValidator.getNumberOfCardinalityAxioms() + superClassValidator.getNumberOfCardinalityAxioms();
+	}
+
+	@Override
+	public Set<DLConstructor> getDLConstructorsInValidatedOntology() {
+		Set<DLConstructor> dlConstrutor= new HashSet<>();
+		dlConstrutor.addAll(this.dlConstructorsInValidatedOntology);
+		//TODO:
+		return this.dlConstructorsInValidatedOntology;
 	}
 }

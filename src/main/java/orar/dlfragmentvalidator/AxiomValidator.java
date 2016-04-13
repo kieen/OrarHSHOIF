@@ -6,7 +6,16 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLAxiomVisitorEx;
 
 public interface AxiomValidator extends OWLAxiomVisitorEx<OWLAxiom> {
-	public Set<DLConstructor> getDLConstructors();
+	/**
+	 * @return a set of DL constructors in the input ontology
+	 */
+	public Set<DLConstructor> getDLConstructorsInInputOntology();
+
+	/**
+	 * @return a set of DL constructors in the ontology after removing violated
+	 *         axioms,e.g. axioms not in the targeted DL fragment.
+	 */
+	public Set<DLConstructor> getDLConstructorsInValidatedOntology();
 
 	public Set<OWLAxiom> getViolatedAxioms();
 

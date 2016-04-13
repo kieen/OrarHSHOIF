@@ -70,7 +70,8 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 													// map between type of axiom
 													// and
 													// axioms
-	protected final Set<DLConstructor> importantDLConstructors;
+	protected final Set<DLConstructor> constructorsInInputOntology;
+	protected final Set<DLConstructor> constructorsInValidatedOntology;
 	protected final HornALCHOIF_SubClass_Validator subClassValidator;
 	protected final HornALCHOIF_SuperClass_Validator superClassValidator;
 	protected final OWLDataFactory owlDataFact;
@@ -84,7 +85,8 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 
 	public HornALCHOIF_AxiomValidator() {
 		this.violatedAxioms = new HashSet<>();
-		this.importantDLConstructors = new HashSet<>();
+		this.constructorsInInputOntology = new HashSet<>();
+		this.constructorsInValidatedOntology = new HashSet<>();
 		this.subClassValidator = new HornALCHOIF_SubClass_Validator();
 		this.superClassValidator = new HornALCHOIF_SuperClass_Validator();
 		this.generatedAxioms = new HashSet<>();
@@ -93,11 +95,11 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 	}
 
 	@Override
-	public Set<DLConstructor> getDLConstructors() {
+	public Set<DLConstructor> getDLConstructorsInInputOntology() {
 		Set<DLConstructor> constructors = new HashSet<>();
-		constructors.addAll(this.importantDLConstructors);
-		constructors.addAll(this.subClassValidator.getDlConstructors());
-		constructors.addAll(this.superClassValidator.getDlConstructors());
+		constructors.addAll(this.constructorsInInputOntology);
+		constructors.addAll(this.subClassValidator.getDlConstructorsInInputOntology());
+		constructors.addAll(this.superClassValidator.getDlConstructorsInInputOntology());
 		return constructors;
 	}
 
@@ -170,7 +172,7 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLReflexiveObjectPropertyAxiom axiom) {
-		this.importantDLConstructors.add(DLConstructor.REFLEXSIVEROLE);
+		this.constructorsInInputOntology.add(DLConstructor.REFLEXSIVEROLE);
 		this.violatedAxioms.add(axiom);
 		return null;
 	}
@@ -256,7 +258,7 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLFunctionalObjectPropertyAxiom axiom) {
-		this.importantDLConstructors.add(DLConstructor.FUNCTIONALITY);
+		this.constructorsInInputOntology.add(DLConstructor.FUNCTIONALITY);
 		return axiom;
 	}
 
@@ -367,7 +369,7 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 	@Override
 	public OWLAxiom visit(OWLTransitiveObjectPropertyAxiom axiom) {
 		this.violatedAxioms.add(axiom);
-		this.importantDLConstructors.add(DLConstructor.TRANSITIVITY);
+		this.constructorsInInputOntology.add(DLConstructor.TRANSITIVITY);
 		return null;
 	}
 
@@ -422,8 +424,17 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public int getNumberOfCardinalityAxioms() {
-		// TODO: fix me.
-		return 100000;
+
+		return -1; // FIX ME
+	}
+
+	@Override
+	public Set<DLConstructor> getDLConstructorsInValidatedOntology() {
+		Set<DLConstructor> constructors = new HashSet<>();
+		constructors.addAll(this.constructorsInValidatedOntology);
+		constructors.addAll(this.subClassValidator.getDlConstructorsInValidatedOntology());
+		constructors.addAll(this.superClassValidator.getDlConstructorsInValidatedOntology());
+		return constructors;
 	}
 
 }

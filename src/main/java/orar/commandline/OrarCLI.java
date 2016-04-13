@@ -126,11 +126,12 @@ public class OrarCLI {
 		} catch (ParseException exp) {
 			// oops, something went wrong
 			System.err.println("Parsing failed.  Reason: " + exp.getMessage());
-			
+
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp("orar", options);
 			System.out.println("Example run:");
-			System.out.println("java -jar -Xmx8G orar.jar -reasoner hermit -statistic -tbox ./tbox/univ-bench-dl-ox.owl -abox ./aboxListOf2.txt");
+			System.out.println(
+					"java -jar -Xmx8G orar.jar -reasoner hermit -statistic -tbox ./tbox/univ-bench-dl-ox.owl -abox ./aboxListOf2.txt");
 		}
 	}
 
@@ -154,6 +155,7 @@ public class OrarCLI {
 	static private Materializer getHornReasoner(CommandLine commandLine, String reasonerName,
 			OrarOntology orarOntology) {
 		Materializer materializer;
+		logger.info("Info: DL Constructors in the validated ontology: " + orarOntology.getActualDLConstructors());
 		switch (reasonerName) {
 		case Argument.HERMIT:
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {

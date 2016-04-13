@@ -225,7 +225,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 
 	@Test
 	public void testUOBM_OriginSmall() {
-		String ontologyTbox = "src/test/resources/uobm-origin/tbox/uobm-tbox-origin.owl";
+		String ontologyTbox = "src/test/resources/uobm-origin/tbox/uobmtbox_origin.owl";
 		String aboxList = "src/test/resources/uobm-origin/abox/aboxListOf2.txt";
 		haveTheSameResults(ontologyTbox, aboxList);
 	}

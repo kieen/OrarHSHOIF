@@ -27,6 +27,7 @@ import org.semanticweb.owlapi.model.OWLObjectMinCardinality;
 import org.semanticweb.owlapi.model.OWLObjectOneOf;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLObjectUnionOf;
+import org.semanticweb.owlapi.util.DLExpressivityChecker.Construct;
 
 import orar.dlfragmentvalidator.DLConstructor;
 import orar.dlfragmentvalidator.ValidatorDataFactory;
@@ -35,17 +36,22 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 	private final OWLDataFactory owlDataFactory;
 	private final ValidatorDataFactory profilingFactory;
 	private final HornALCHOIF_SubClass_Validator subClassValidator;
-	private final Set<DLConstructor> dlConstructors;
+	private final Set<DLConstructor> dlConstructorsInInputOntology;
+	private final Set<DLConstructor> dlConstructorsInValidatedOntology;
 
 	public HornALCHOIF_SuperClass_Validator() {
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		profilingFactory = ValidatorDataFactory.getInstance();
 		subClassValidator = new HornALCHOIF_SubClass_Validator();
-		this.dlConstructors = new HashSet<>();
+		this.dlConstructorsInInputOntology = new HashSet<>();
+		this.dlConstructorsInValidatedOntology= new HashSet<>();
 	}
 
-	public Set<DLConstructor> getDlConstructors() {
-		return dlConstructors;
+	public Set<DLConstructor> getDlConstructorsInInputOntology() {
+		return dlConstructorsInInputOntology;
+	}
+	public Set<DLConstructor> getDlConstructorsInValidatedOntology() {
+		return dlConstructorsInValidatedOntology;
 	}
 
 	@Override
@@ -55,6 +61,8 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 
 	@Override
 	public OWLClassExpression visit(OWLObjectIntersectionOf ce) {
+		this.dlConstructorsInInputOntology.add(DLConstructor.CONJUNCTION);
+	
 		Set<OWLClassExpression> operands = ce.getOperands();
 		boolean violated = false;
 		for (OWLClassExpression operand : operands) {
@@ -66,6 +74,7 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 		}
 
 		if (!violated) {
+			this.dlConstructorsInValidatedOntology.add(DLConstructor.CONJUNCTION);
 			return ce;
 		}
 
@@ -74,7 +83,7 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 
 	@Override
 	public OWLClassExpression visit(OWLObjectUnionOf ce) {
-		this.dlConstructors.add(DLConstructor.NonHorn_DISJUNCTION);
+		this.dlConstructorsInInputOntology.add(DLConstructor.NonHorn_DISJUNCTION);
 		return null;
 	}
 
@@ -90,9 +99,11 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 
 	@Override
 	public OWLClassExpression visit(OWLObjectSomeValuesFrom ce) {
+		this.dlConstructorsInInputOntology.add(DLConstructor.EXISTENTIAL_RESTRICTION);
 		OWLClassExpression filler = ce.getFiller();
 		OWLClassExpression profiledFiller = filler.accept(this);
 		if (profiledFiller != null) {
+			this.dlConstructorsInValidatedOntology.add(DLConstructor.EXISTENTIAL_RESTRICTION);
 			return ce;
 		}
 		return null;
@@ -101,9 +112,11 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 
 	@Override
 	public OWLClassExpression visit(OWLObjectAllValuesFrom ce) {
+		this.dlConstructorsInInputOntology.add(DLConstructor.UNIVERSAL_RESTRICTION);
 		OWLClassExpression filler = ce.getFiller();
 		OWLClassExpression profiledFiller = filler.accept(this);
 		if (profiledFiller != null) {
+			this.dlConstructorsInValidatedOntology.add(DLConstructor.UNIVERSAL_RESTRICTION);
 			return ce;
 		}
 		return null;
@@ -111,6 +124,11 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 
 	@Override
 	public OWLClassExpression visit(OWLObjectHasValue ce) {
+		this.dlConstructorsInInputOntology.add(DLConstructor.HASVALUE);
+		this.dlConstructorsInInputOntology.add(DLConstructor.NOMINAL);
+		
+		this.dlConstructorsInValidatedOntology.add(DLConstructor.HASVALUE);
+		this.dlConstructorsInValidatedOntology.add(DLConstructor.NOMINAL);
 		/*
 		 * change anonymous individual to named individual
 		 */
@@ -150,8 +168,12 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 
 	@Override
 	public OWLClassExpression visit(OWLObjectMaxCardinality ce) {
+		this.dlConstructorsInInputOntology.add(DLConstructor.MAX_CARDINALITY_RIGHT);
+//		if (ce.getCardinality()==1 && ce.getFiller().isOWLThing()){
+//			this.dlConstructorsInValidatedOntology.add(DLConstructor.MAX_CARDINALITY_RIGHT);	
+//			return ce;
+//		}
 		return null;
-		// TODO: could be improved, e.g. accept Top -> max 1 R.Thing
 	}
 
 	@Override
@@ -161,8 +183,11 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 
 	@Override
 	public OWLClassExpression visit(OWLObjectOneOf ce) {
-		if (ce.getIndividuals().size() == 1)
+		if (ce.getIndividuals().size() == 1){
+			this.dlConstructorsInInputOntology.add(DLConstructor.NOMINAL);
+			this.dlConstructorsInValidatedOntology.add(DLConstructor.NOMINAL);
 			return ce;
+			}
 		return null;
 	}
 
