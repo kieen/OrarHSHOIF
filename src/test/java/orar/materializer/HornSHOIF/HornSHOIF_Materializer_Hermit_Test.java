@@ -210,29 +210,65 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		haveTheSameResults(ontologyPath);
 	}
 
-//	@Test
-//	public void testLUBM() {
-//		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
-//		haveTheSameResults(ontologyPath);
-//	}
-//
-//	@Test
-//	 public void testUOBM_OXSmall4() {
-//	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
-//	 haveTheSameResults(ontologyPath);
-//	 }
+	@Test
+	public void testLUBM() {
+		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
+		haveTheSameResults(ontologyPath);
+	}
+
+	@Test
+	 public void testUOBM_OXSmall4() {
+	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
+	 haveTheSameResults(ontologyPath);
+	 }
 //	@Test
 //	 public void testUOBM_OXSmall1() {
 //	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small1.owl";
 //	 haveTheSameResults(ontologyPath);
 //	 }
-//	 @Test
-//	 public void testUOBM_OX() {
-//	
-//	 String ontologyPath = "src/test/resources/uobm-ox/u1/univ0.owl";
-//	 haveTheSameResults(ontologyPath);
-//	 }
 
+	@Test
+	public void testUOBM_OriginSmall() {
+		String ontologyTbox = "src/test/resources/uobm-origin/tbox/uobmtbox_origin.owl";
+		String aboxList = "src/test/resources/uobm-origin/abox/aboxListOf2.txt";
+		haveTheSameResults(ontologyTbox, aboxList);
+	}
+	/**
+	 * Compare result by Abstraction and by OWLReasoner; assert that they have
+	 * the same result.
+	 * 
+	 * @param ontologyPath
+	 */
+	private void haveTheSameResults(String tbox, String aboxList) {
+		AbstractDataFactory.getInstance().clear();
+		NormalizationDataFactory.getInstance().clear();
+		MetaDataOfOntology.getInstance().clear();
+		DataForTransferingEntailments.getInstance().clear();
+
+		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME);
+		 Configuration.getInstance().addDebugLevels(DebugLevel.ADDING_MARKING_AXIOMS);
+		System.out.println("Loading ontology for abstraction materializer....");
+		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
+		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(tbox, aboxList);
+
+		Materializer materializer = new HornSHOIF_Materialization_Hermit(normalizedOrarOntology);
+
+		/*
+		 * get result directly from Konclude reasoning over the input ontology
+		 */
+		System.out.println("Loading ontology for a DL Reasoner....");
+		OWLOntology owlOntology = ontoReader.getOWLAPIOntology(tbox, aboxList);
+
+		DLReasoner koncludeRealizer = new HermitDLReasoner(owlOntology);
+
+		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
+		checker.computeEntailments();
+
+		 Assert.assertTrue(checker.isConceptAssertionComplete());
+		Assert.assertTrue(checker.isSameasComplete());
+		 Assert.assertTrue(checker.isRoleAssertionComplete());
+
+	}
 	/**
 	 * Compare result by Abstraction and by OWLReasoner; assert that they have
 	 * the same result.
