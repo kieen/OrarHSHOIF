@@ -268,7 +268,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		 Assert.assertTrue(checker.isRoleAssertionComplete());
 
 	}
-
+  
 	/**
 	 * Compare result by Abstraction and by OWLReasoner; assert that they have
 	 * the same result.

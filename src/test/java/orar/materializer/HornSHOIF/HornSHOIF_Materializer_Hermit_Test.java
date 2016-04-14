@@ -233,6 +233,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		String aboxList = "src/test/resources/uobm-origin/abox/aboxListOf2.txt";
 		haveTheSameResults(ontologyTbox, aboxList);
 	}
+	
 	/**
 	 * Compare result by Abstraction and by OWLReasoner; assert that they have
 	 * the same result.
