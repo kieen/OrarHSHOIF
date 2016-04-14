@@ -19,6 +19,7 @@ import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
+import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectHasValue;
 import org.semanticweb.owlapi.model.OWLObjectOneOf;
@@ -121,14 +122,30 @@ public abstract class NormalizerTemplate implements Normalizer {
 				OWLClassExpression subClass = subClassAxiom.getSubClass();
 
 				OWLClassExpression superClass = subClassAxiom.getSuperClass();
+				if (subClass instanceof OWLObjectOneOf && superClass instanceof OWLClass) {
+					Set<OWLNamedIndividual> individuals = ((OWLObjectOneOf) subClass).getIndividualsInSignature();
+					for (OWLNamedIndividual ind : individuals) {
+						OWLClassAssertionAxiom conceptAssertion = this.owlDataFactory
+								.getOWLClassAssertionAxiom(superClass, ind);
+						this.aboxAxiomsByNomalizingNominals.add(conceptAssertion);
+					}
 
-				if (subClass instanceof OWLObjectHasValue && superClass instanceof OWLClass) {
+				} else if (subClass instanceof OWLObjectHasValue && superClass instanceof OWLClass) {
 					this.normalizedSubClassAxioms.add(subClassAxiom);
 				} else
 
 				if (superClass instanceof OWLClass && subClass instanceof OWLObjectSomeValuesFrom) {
 					OWLObjectSomeValuesFrom someValueFrom = (OWLObjectSomeValuesFrom) subClass;
 					OWLClassExpression filler = someValueFrom.getFiller();
+					// get nominals if there are some
+					if (filler instanceof OWLObjectOneOf) {
+						Set<OWLIndividual> inds = ((OWLObjectOneOf) filler).getIndividuals();
+						for (OWLIndividual ind : inds) {
+							MetaDataOfOntology.getInstance().getNominals().add(ind.asOWLNamedIndividual());
+						}
+
+					}
+
 					OWLClassExpression normalizedFiller = filler.accept(subClassNormalizer);
 
 					if (config.getLogInfos().contains(LogInfo.NORMALIZATION_INFO)) {
@@ -281,7 +298,6 @@ public abstract class NormalizerTemplate implements Normalizer {
 			Set<OWLAxiom> ABoxAxiom = this.inputOntology.getABoxAxioms(true);
 			manager.addAxioms(normalizedOntology, ABoxAxiom);
 			manager.addAxioms(normalizedOntology, aboxAxiomsByNomalizingNominals);
-			
 
 		} catch (OWLOntologyCreationException e) {
 			e.printStackTrace();

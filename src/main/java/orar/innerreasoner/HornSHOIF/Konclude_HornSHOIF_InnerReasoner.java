@@ -112,6 +112,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 				Thread.sleep(POOLING_INTERVAL);
 				String result = stdout.toString();
 				if (result.toLowerCase().contains(KONCLUDE_READY.toLowerCase())) {
+					logger.info("Orar Info: Konclude is started.");
 					logger.info(result);
 					break;
 				}
@@ -165,8 +166,9 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 		 * add some assertions only in case of Konclude to reduce the number of
 		 * http requests while getting results from Konclude
 		 */
-
+		logger.info("***DEBUG*** start adding concepts marking predecessor of singleton concept...");
 		this.axiomsAdder.addAxiomsForPredecessorOfSingletonConcept();
+		logger.info("***DEBUG*** end adding concepts marking predecessor of singleton concept...");
 		/*
 		 * start Konclude server
 		 */
@@ -192,7 +194,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 	protected void computeRoleAssertionForInstancesOfSingletonConcept() {
 
 		Set<OWLNamedIndividual> individuals = new HashSet<>(this.instancesOfSingletonConcepts);
-		if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
+		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
 			logger.info("***DEBUG*** individuals are instances of singleton concepts:");
 			PrintingHelper.printSet(individuals);
 		}
@@ -201,7 +203,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 		 */
 		individuals.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
 
-		if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
+		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
 			logger.info("***DEBUG*** individuals U are instances of singleton	 concepts:");
 			PrintingHelper.printSet(individuals);
 		}
@@ -233,6 +235,11 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 				this.instancesOfPredecessorOfSingletonConcept);
 		// retain only to U
 		allPredecessorsOfSingletonConcepts.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
+		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+			logger.info("***DEBUG*** individuals U are instances (possibly being predecessors) of singleton concepts:");
+			PrintingHelper.printSet(allPredecessorsOfSingletonConcepts);
+		}
+		
 		for (OWLNamedIndividual ind_u : allPredecessorsOfSingletonConcepts) {
 			for (OWLObjectProperty role_R : this.rolesForPredecessorOfSingletonConcept) {
 				/*

@@ -14,7 +14,7 @@ public class Argument {
 			FACT = "fact";
 	static final String PORT = "port";
 	static final String KONCLUDEPATH = "koncludepath";
-	static final String SPLITING = "spliting";
+	static final String SPLITTING = "splitting";
 
 	static final List<String> reasonerList = new ArrayList<String>(Arrays.asList(KONCLUDE, HERMIT, FACT, PELLET));
 

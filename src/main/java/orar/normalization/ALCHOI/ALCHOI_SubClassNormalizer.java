@@ -16,6 +16,7 @@ import org.semanticweb.owlapi.model.OWLDataMaxCardinality;
 import org.semanticweb.owlapi.model.OWLDataMinCardinality;
 import org.semanticweb.owlapi.model.OWLDataSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectAllValuesFrom;
 import org.semanticweb.owlapi.model.OWLObjectComplementOf;
 import org.semanticweb.owlapi.model.OWLObjectExactCardinality;
@@ -110,6 +111,17 @@ public class ALCHOI_SubClassNormalizer implements SubClassNormalizer {
 
 		OWLClass freshClass = normalizerDataFactory.getFreshConcept();
 
+		logger.info("***DEBUG***"+ce);
+		OWLClassExpression filler = ce.getFiller();
+		if (filler instanceof OWLObjectOneOf) {
+			Set<OWLIndividual> inds = ((OWLObjectOneOf) filler).getIndividuals();
+
+			for (OWLIndividual ind : inds) {
+				sharedData.getNominals().add(ind.asOWLNamedIndividual());
+			}
+
+		}
+
 		OWLSubClassOfAxiom newSubClass = owlDataFactory.getOWLSubClassOfAxiom(ce, freshClass);
 		stack.push(newSubClass);
 		return freshClass;
@@ -174,10 +186,11 @@ public class ALCHOI_SubClassNormalizer implements SubClassNormalizer {
 
 	@Override
 	public OWLClassExpression visit(OWLObjectOneOf ce) {
-		Set<OWLIndividual> inds = ce.getIndividuals();
-		for (OWLIndividual ind : inds) {
-			sharedData.getNominals().add(ind.asOWLNamedIndividual());
-		}
+//		logger.info("***DEBUG*** OWLObjectOneOf"+ce);
+//		 Set<OWLIndividual> inds = ce.getIndividuals();
+//		 for (OWLIndividual ind : inds) {
+//		 sharedData.getNominals().add(ind.asOWLNamedIndividual());
+//		 }
 		return ce;
 	}
 

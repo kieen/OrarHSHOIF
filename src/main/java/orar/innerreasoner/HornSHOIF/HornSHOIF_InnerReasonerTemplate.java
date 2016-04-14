@@ -32,6 +32,10 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 		 * retain only U-individuals.
 		 */
 		individuals.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
+		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+			logger.info("***DEBUG*** individuals U are instances of loop concepts:");
+			PrintingHelper.printSet(individuals);
+		}
 		for (OWLNamedIndividual eachU : individuals) {
 			for (OWLObjectProperty tranRol : this.metadataOfOntology.getTransitiveRoles()) {
 				Set<OWLNamedIndividual> objects = reasoner.getObjectPropertyValues(eachU, tranRol).getFlattened();
@@ -89,7 +93,7 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 	@Override
 	protected void computeRoleAssertionForInstancesOfSingletonConcept() {
 		Set<OWLNamedIndividual> individuals = new HashSet<>(this.instancesOfSingletonConcepts);
-		if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
+		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
 			logger.info("***DEBUG*** individuals are instances of singleton concepts:");
 			PrintingHelper.printSet(individuals);
 		}
@@ -98,7 +102,7 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 		 */
 		individuals.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
 
-		if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
+		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
 			logger.info("***DEBUG*** individuals U are instances of singleton concepts:");
 			PrintingHelper.printSet(individuals);
 		}

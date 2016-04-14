@@ -210,22 +210,22 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		haveTheSameResults(ontologyPath);
 	}
 
-	@Test
-	public void testLUBM() {
-		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
-		haveTheSameResults(ontologyPath);
-	}
-
-	@Test
-	 public void testUOBM_OXSmall4() {
-	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
-	@Test
-	 public void testUOBM_OXSmall1() {
-	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small1.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
+//	@Test
+//	public void testLUBM() {
+//		String ontologyPath = "src/test/resources/lubm/full-lubm.owl";
+//		haveTheSameResults(ontologyPath);
+//	}
+//
+//	@Test
+//	 public void testUOBM_OXSmall4() {
+//	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
+//	 haveTheSameResults(ontologyPath);
+//	 }
+//	@Test
+//	 public void testUOBM_OXSmall1() {
+//	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small1.owl";
+//	 haveTheSameResults(ontologyPath);
+//	 }
 //	 @Test
 //	 public void testUOBM_OX() {
 //	
@@ -250,7 +250,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		Configuration.getInstance().addLoginfoLevels( LogInfo.STATISTIC);
 //		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
 //				LogInfo.COMPARED_RESULT_INFO, LogInfo.STATISTIC);
-//		Configuration.getInstance().addDebugLevels(DebugLevel.REASONING_ABSTRACTONTOLOGY,DebugLevel.ADDING_MARKING_AXIOMS);
+//		Configuration.getInstance().addDebugLevels(DebugLevel.NORMALIZATION);
 		
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();

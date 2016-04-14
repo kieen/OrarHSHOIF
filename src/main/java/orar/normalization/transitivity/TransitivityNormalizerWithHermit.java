@@ -44,7 +44,8 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 
 	public TransitivityNormalizerWithHermit(OWLOntology inputOntology) {
 		this.inputOntology = inputOntology;
-		this.hermit = new Reasoner(inputOntology);
+		OWLOntology tboxOntology = createOntologyWithTBoxOnly();
+		this.hermit = new Reasoner(tboxOntology);
 
 		this.owlDataFactory = OWLManager.getOWLDataFactory();
 		this.normalizerDataFactory = NormalizationDataFactory.getInstance();
@@ -52,36 +53,33 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 		this.eliminationIsDone = false;
 		this.config = Configuration.getInstance();
 	}
-//	private 
-	@Override
-	public void normalizeTransitivity() {
-		OWLOntologyManager ontologyManager = OWLManager.createOWLOntologyManager();
+
+	OWLOntology createOntologyWithTBoxOnly() {
+		OWLOntologyManager newOntologyManager = OWLManager.createOWLOntologyManager();
 		try {
-			resultingOntology = ontologyManager.createOntology();
-			/*
-			 * 1) genearte axioms simulating transivitity and add to the
-			 * resulting ontology
-			 */
-
-			Set<OWLSubClassOfAxiom> axiomsSimulatingTransitivity = generateAxiomsSimulatingTransitivity();
-			ontologyManager.addAxioms(resultingOntology, axiomsSimulatingTransitivity);
-
-			/*
-			 * get all Axioms from the inputOntology
-			 */
-			Set<OWLAxiom> axiomsFromInputOntology = new HashSet<>();
-			axiomsFromInputOntology.addAll(this.inputOntology.getTBoxAxioms(true));
-			axiomsFromInputOntology.addAll(this.inputOntology.getRBoxAxioms(true));
-			axiomsFromInputOntology.addAll(this.inputOntology.getABoxAxioms(true));
-
-			/*
-			 * add axioms from the input ontology to the resulting ontology
-			 */
-			ontologyManager.addAxioms(resultingOntology, axiomsFromInputOntology);
-
+			OWLOntology tboxOntology = newOntologyManager.createOntology();
+			newOntologyManager.addAxioms(tboxOntology, this.inputOntology.getTBoxAxioms(true));
+			newOntologyManager.addAxioms(tboxOntology, this.inputOntology.getRBoxAxioms(true));
+			return tboxOntology;
 		} catch (OWLOntologyCreationException e) {
 			e.printStackTrace();
 		}
+		return null;
+
+	}
+
+	// private
+	@Override
+	public void normalizeTransitivity() {
+		OWLOntologyManager ontologyManager = this.inputOntology.getOWLOntologyManager();
+
+		/*
+		 * 1) genearte axioms simulating transivitity and add to the resulting
+		 * ontology
+		 */
+
+		Set<OWLSubClassOfAxiom> axiomsSimulatingTransitivity = generateAxiomsSimulatingTransitivity();
+		ontologyManager.addAxioms(this.inputOntology, axiomsSimulatingTransitivity);
 
 		this.eliminationIsDone = true;
 	}
@@ -89,7 +87,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 	private Set<OWLSubClassOfAxiom> generateAxiomsSimulatingTransitivity() {
 
 		Set<OWLSubClassOfAxiom> generatedAxioms = new HashSet<>();
-		//TODO: we should computed it in rolereasoning.
+		// TODO: we should computed it in rolereasoning.
 		hermit.precomputeInferences(InferenceType.OBJECT_PROPERTY_HIERARCHY);
 		Set<OWLObjectPropertyExpression> allTransRoles = getTransitiveRoles();
 		Set<OWLSubClassOfAxiom> todoSubClassAxioms = getSubClassOfAxioms();
@@ -183,6 +181,6 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 		if (!this.eliminationIsDone) {
 			normalizeTransitivity();
 		}
-		return this.resultingOntology;
+		return this.inputOntology;
 	}
 }

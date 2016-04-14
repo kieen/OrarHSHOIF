@@ -77,7 +77,7 @@ public class OrarCLI {
 		// then the path to Konclude reasoner must be provided")
 		// .hasArg(true).build();
 
-		Option split = new Option(Argument.SPLITING, true,
+		Option split = new Option(Argument.SPLITTING, true,
 				"number of types per abstract ABox. Used as an optimization. ");
 
 		/*
@@ -225,12 +225,12 @@ public class OrarCLI {
 			}
 		}
 
-		if (commandLine.hasOption(Argument.SPLITING)) {
-			String typePerOntString = commandLine.getOptionValue(Argument.SPLITING);
+		if (commandLine.hasOption(Argument.SPLITTING)) {
+			String typePerOntString = commandLine.getOptionValue(Argument.SPLITTING);
 			try {
 				Integer.parseInt(typePerOntString);
 			} catch (NumberFormatException ex) {
-				System.err.print("argument for -spliting is not an integer number");
+				System.err.print("argument for -splitting is not an integer number");
 				return false;
 			}
 		}
@@ -251,8 +251,8 @@ public class OrarCLI {
 			config.addLoginfoLevels(LogInfo.STATISTIC);
 		}
 
-		if (commandLine.hasOption(Argument.SPLITING)) {
-			String typePerOntString = commandLine.getOptionValue(Argument.SPLITING);
+		if (commandLine.hasOption(Argument.SPLITTING)) {
+			String typePerOntString = commandLine.getOptionValue(Argument.SPLITTING);
 
 			int typePerAbstractOnt = Integer.parseInt(typePerOntString);
 			config.setNumberOfTypePerOntology(typePerAbstractOnt);

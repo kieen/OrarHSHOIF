@@ -113,11 +113,13 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		/*
 		 * add axioms to mark singleton concepts
 		 */
+		logger.info("***DEBUG*** star adding axioms for singleton, trans:");
 		this.axiomsAdder.addMarkingAxioms();
 		if (this.config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
 //			logger.info("***DEBUG*** Ontololgy after adding marking axioms:");
 //			PrintingHelper.printSet(this.owlOntology.getAxioms());
 		}
+		logger.info("***DEBUG*** end adding axioms for singleton, trans:");
 		/*
 		 * get the reasoner
 		 */
@@ -131,9 +133,11 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		if (!reasoner.isConsistent()) {
 			logger.error("Ontology inconsistent!");
 		}
-
+		logger.info("Computing concept assertions.... ");
 		computeEntailedConceptAssertions();
+		logger.info("Computing role assertions.... ");
 		computeEntailedRoleAssertions();
+		logger.info("Computing sameas assertions.... ");
 		computeEntailedSameasAssertions();// varies in Horn-SHIF and Horn-SHOIF
 		long endTime = System.currentTimeMillis();
 		this.entailmentComputed = true;
@@ -270,16 +274,18 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 			
 			logger.info("***DEBUG*** number of instances of singleton conepts: "
 					+ this.instancesOfSingletonConcepts.size());
+//			PrintingHelper.printSet(this.instancesOfSingletonConcepts);
 			
 			logger.info("***DEBUG*** number of instances of concepts having trans neighbours: "
 					+ this.instancesOfHasTranConcepts.size());
 			
 			logger.info("***DEBUG*** number of instances of loop concepts: "
 					+ this.instancesOfLoopConcepts.size());
+//			PrintingHelper.printSet(this.instancesOfLoopConcepts);
 			
 			logger.info("***DEBUG*** number of instances of predecessors of singleton concepts: "
 					+ this.instancesOfPredecessorOfSingletonConcept.size());
-			
+//			PrintingHelper.printSet(this.instancesOfPredecessorOfSingletonConcept);
 		}
 
 	}

@@ -184,6 +184,7 @@ public abstract class MaterializeTemplate implements Materializer {
 				}
 				countMaterializedOntology++;
 				logger.info("Info:Materializing (splitted) abstract ontology: " + countMaterializedOntology);
+				logger.info("Info:Size of the (splitted) abstract ontology: " + abstraction.getAxiomCount());
 				InnerReasoner innerReasoner = getInnerReasoner(abstraction);
 				innerReasoner.computeEntailments();
 				// we can use putAll since individuals in different abstractsion
