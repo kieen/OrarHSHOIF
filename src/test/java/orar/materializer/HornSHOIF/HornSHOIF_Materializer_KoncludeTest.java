@@ -245,7 +245,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		DataForTransferingEntailments.getInstance().clear();
 
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME);
-		 Configuration.getInstance().addDebugLevels(DebugLevel.ADDING_MARKING_AXIOMS);
+//		 Configuration.getInstance().addDebugLevels(DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(tbox, aboxList);
@@ -284,8 +284,8 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		Configuration.getInstance().clearLogInfoLevels();
 
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME, LogInfo.LOADING_TIME);
-		 Configuration.getInstance().addDebugLevels(
-		 DebugLevel.ADDING_MARKING_AXIOMS);
+//		 Configuration.getInstance().addDebugLevels(
+//		 DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);

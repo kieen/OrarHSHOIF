@@ -113,13 +113,13 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		/*
 		 * add axioms to mark singleton concepts
 		 */
-		logger.info("***DEBUG*** star adding axioms for singleton, trans:");
+
 		this.axiomsAdder.addMarkingAxioms();
 		if (this.config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
-//			logger.info("***DEBUG*** Ontololgy after adding marking axioms:");
-//			PrintingHelper.printSet(this.owlOntology.getAxioms());
+			logger.info("***DEBUG*** Ontololgy after adding marking axioms:");
+			PrintingHelper.printSet(this.owlOntology.getAxioms());
 		}
-		logger.info("***DEBUG*** end adding axioms for singleton, trans:");
+
 		/*
 		 * get the reasoner
 		 */

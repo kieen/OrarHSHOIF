@@ -183,7 +183,7 @@ public class HornALCHOIF_SubClass_Validator implements OWLClassExpressionVisitor
 
 	@Override
 	public OWLClassExpression visit(OWLObjectOneOf ce) {
-		logger.info("***DEBUG OWLObjectOneOf:"+ce);
+//		logger.info("***DEBUG OWLObjectOneOf:"+ce);
 		return ce;
 	}
 

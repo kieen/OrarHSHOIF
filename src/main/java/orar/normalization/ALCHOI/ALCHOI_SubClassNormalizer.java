@@ -111,7 +111,7 @@ public class ALCHOI_SubClassNormalizer implements SubClassNormalizer {
 
 		OWLClass freshClass = normalizerDataFactory.getFreshConcept();
 
-		logger.info("***DEBUG***"+ce);
+//		logger.info("***DEBUG***"+ce);
 		OWLClassExpression filler = ce.getFiller();
 		if (filler instanceof OWLObjectOneOf) {
 			Set<OWLIndividual> inds = ((OWLObjectOneOf) filler).getIndividuals();

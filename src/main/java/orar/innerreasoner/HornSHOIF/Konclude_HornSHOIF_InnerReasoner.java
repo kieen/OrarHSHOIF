@@ -166,9 +166,9 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 		 * add some assertions only in case of Konclude to reduce the number of
 		 * http requests while getting results from Konclude
 		 */
-		logger.info("***DEBUG*** start adding concepts marking predecessor of singleton concept...");
+//		logger.info("***DEBUG*** start adding concepts marking predecessor of singleton concept...");
 		this.axiomsAdder.addAxiomsForPredecessorOfSingletonConcept();
-		logger.info("***DEBUG*** end adding concepts marking predecessor of singleton concept...");
+//		logger.info("***DEBUG*** end adding concepts marking predecessor of singleton concept...");
 		/*
 		 * start Konclude server
 		 */
