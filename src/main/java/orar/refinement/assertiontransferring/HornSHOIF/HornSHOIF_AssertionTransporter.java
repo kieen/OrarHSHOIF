@@ -47,16 +47,25 @@ public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate
 			}
 
 			// add sameas assertions to the original Abox.
-			boolean newAssertionsAdded = false;
-			for (OWLNamedIndividual eachOriginalInd : equivalentOriginalInds) {
-				if (this.orarOntology.addManySameAsAssertions(eachOriginalInd, equivalentOriginalInds)) {
-					newAssertionsAdded = true;
+			// boolean newAssertionsAdded = false;
+			if (equivalentOriginalInds.size() > 1) {
+				if (this.orarOntology.addSameasAssertion(equivalentOriginalInds)) {
+					this.isABoxExtended = true;
+					this.newSameasAssertions.add(equivalentOriginalInds);
 				}
 			}
-			if (newAssertionsAdded) {
-				this.isABoxExtended = true;
-				this.newSameasAssertions.add(equivalentOriginalInds);
-			}
+			//
+			// for (OWLNamedIndividual eachOriginalInd : equivalentOriginalInds)
+			// {
+			// if (this.orarOntology.addManySameAsAssertions(eachOriginalInd,
+			// equivalentOriginalInds)) {
+			// newAssertionsAdded = true;
+			// }
+			// }
+			// if (newAssertionsAdded) {
+			// this.isABoxExtended = true;
+			// this.newSameasAssertions.add(equivalentOriginalInds);
+			// }
 		}
 
 	}
