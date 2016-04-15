@@ -66,7 +66,6 @@ public class ALCHOI_SubClassNormalizer implements SubClassNormalizer {
 
 	@Override
 	public OWLClassExpression visit(OWLClass ce) {
-
 		return ce;
 	}
 

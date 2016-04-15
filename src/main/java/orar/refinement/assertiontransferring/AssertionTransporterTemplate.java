@@ -1,9 +1,7 @@
 package orar.refinement.assertiontransferring;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -20,6 +18,7 @@ import orar.data.DataForTransferingEntailments;
 import orar.modeling.ontology.OrarOntology;
 import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
 import orar.refinement.abstractroleassertion.RoleAssertionList;
+import orar.util.PrintingHelper;
 
 public abstract class AssertionTransporterTemplate implements AssertionTransporter {
 	// original ontology
@@ -224,14 +223,15 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 					 */
 					Set<OWLClass> existingAssertedConcept = new HashSet<OWLClass>();
 					if (this.config.getDebuglevels().contains(DebugLevel.TRANSFER_CONCEPTASSERTION)) {
-						existingAssertedConcept = this.orarOntology.getAssertedConcepts(originalInd);
+						existingAssertedConcept.addAll(this.orarOntology.getAssertedConcepts(originalInd));
 					}
 					if (this.orarOntology.addManyConceptAssertions(originalInd, concepts)) {
 						this.isABoxExtended = true;
 						if (this.config.getDebuglevels().contains(DebugLevel.TRANSFER_CONCEPTASSERTION)) {
 							logger.info("***DEBUG***TRANSFER_CONCEPTASSERTION:");
 							logger.info("For individual:" + originalInd);
-							logger.info("Existing asserted concepts:"+existingAssertedConcept);
+							logger.info("Existing asserted concepts:");
+							PrintingHelper.printSet(existingAssertedConcept);
 							logger.info("Newly added asserted concepts:" + concepts);
 							logger.info("updated=true");
 						}

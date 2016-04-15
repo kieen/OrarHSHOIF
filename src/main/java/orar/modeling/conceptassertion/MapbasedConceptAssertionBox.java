@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
@@ -18,7 +19,7 @@ import orar.data.NormalizationDataFactory;
 import orar.dlfragmentvalidator.ValidatorDataFactory;
 
 public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
-
+	private Logger logger = Logger.getLogger(MapbasedConceptAssertionBox.class);
 	private final Map<OWLNamedIndividual, Set<OWLClass>> conceptAssertionMap;
 
 	public MapbasedConceptAssertionBox() {
@@ -64,9 +65,7 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 		if (existingClasses == null) {
 			existingClasses = new HashSet<OWLClass>();
 		}
-
 		boolean hasNewElement = existingClasses.addAll(concepts);
-
 		this.conceptAssertionMap.put(individual, existingClasses);
 		return hasNewElement;
 	}

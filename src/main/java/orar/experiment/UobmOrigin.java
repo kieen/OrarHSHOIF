@@ -24,8 +24,8 @@ public class UobmOrigin {
 		Configuration.getInstance().clearDebugLevels();
 		Configuration.getInstance().clearLogInfoLevels();
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.LOADING_TIME, LogInfo.REASONING_TIME);
-		Configuration.getInstance().addDebugLevels(DebugLevel.TRANSFER_SAMEAS, DebugLevel.TRANSFER_CONCEPTASSERTION,
-				DebugLevel.TRANSFER_ROLEASSERTION);
+		Configuration.getInstance().addDebugLevels(DebugLevel.TRANSFER_CONCEPTASSERTION,
+		 DebugLevel.NORMALIZATION);
 		 runWithSeperatedTBoxAndABoxes();
 //		runWithCombinedTBoxAndABoxes();
 

@@ -92,6 +92,10 @@ public abstract class MaterializeTemplate implements Materializer {
 		boolean updated = true;
 		logger.info("Starting the abstraction refinement loop...");
 
+//		// TODO:delete this set after debuggin
+//		HashSet<Object> typesLoop3 = new HashSet<>();
+//		HashSet<Object> typesLoop4 = new HashSet<>();
+
 		while (updated) {
 			currentLoop = this.currentLoop + 1;
 			logger.info("Current loop: " + currentLoop);
@@ -109,6 +113,16 @@ public abstract class MaterializeTemplate implements Materializer {
 			logger.info("Computing types...");
 			Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals = this.typeComputor
 					.computeTypes(this.normalizedORAROntology);
+
+//			// TODO:delete after debugging
+//			if (this.currentLoop == 3) {
+//				typesLoop3.addAll(typeMap2Individuals.keySet());
+//			}
+//
+//			if (this.currentLoop == 4) {
+//				typesLoop4.addAll(typeMap2Individuals.keySet());
+//			}
+
 			// logging
 			if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
 				logger.info(StatisticVocabulary.CURRENT_LOOP + currentLoop + ";" + StatisticVocabulary.NUMBER_OF_TYPES
@@ -242,15 +256,18 @@ public abstract class MaterializeTemplate implements Materializer {
 		if (config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
 			logger.info(StatisticVocabulary.TIME_REASONING_USING_ABSRTACTION + this.reasoningTimeInSeconds);
 		}
-		
-		if(config.getLogInfos().contains(LogInfo.STATISTIC)){
-			int numberOfMaterializedConceptAssertions=this.normalizedORAROntology.getNumberOfConceptAssertions();
-			int numberOfMaterializedRoleAssertions=this.normalizedORAROntology.getNumberOfRoleAssertions();
-			int numberOfMaterializedAssertions=numberOfMaterializedConceptAssertions+numberOfMaterializedRoleAssertions;
-			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_CONCEPTASSERTIONS+numberOfMaterializedConceptAssertions);
-			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ROLEASSERTIONS+numberOfMaterializedRoleAssertions);
-			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ASSERTIONS+numberOfMaterializedAssertions);
+
+		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+			int numberOfMaterializedConceptAssertions = this.normalizedORAROntology.getNumberOfConceptAssertions();
+			int numberOfMaterializedRoleAssertions = this.normalizedORAROntology.getNumberOfRoleAssertions();
+			int numberOfMaterializedAssertions = numberOfMaterializedConceptAssertions
+					+ numberOfMaterializedRoleAssertions;
+			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_CONCEPTASSERTIONS
+					+ numberOfMaterializedConceptAssertions);
+			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ROLEASSERTIONS + numberOfMaterializedRoleAssertions);
+			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ASSERTIONS + numberOfMaterializedAssertions);
 		}
+//		logger.info("Types in Loop3 is equal to Types in Loop4?"+ typesLoop3.equals(typesLoop4));
 	}
 
 	protected abstract List<OWLOntology> getAbstractions(
