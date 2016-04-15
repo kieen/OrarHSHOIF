@@ -22,7 +22,13 @@ import orar.materializer.Materializer;
 import orar.modeling.ontology.OrarOntology;
 
 public class HornSHOIF_Materializer_KoncludeTest {
+	@Test
+	public void testHasValue1() {
+		Configuration.getInstance().addAllDebugInfos();
+		String ontologyPath = "src/test/resources/main/testHasValue1.owl";
 
+		haveTheSameResults(ontologyPath);
+	}
 	/**
 	 * No new entailments
 	 */
@@ -284,8 +290,8 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		Configuration.getInstance().clearLogInfoLevels();
 
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME, LogInfo.LOADING_TIME);
-//		 Configuration.getInstance().addDebugLevels(
-//		 DebugLevel.ADDING_MARKING_AXIOMS);
+		 Configuration.getInstance().addDebugLevels(
+		 DebugLevel.PRINT_MARKING_INDIVIDUALS, DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);

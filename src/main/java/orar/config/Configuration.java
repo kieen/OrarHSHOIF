@@ -22,13 +22,14 @@ public class Configuration {
 	private int numberOfTypePerOntology = -1;// Default value
 
 	private Configuration() {
-		// default is newestversion_11_Sept_2015/Konclude. This allows to get
-		// role asesrtions with atomic only. getting inverse role assertions
-		// failed.
-//		 this.KONCLUDE_BINARY_PATH =
-//		 "/Users/kien/konclude/newestversion_11_Sept_2015/Konclude";
-
-		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/konclude062/Binaries/Konclude";
+		/*
+		 * default name for Konclude is Konclude. This is the stable release.
+		 * Other Konclude with date-suffix is up-to-dated implementation and might be buggy.
+		 */
+		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/Konclude";
+		
+//		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/Konclude15April";
+		
 		koncludeConfigFileName = "/Users/kien/konclude/newestversion_11_Sept_2015/konclude-load-config.xml";
 		// koncludeConfigFileName="/data/kien/benchmark/software/konclude-load-config.xml";
 		savedOntologyFileName = "ontologyForKonclude.funcionalsyntax.owl";

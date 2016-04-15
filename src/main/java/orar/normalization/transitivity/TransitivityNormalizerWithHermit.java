@@ -71,6 +71,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 	// private
 	@Override
 	public void normalizeTransitivity() {
+		logger.info("Normalizing transitivity...");
 		OWLOntologyManager ontologyManager = this.inputOntology.getOWLOntologyManager();
 
 		/*
@@ -82,6 +83,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 		ontologyManager.addAxioms(this.inputOntology, axiomsSimulatingTransitivity);
 
 		this.eliminationIsDone = true;
+		logger.info("Finished normalizing transitivity.");
 	}
 
 	private Set<OWLSubClassOfAxiom> generateAxiomsSimulatingTransitivity() {

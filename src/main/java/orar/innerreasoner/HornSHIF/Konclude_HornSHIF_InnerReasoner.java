@@ -23,7 +23,7 @@ import orar.innerreasoner.HornSHOIF.Konclude_HornSHOIF_InnerReasoner;
 public class Konclude_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate {
 	private int portNumber;
 	private ExecuteWatchdog watchdog;
-	private static Logger logger = Logger.getLogger(Konclude_HornSHOIF_InnerReasoner.class);
+	private static Logger logger = Logger.getLogger(Konclude_HornSHIF_InnerReasoner.class);
 	private ByteArrayOutputStream stdout;
 	private PumpStreamHandler pumpStreamHander;
 	private final int POOLING_INTERVAL = 5; // miliseconds to check if Kondlude

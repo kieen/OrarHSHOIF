@@ -56,6 +56,16 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 	protected final Set<OWLNamedIndividual> instancesOfPredecessorOfSingletonConcept;
 	protected final Set<OWLObjectProperty> rolesForPredecessorOfSingletonConcept;
 
+	/*
+	 * maps of marking concept for nominal, predecessors of nominals, successors
+	 * of nominals.
+	 */
+	protected final Map<OWLClass, Set<OWLNamedIndividual>> nominalConceptMap2Instances;
+
+	protected final Map<OWLClass, Set<OWLNamedIndividual>> predecessorOfNominalMap2Instances;
+
+	protected final Map<OWLClass, Set<OWLNamedIndividual>> successorOfNominalMap2Instances;
+
 	public InnerReasonerTemplate(OWLOntology owlOntology) {
 		/*
 		 * init data
@@ -81,6 +91,12 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		this.instancesOfHasTranConcepts = new HashSet<>();
 		this.instancesOfPredecessorOfSingletonConcept = new HashSet<>();
 		this.rolesForPredecessorOfSingletonConcept = new HashSet<>();
+		/*
+		 * maps
+		 */
+		this.nominalConceptMap2Instances = new HashMap<>();
+		this.predecessorOfNominalMap2Instances = new HashMap<>();
+		this.successorOfNominalMap2Instances = new HashMap<>();
 	}
 
 	@Override
@@ -160,6 +176,13 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 	 */
 	private void computeRoleAssertionsForXCausedByFunctionalRoles() {
 		Set<OWLNamedIndividual> xIndividuals = this.dataForTransferring.getxAbstractHavingFunctionalRole();
+		/*
+		 * in case of splitting abstraction into smaller parts, we need to get
+		 * xIndividuals in this part only.
+		 */
+		Set<OWLNamedIndividual> allIndividuals = this.owlOntology.getIndividualsInSignature(true);
+		xIndividuals.retainAll(allIndividuals);
+
 		Set<OWLObjectProperty> funcRoles = this.metadataOfOntology.getFunctionalRoles();
 
 		for (OWLNamedIndividual x : xIndividuals) {
@@ -183,7 +206,12 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 	private void computeRoleAssertionsForZCausedByInverseFunctionalRoles() {
 		Set<OWLNamedIndividual> zIndividuals = this.dataForTransferring.getzAbstractHavingInverseFunctionalRole();
 		Set<OWLObjectProperty> inverseFuncRoles = this.metadataOfOntology.getInverseFunctionalRoles();
-
+		/*
+		 * in case we split the abstraction into smaller parts. We need to query
+		 * for individuals in this (ontology) part only.
+		 */
+		Set<OWLNamedIndividual> allIndividuals = this.owlOntology.getIndividualsInSignature(true);
+		zIndividuals.retainAll(allIndividuals);
 		for (OWLNamedIndividual z : zIndividuals) {
 			for (OWLObjectProperty role : inverseFuncRoles) {
 				Set<OWLNamedIndividual> objects = reasoner.getObjectPropertyValues(z, role).getFlattened();
@@ -231,7 +259,10 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 
 		for (OWLClass eachConceptName : allConceptsNames) {
 			Set<OWLNamedIndividual> instances = this.reasoner.getInstances(eachConceptName, false).getFlattened();
-
+			if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
+				logger.info("***DEBUG*** all instances of: " + eachConceptName);
+				PrintingHelper.printSet(instances);
+			}
 			if (this.axiomsAdder.getSingletonConcepts().contains(eachConceptName)) {
 				this.instancesOfSingletonConcepts.addAll(instances);
 			} else if (this.axiomsAdder.getLoopConcepts().contains(eachConceptName)) {
@@ -245,7 +276,16 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 				if (roleUsedForQuery != null) {
 					this.rolesForPredecessorOfSingletonConcept.add(roleUsedForQuery);
 				}
-			} else {
+			} else if (this.axiomsAdder.getSuccessorOfNominals().contains(eachConceptName)) {
+				this.successorOfNominalMap2Instances.put(eachConceptName, instances);
+			} else if (this.axiomsAdder.getPredecesorOfNominals().contains(eachConceptName)) {
+				this.predecessorOfNominalMap2Instances.put(eachConceptName, instances);
+			}
+
+			else {
+				if (this.metadataOfOntology.getNominalConcepts().contains(eachConceptName)) {
+					this.nominalConceptMap2Instances.put(eachConceptName, new HashSet<>(instances));
+				}
 				/*
 				 * filter out asserted instances
 				 */
@@ -264,28 +304,30 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 			}
 		}
 		// logging
-		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+		if (config.getDebuglevels().contains(DebugLevel.PRINT_MARKING_INDIVIDUALS)) {
 			int numberOfIndividualQueryingForRoleAssertions = this.instancesOfHasTranConcepts.size()
 					+ this.instancesOfLoopConcepts.size() + this.instancesOfSingletonConcepts.size()
 					+ this.instancesOfPredecessorOfSingletonConcept.size();
-			
+
 			logger.info("***DEBUG*** number of all individuals used to query role asesrtions: "
 					+ numberOfIndividualQueryingForRoleAssertions);
-			
+
+			logger.info("***DEBUG*** number of instances of Nominals: " + this.nominalConceptMap2Instances.size());
+			PrintingHelper.printMap(this.nominalConceptMap2Instances);
+
 			logger.info("***DEBUG*** number of instances of singleton conepts: "
 					+ this.instancesOfSingletonConcepts.size());
-//			PrintingHelper.printSet(this.instancesOfSingletonConcepts);
-			
+			// PrintingHelper.printSet(this.instancesOfSingletonConcepts);
+
 			logger.info("***DEBUG*** number of instances of concepts having trans neighbours: "
 					+ this.instancesOfHasTranConcepts.size());
-			
-			logger.info("***DEBUG*** number of instances of loop concepts: "
-					+ this.instancesOfLoopConcepts.size());
-//			PrintingHelper.printSet(this.instancesOfLoopConcepts);
-			
+
+			logger.info("***DEBUG*** number of instances of loop concepts: " + this.instancesOfLoopConcepts.size());
+			// PrintingHelper.printSet(this.instancesOfLoopConcepts);
+
 			logger.info("***DEBUG*** number of instances of predecessors of singleton concepts: "
 					+ this.instancesOfPredecessorOfSingletonConcept.size());
-//			PrintingHelper.printSet(this.instancesOfPredecessorOfSingletonConcept);
+			// PrintingHelper.printSet(this.instancesOfPredecessorOfSingletonConcept);
 		}
 
 	}

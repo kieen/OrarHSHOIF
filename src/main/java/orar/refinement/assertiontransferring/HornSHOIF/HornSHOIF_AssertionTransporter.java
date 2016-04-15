@@ -63,6 +63,12 @@ public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate
 
 	@Override
 	protected void tranferRoleAssertionsBetweenUX() {
+		transferRoleAssertionBetweenUAndXAbstract();
+		transferRoleAssertionBetweenNominalAndU();
+		transferRoleAssertionBetweenUAndNominals();
+	}
+
+	private void transferRoleAssertionBetweenUAndXAbstract() {
 		RoleAssertionList roleAssertionList = this.abstractRoleAssertionBox.getUxRoleAssertionsForCTypeAndType();
 		int size = roleAssertionList.getSize();
 		for (int index = 0; index < size; index++) {
@@ -85,9 +91,49 @@ public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate
 
 			}
 		}
-
 	}
 
-	
-	
+	private void transferRoleAssertionBetweenUAndNominals() {
+		RoleAssertionList roleAssertionList = this.abstractRoleAssertionBox.get_UandNominal_RoleAssertions();
+		int size = roleAssertionList.getSize();
+		for (int index = 0; index < size; index++) {
+			OWLNamedIndividual abstractSubject = roleAssertionList.getSubject(index);
+			OWLObjectProperty role = roleAssertionList.getRole(index);
+			OWLNamedIndividual nominal = roleAssertionList.getObject(index);
+
+			Set<OWLNamedIndividual> originalSubjects = this.dataForTransferingEntailments
+					.getOriginalIndividuals(abstractSubject);
+
+			for (OWLNamedIndividual originalSubject : originalSubjects) {
+
+				if (this.orarOntology.addRoleAssertion(originalSubject, role, nominal)) {
+					this.isABoxExtended = true;
+					this.newRoleAssertions.addRoleAssertion(originalSubject, role, nominal);
+				}
+
+			}
+		}
+	}
+
+	private void transferRoleAssertionBetweenNominalAndU() {
+		RoleAssertionList roleAssertionList = this.abstractRoleAssertionBox.get_NominalAndU_RoleAssertions();
+		int size = roleAssertionList.getSize();
+		for (int index = 0; index < size; index++) {
+			OWLNamedIndividual nominal = roleAssertionList.getSubject(index);
+			OWLObjectProperty role = roleAssertionList.getRole(index);
+			OWLNamedIndividual abstractObject = roleAssertionList.getObject(index);
+
+			Set<OWLNamedIndividual> originalObjects = this.dataForTransferingEntailments
+					.getOriginalIndividuals(abstractObject);
+
+			for (OWLNamedIndividual eachOriginalObject : originalObjects) {
+
+				if (this.orarOntology.addRoleAssertion(nominal, role, eachOriginalObject)) {
+					this.isABoxExtended = true;
+					this.newRoleAssertions.addRoleAssertion(nominal, role, eachOriginalObject);
+				}
+
+			}
+		}
+	}
 }

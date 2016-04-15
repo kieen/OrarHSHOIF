@@ -39,11 +39,17 @@ public class AbstractRoleAssertionBox {
 	 */
 	private final RoleAssertionList uxRoleAssertionsForCTypeAndType;
 
+	private final RoleAssertionList uNominal_RoleAssertions;
+	private final RoleAssertionList nominalU_RoleAssertions;
+
 	public AbstractRoleAssertionBox() {
 		this.xyRoleAssertionsForType = new RoleAssertionList();
 		this.zxRoleAssertionsForType = new RoleAssertionList();
 		this.loopRoleAssertions = new RoleAssertionList();
 		this.uxRoleAssertionsForCTypeAndType = new RoleAssertionList();
+
+		this.uNominal_RoleAssertions = new RoleAssertionList();
+		this.nominalU_RoleAssertions = new RoleAssertionList();
 	}
 
 	/**
@@ -106,6 +112,16 @@ public class AbstractRoleAssertionBox {
 		this.uxRoleAssertionsForCTypeAndType.addRoleAssertion(subject, role, object);
 	}
 
+	public void addUNominal_RoleAssertion(OWLNamedIndividual subject_U, OWLObjectProperty role,
+			OWLNamedIndividual nominal) {
+		this.uNominal_RoleAssertions.addRoleAssertion(subject_U, role, nominal);
+	}
+
+	public void addNominalandU_RoleAssertion(OWLNamedIndividual nominal, OWLObjectProperty role,
+			OWLNamedIndividual object_b) {
+		this.nominalU_RoleAssertions.addRoleAssertion(nominal, role, object_b);
+	}
+
 	public RoleAssertionList getXyRoleAssertionsForType() {
 		return xyRoleAssertionsForType;
 	}
@@ -128,6 +144,8 @@ public class AbstractRoleAssertionBox {
 		roleAssertions.addAll(this.uxRoleAssertionsForCTypeAndType.getSetOfRoleAssertions());
 		roleAssertions.addAll(this.xyRoleAssertionsForType.getSetOfRoleAssertions());
 		roleAssertions.addAll(this.zxRoleAssertionsForType.getSetOfRoleAssertions());
+		roleAssertions.addAll(this.uNominal_RoleAssertions.getSetOfRoleAssertions());
+		roleAssertions.addAll(this.nominalU_RoleAssertions.getSetOfRoleAssertions());
 		return roleAssertions;
 	}
 
@@ -136,18 +154,31 @@ public class AbstractRoleAssertionBox {
 		this.uxRoleAssertionsForCTypeAndType.addAll(abstractRoleAssertionBox.getUxRoleAssertionsForCTypeAndType());
 		this.xyRoleAssertionsForType.addAll(abstractRoleAssertionBox.getXyRoleAssertionsForType());
 		this.zxRoleAssertionsForType.addAll(abstractRoleAssertionBox.getZxRoleAssertionsForType());
+		this.uNominal_RoleAssertions.addAll(abstractRoleAssertionBox.get_UandNominal_RoleAssertions());
+		this.nominalU_RoleAssertions.addAll(abstractRoleAssertionBox.get_NominalAndU_RoleAssertions());
 	}
 
 	@Override
 	public String toString() {
 		return "AbstractRoleAssertionBox [xyRoleAssertionsForType=" + xyRoleAssertionsForType
 				+ ", zxRoleAssertionsForType=" + zxRoleAssertionsForType + ", loopRoleAssertions=" + loopRoleAssertions
-				+ ", uxRoleAssertionsForCTypeAndType=" + uxRoleAssertionsForCTypeAndType + "]";
+				+ ", uxRoleAssertionsForCTypeAndType=" + uxRoleAssertionsForCTypeAndType
+				+ ", uNominal_RoleAssertionsForCTypeAndType=" + uNominal_RoleAssertions
+				+ ", nominalU_RoleAssertionsForCTypeAndType=" + nominalU_RoleAssertions + "]";
 	}
 
 	public int getSize() {
 		return this.loopRoleAssertions.getSize() + this.uxRoleAssertionsForCTypeAndType.getSize()
-				+ this.xyRoleAssertionsForType.getSize() + this.zxRoleAssertionsForType.getSize();
+				+ this.xyRoleAssertionsForType.getSize() + this.zxRoleAssertionsForType.getSize()
+				+ this.uNominal_RoleAssertions.getSize() + this.nominalU_RoleAssertions.getSize();
+	}
+
+	public RoleAssertionList get_UandNominal_RoleAssertions() {
+		return uNominal_RoleAssertions;
+	}
+
+	public RoleAssertionList get_NominalAndU_RoleAssertions() {
+		return nominalU_RoleAssertions;
 	}
 
 }

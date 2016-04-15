@@ -151,11 +151,16 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 				OWLClassAssertionAxiom newConceptAssertion = this.dataFactory.getOWLClassAssertionAxiom(eachConceptName,
 						eachInstance);
 				this.conceptAssertions.add(newConceptAssertion);
+				
 			}
 
 		}
 	}
 
+//	private void owlapi(){
+//		this.reasoner.getSuperObjectProperties(pe, direct)
+//	}
+	
 	/**
 	 * release resource from the reasoner. Stop Konclude server (in case of
 	 * using Konclude via OWLLink)

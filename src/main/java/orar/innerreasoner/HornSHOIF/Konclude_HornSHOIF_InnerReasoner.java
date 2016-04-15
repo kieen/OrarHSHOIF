@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Set;
 
 import org.apache.commons.exec.CommandLine;
@@ -16,6 +20,7 @@ import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLInverseObjectPropertiesAxiom;
@@ -35,6 +40,8 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
 import orar.config.Configuration;
 import orar.config.DebugLevel;
+import orar.innerreasoner.NominalAndRole;
+import orar.innerreasoner.RoleAndNominal;
 import orar.util.PrintingHelper;
 
 public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTemplate {
@@ -166,9 +173,14 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 		 * add some assertions only in case of Konclude to reduce the number of
 		 * http requests while getting results from Konclude
 		 */
-//		logger.info("***DEBUG*** start adding concepts marking predecessor of singleton concept...");
+		// logger.info("***DEBUG*** start adding concepts marking predecessor of
+		// singleton concept...");
 		this.axiomsAdder.addAxiomsForPredecessorOfSingletonConcept();
-//		logger.info("***DEBUG*** end adding concepts marking predecessor of singleton concept...");
+		// logger.info("***DEBUG*** end adding concepts marking predecessor of
+		// singleton concept...");
+
+		this.axiomsAdder.addAxiomsToGetRoleAssertionOfNominals();
+
 		/*
 		 * start Konclude server
 		 */
@@ -192,9 +204,15 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 
 	@Override
 	protected void computeRoleAssertionForInstancesOfSingletonConcept() {
+		getPredecessorRoleAssertionOfNominals();
+		getSuccessorRoleAssertionOfNominals();
+		getRoleAssertionOfInstancesOfSingletonConcepts();
+		getInverseRoleAssertionOfInstancesOfSingletonConcepts();
+	}
 
+	private void getRoleAssertionOfInstancesOfSingletonConcepts() {
 		Set<OWLNamedIndividual> individuals = new HashSet<>(this.instancesOfSingletonConcepts);
-		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+		if (config.getDebuglevels().contains(DebugLevel.PRINT_MARKING_INDIVIDUALS)) {
 			logger.info("***DEBUG*** individuals are instances of singleton concepts:");
 			PrintingHelper.printSet(individuals);
 		}
@@ -203,7 +221,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 		 */
 		individuals.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
 
-		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+		if (config.getDebuglevels().contains(DebugLevel.PRINT_MARKING_INDIVIDUALS)) {
 			logger.info("***DEBUG*** individuals U are instances of singleton	 concepts:");
 			PrintingHelper.printSet(individuals);
 		}
@@ -227,7 +245,6 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 
 			}
 		}
-		getInverseRoleAssertionOfInstancesOfSingletonConcepts();
 	}
 
 	private void getInverseRoleAssertionOfInstancesOfSingletonConcepts() {
@@ -235,11 +252,11 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 				this.instancesOfPredecessorOfSingletonConcept);
 		// retain only to U
 		allPredecessorsOfSingletonConcepts.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
-		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
+		if (config.getDebuglevels().contains(DebugLevel.PRINT_MARKING_INDIVIDUALS)) {
 			logger.info("***DEBUG*** individuals U are instances (possibly being predecessors) of singleton concepts:");
 			PrintingHelper.printSet(allPredecessorsOfSingletonConcepts);
 		}
-		
+
 		for (OWLNamedIndividual ind_u : allPredecessorsOfSingletonConcepts) {
 			for (OWLObjectProperty role_R : this.rolesForPredecessorOfSingletonConcept) {
 				/*
@@ -253,6 +270,112 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 				for (OWLNamedIndividual eachObject : objects) {
 					this.roleAssertionList.addUX_RoleAssertionForCTypeAndType(ind_u, role_R, eachObject);
 				}
+			}
+		}
+	}
+
+	private void getPredecessorRoleAssertionOfNominals() {
+		Iterator<Entry<OWLClass, Set<OWLNamedIndividual>>> iterator = this.predecessorOfNominalMap2Instances.entrySet()
+				.iterator();
+		while (iterator.hasNext()) {
+			Entry<OWLClass, Set<OWLNamedIndividual>> entry = iterator.next();
+			OWLClass predecessorMarkingConcept = entry.getKey();
+			Set<OWLNamedIndividual> allSubjects = entry.getValue();
+			RoleAndNominal roleAndNominal = this.axiomsAdder.getPredecessorOfNominalMap2RoleAndNominal()
+					.get(predecessorMarkingConcept);
+			OWLObjectProperty role_R = roleAndNominal.getRole();
+			OWLNamedIndividual nominal_o = roleAndNominal.getNominal();
+			for (OWLNamedIndividual eachSubject_a : allSubjects) {
+				this.roleAssertionList.addUNominal_RoleAssertion(eachSubject_a, role_R, nominal_o);
+			}
+		}
+	}
+
+	private void getSuccessorRoleAssertionOfNominals() {
+		Iterator<Entry<OWLClass, Set<OWLNamedIndividual>>> iterator = this.successorOfNominalMap2Instances.entrySet()
+				.iterator();
+		while (iterator.hasNext()) {
+			Entry<OWLClass, Set<OWLNamedIndividual>> entry = iterator.next();
+			OWLClass successorMarkingConcept = entry.getKey();
+			Set<OWLNamedIndividual> allObjects = entry.getValue();
+			NominalAndRole nominalAndRole = this.axiomsAdder.getSuccessorOfNominalMap2NomialAndRole()
+					.get(successorMarkingConcept);
+			OWLNamedIndividual nominal_o = nominalAndRole.getNominal();
+			OWLObjectProperty role = nominalAndRole.getRole();
+			for (OWLNamedIndividual eachObject_b : allObjects) {
+				this.roleAssertionList.addNominalandU_RoleAssertion(nominal_o, role, eachObject_b);
+			}
+		}
+	}
+
+	/**
+	 * compute sameas assertions between representative of concept-types and
+	 * those of types.
+	 */
+	@Override
+	protected void computeEntailedSameasAssertions() {
+		computeSameasAssertionFromNominals();
+		computeSameasAssertionFromSingletonConcepts();
+	}
+
+	private void computeSameasAssertionFromNominals() {
+		Iterator<Entry<OWLClass, Set<OWLNamedIndividual>>> iterator = this.nominalConceptMap2Instances.entrySet()
+				.iterator();
+		while (iterator.hasNext()) {
+			Entry<OWLClass, Set<OWLNamedIndividual>> entry = iterator.next();
+			Set<OWLNamedIndividual> sameInds = new HashSet<>(entry.getValue());
+			/*
+			 * retain only u and x
+			 */
+			sameInds.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
+			sameInds.retainAll(this.abstractDataFactory.getXAbstractIndividuals());
+
+			if (sameInds.size() > 1) {
+				OWLNamedIndividual firstElement = sameInds.iterator().next();
+				sameInds.remove(firstElement);
+				/*
+				 * put to the map
+				 */
+				addToSameAsMap(firstElement, sameInds);
+			}
+
+		}
+	}
+
+	private void addToSameAsMap(OWLNamedIndividual ind, Set<OWLNamedIndividual> sameInds) {
+		Set<OWLNamedIndividual> existingElements = this.sameAsMap.get(ind);
+		if (existingElements == null) {
+			existingElements = new HashSet<>();
+		}
+		existingElements.addAll(sameInds);
+		this.sameAsMap.put(ind, existingElements);
+	}
+
+	private void computeSameasAssertionFromSingletonConcepts() {
+
+		// Set<OWLNamedIndividual> allIndividualsFromConceptType =
+		// this.abstractDataFactory.getUAbstractIndividuals();
+		// logger.info("***DEBUG***number of u
+		// individuals:"+this.abstractDataFactory.getUAbstractIndividuals().size());
+		Set<OWLNamedIndividual> instancesOfSingletonConcepts = new HashSet<>(this.instancesOfSingletonConcepts);
+		instancesOfSingletonConcepts.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
+		// logger.info("***DEBUG***number of u individuals in the ontology:"+
+		// allIndividualsFromConceptType.size());
+		Queue<OWLNamedIndividual> todoIndividuals = new LinkedList<>(instancesOfSingletonConcepts);
+		while (!todoIndividuals.isEmpty()) {
+			OWLNamedIndividual anIndividual = todoIndividuals.poll();
+			Set<OWLNamedIndividual> equivalentIndividuals = reasoner.getSameIndividuals(anIndividual).getEntities();
+			/*
+			 * Note to remove the indv itself as we DONT use (u=u) to transfer
+			 * assertions.
+			 */
+			equivalentIndividuals.remove(anIndividual);
+			if (!equivalentIndividuals.isEmpty()) {
+				addToSameAsMap(anIndividual, equivalentIndividuals);
+
+				// don't need to query for equivalentIndividuals. So we remove
+				// them from todoIndividuals.
+				todoIndividuals.removeAll(equivalentIndividuals);
 			}
 		}
 	}

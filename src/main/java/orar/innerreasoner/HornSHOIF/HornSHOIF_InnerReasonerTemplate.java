@@ -93,6 +93,9 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 	@Override
 	protected void computeRoleAssertionForInstancesOfSingletonConcept() {
 		Set<OWLNamedIndividual> individuals = new HashSet<>(this.instancesOfSingletonConcepts);
+		for (Set<OWLNamedIndividual> eachSetOfNominals:this.nominalConceptMap2Instances.values()){
+		individuals.addAll(eachSetOfNominals);
+		}
 		if (config.getDebuglevels().contains(DebugLevel.ADDING_MARKING_AXIOMS)) {
 			logger.info("***DEBUG*** individuals are instances of singleton concepts:");
 			PrintingHelper.printSet(individuals);

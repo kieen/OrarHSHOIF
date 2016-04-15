@@ -25,6 +25,13 @@ import orar.modeling.ontology.OrarOntology;
 import orar.util.PrintingHelper;
 
 public class HornSHOIF_Materializer_Hermit_Test {
+	@Test
+	public void testHasValue1() {
+		Configuration.getInstance().addAllDebugInfos();
+		String ontologyPath = "src/test/resources/main/testHasValue1.owl";
+
+		haveTheSameResults(ontologyPath);
+	}
 
 	/**
 	 * No new entailments
@@ -154,6 +161,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 
 		haveTheSameResults(ontologyPath);
 	}
+
 	@Test
 	public void testNominalConcept() {
 		Configuration.getInstance().addAllDebugInfos();
@@ -161,7 +169,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 
 		haveTheSameResults(ontologyPath);
 	}
-	
+
 	@Test
 	public void testNonTrivialRoleAssertion() {
 		Configuration.getInstance().addAllDebugInfos();
@@ -169,6 +177,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 
 		haveTheSameResults(ontologyPath);
 	}
+
 	@Test
 	public void testRoleAssertionWithNominal() {
 		Configuration.getInstance().addAllDebugInfos();
@@ -177,7 +186,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		haveTheSameResults(ontologyPath);
 	}
 
-	@SuppressWarnings("Hermit failed to do reasoning over the abstraction: java.util.ConcurrentModificationException") 
+	@SuppressWarnings("Hermit failed to do reasoning over the abstraction: java.util.ConcurrentModificationException")
 	@Test
 	public void testRoleAssertionByNominalConcept() {
 		Configuration.getInstance().addAllDebugInfos();
@@ -217,15 +226,16 @@ public class HornSHOIF_Materializer_Hermit_Test {
 	}
 
 	@Test
-	 public void testUOBM_OXSmall4() {
-	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
-	 haveTheSameResults(ontologyPath);
-	 }
-//	@Test
-//	 public void testUOBM_OXSmall1() {
-//	 String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small1.owl";
-//	 haveTheSameResults(ontologyPath);
-//	 }
+	public void testUOBM_OXSmall4() {
+		String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
+		haveTheSameResults(ontologyPath);
+	}
+	// @Test
+	// public void testUOBM_OXSmall1() {
+	// String ontologyPath =
+	// "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small1.owl";
+	// haveTheSameResults(ontologyPath);
+	// }
 
 	@Test
 	public void testUOBM_OriginSmall() {
@@ -233,7 +243,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		String aboxList = "src/test/resources/uobm-origin/abox/aboxListOf2.txt";
 		haveTheSameResults(ontologyTbox, aboxList);
 	}
-	
+
 	/**
 	 * Compare result by Abstraction and by OWLReasoner; assert that they have
 	 * the same result.
@@ -247,7 +257,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		DataForTransferingEntailments.getInstance().clear();
 
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME);
-		 Configuration.getInstance().addDebugLevels(DebugLevel.ADDING_MARKING_AXIOMS);
+		Configuration.getInstance().addDebugLevels(DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(tbox, aboxList);
@@ -265,11 +275,12 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
 		checker.computeEntailments();
 
-		 Assert.assertTrue(checker.isConceptAssertionComplete());
+		Assert.assertTrue(checker.isConceptAssertionComplete());
 		Assert.assertTrue(checker.isSameasComplete());
-		 Assert.assertTrue(checker.isRoleAssertionComplete());
+		Assert.assertTrue(checker.isRoleAssertionComplete());
 
 	}
+
 	/**
 	 * Compare result by Abstraction and by OWLReasoner; assert that they have
 	 * the same result.
@@ -282,13 +293,15 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		MetaDataOfOntology.getInstance().clear();
 		DataForTransferingEntailments.getInstance().clear();
 		ValidatorDataFactory.getInstance().clear();
-		
+
 		Configuration.getInstance().getDebuglevels().clear();
-		Configuration.getInstance().addLoginfoLevels( LogInfo.STATISTIC);
-//		Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO, LogInfo.INPUTONTOLOGY_INFO,
-//				LogInfo.COMPARED_RESULT_INFO, LogInfo.STATISTIC);
-//		Configuration.getInstance().addDebugLevels(DebugLevel.NORMALIZATION);
-		
+		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC);
+		// Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO,
+		// LogInfo.INPUTONTOLOGY_INFO,
+		// LogInfo.COMPARED_RESULT_INFO, LogInfo.STATISTIC);
+//		Configuration.getInstance().addDebugLevels(DebugLevel.PRINT_MARKING_INDIVIDUALS,
+//				DebugLevel.ADDING_MARKING_AXIOMS, DebugLevel.REASONING_ABSTRACTONTOLOGY);
+
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
@@ -302,9 +315,9 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		OWLOntology owlOntology = ontoReader.getOWLAPIOntology(ontologyPath);
 
 		DLReasoner dlReasoner = new HermitDLReasoner(owlOntology);
-//		koncludeRealizer.computeEntailments();
-//		PrintingHelper.printSet(koncludeRealizer.getEntailedRoleAssertions());
-		
+		// koncludeRealizer.computeEntailments();
+		// PrintingHelper.printSet(koncludeRealizer.getEntailedRoleAssertions());
+
 		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, dlReasoner);
 		checker.computeEntailments();
 
