@@ -128,10 +128,10 @@ public class CompletenessCheckerHorn implements CompletenessChecker {
 		if (config.getLogInfos().contains(LogInfo.COMPARED_RESULT_INFO)) {
 			if (!isComplete) {
 
-				 HashSet<OWLObjectPropertyAssertionAxiom> copyOfResultByAbstraction = new HashSet<>(
+				 HashSet<OWLObjectPropertyAssertionAxiom> copyOfResultByAbstraction = new HashSet<OWLObjectPropertyAssertionAxiom>(
 						this.entailedRoleAssertionByAbstraction);
 
-				 HashSet<OWLObjectPropertyAssertionAxiom> copyOfResultByOWLRealizer = new HashSet<>(
+				 HashSet<OWLObjectPropertyAssertionAxiom> copyOfResultByOWLRealizer = new HashSet<OWLObjectPropertyAssertionAxiom>(
 							this.entailedRoleAssertionByDLReasoner);
 
 					
@@ -194,10 +194,10 @@ public class CompletenessCheckerHorn implements CompletenessChecker {
 		if (config.getLogInfos().contains(LogInfo.COMPARED_RESULT_INFO)) {
 			if (!iscomplete) {
 
-				HashSet<OWLClassAssertionAxiom> copyOfResultByAbstraction = new HashSet<>(
+				HashSet<OWLClassAssertionAxiom> copyOfResultByAbstraction = new HashSet<OWLClassAssertionAxiom>(
 						entailedConceptAssertionByAbstraction);
 
-				HashSet<OWLClassAssertionAxiom> copyOfResultByOWLRealizer = new HashSet<>(
+				HashSet<OWLClassAssertionAxiom> copyOfResultByOWLRealizer = new HashSet<OWLClassAssertionAxiom>(
 						entailedConceptAssertionByDLReasoner);
 
 				copyOfResultByAbstraction.removeAll(entailedConceptAssertionByDLReasoner);

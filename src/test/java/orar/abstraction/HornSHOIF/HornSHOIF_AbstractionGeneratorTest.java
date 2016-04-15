@@ -117,7 +117,7 @@ public class HornSHOIF_AbstractionGeneratorTest {
 		OWLObjectPropertyAssertionAxiom funcRole_x1y1 = testData.getRoleAssertion(x1, funcRole, y1);
 		
 		
-		Set<OWLAxiom> expectedAxioms = new HashSet<>();
+		Set<OWLAxiom> expectedAxioms = new HashSet<OWLAxiom>();
 		expectedAxioms.add(A_x1);
 		expectedAxioms.add(A_u1);
 		expectedAxioms.add(funcRole_x1y1);

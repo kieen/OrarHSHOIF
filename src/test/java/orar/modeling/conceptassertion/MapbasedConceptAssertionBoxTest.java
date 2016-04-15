@@ -41,7 +41,7 @@ public class MapbasedConceptAssertionBoxTest {
 
 		Cc = testDataFactory.getConceptAssertion(C, c);
 
-		expectedAssertions = new HashSet<>();
+		expectedAssertions = new HashSet<OWLClassAssertionAxiom>();
 		expectedAssertions.add(Aa);
 		expectedAssertions.add(Ba);
 		expectedAssertions.add(Ca);
@@ -77,19 +77,19 @@ public class MapbasedConceptAssertionBoxTest {
 	@Test
 	public void getAssertedConceptsTest() {
 
-		Set<OWLClass> ABC = new HashSet<>();
+		Set<OWLClass> ABC = new HashSet<OWLClass>();
 		ABC.add(A);
 		ABC.add(B);
 		ABC.add(C);
 
 		Assert.assertEquals(ABC, conceptAssertionBox.getAssertedConcepts(a));
 
-		Set<OWLClass> AB = new HashSet<>();
+		Set<OWLClass> AB = new HashSet<OWLClass>();
 		AB.add(A);
 		AB.add(B);
 		Assert.assertEquals(AB, conceptAssertionBox.getAssertedConcepts(b));
 
-		HashSet<Object> CSet = new HashSet<>();
+		HashSet<Object> CSet = new HashSet<Object>();
 		CSet.add(C);
 		Assert.assertEquals(CSet, conceptAssertionBox.getAssertedConcepts(c));
 

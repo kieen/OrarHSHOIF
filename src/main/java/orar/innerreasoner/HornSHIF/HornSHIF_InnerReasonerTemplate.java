@@ -20,7 +20,7 @@ public abstract class HornSHIF_InnerReasonerTemplate extends InnerReasonerTempla
 	 */
 	@Override
 	protected void computeRoleAssertionForInstancesOfLoopConcepts() {
-		Set<OWLNamedIndividual> individuals = new HashSet<>(this.instancesOfLoopConcepts);
+		Set<OWLNamedIndividual> individuals = new HashSet<OWLNamedIndividual>(this.instancesOfLoopConcepts);
 		/*
 		 * retain only X-individuals.
 		 */

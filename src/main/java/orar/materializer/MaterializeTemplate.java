@@ -65,7 +65,7 @@ public abstract class MaterializeTemplate implements Materializer {
 		this.metaDataOfOntology = MetaDataOfOntology.getInstance();
 
 		// other fields
-		this.abstractOntologies = new HashSet<>();
+		this.abstractOntologies = new HashSet<OWLOntology>();
 		this.ruleEngine = new SemiNaiveRuleEngine(normalizedOrarOntology);
 		this.typeComputor = new BasicTypeComputor();
 	}
@@ -173,9 +173,9 @@ public abstract class MaterializeTemplate implements Materializer {
 			 * (5). Materialize abstractions
 			 */
 			logger.info("Materializing the abstractions ...");
-			Map<OWLNamedIndividual, Set<OWLClass>> entailedAbstractConceptAssertions = new HashMap<>();
+			Map<OWLNamedIndividual, Set<OWLClass>> entailedAbstractConceptAssertions = new HashMap<OWLNamedIndividual, Set<OWLClass>>();
 			AbstractRoleAssertionBox entailedAbstractRoleAssertion = new AbstractRoleAssertionBox();
-			Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap = new HashMap<>();
+			Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
 			int countMaterializedOntology = 0;// for monitoring only.
 			for (OWLOntology abstraction : abstractions) {
 				if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {

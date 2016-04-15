@@ -38,13 +38,13 @@ public class MetaDataOfOntology {
 	private final Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> inverseRoleMap;
 
 	private MetaDataOfOntology() {
-		this.nominalConcepts = new HashSet<>();
-		this.nominals = new HashSet<>();
-		this.functionalRoles = new HashSet<>();
-		this.inverseFunctionalRoles = new HashSet<>();
-		this.transitiveRoles = new HashSet<>();
+		this.nominalConcepts = new HashSet<OWLClass>();
+		this.nominals = new HashSet<OWLNamedIndividual>();
+		this.functionalRoles = new HashSet<OWLObjectProperty>();
+		this.inverseFunctionalRoles = new HashSet<OWLObjectProperty>();
+		this.transitiveRoles = new HashSet<OWLObjectProperty>();
 		this.subRoleMap = new HashMap<OWLObjectProperty, Set<? extends OWLObjectPropertyExpression>>();
-		this.inverseRoleMap= new HashMap<>();
+		this.inverseRoleMap= new HashMap<OWLObjectProperty, Set<OWLObjectPropertyExpression>>();
 	}
 
 	public static MetaDataOfOntology getInstance() {

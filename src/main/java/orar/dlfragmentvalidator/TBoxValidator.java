@@ -21,7 +21,7 @@ public abstract class TBoxValidator {
 
 	public TBoxValidator(Set<OWLAxiom> inputTBoxAxioms) {
 		this.inputTBoxAxioms = inputTBoxAxioms;
-		this.validatedAxioms = new HashSet<>();
+		this.validatedAxioms = new HashSet<OWLAxiom>();
 		this.validatingDone = false;
 		this.dlfrangment = "dlfragment";// default value
 		initAxiomValidator();

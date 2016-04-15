@@ -25,9 +25,9 @@ public class RoleAssertionList {
 
 	public RoleAssertionList() {
 
-		this.subjects = new ArrayList<>();
-		this.roles = new ArrayList<>();
-		this.objects = new ArrayList<>();
+		this.subjects = new ArrayList<OWLNamedIndividual>();
+		this.roles = new ArrayList<OWLObjectProperty>();
+		this.objects = new ArrayList<OWLNamedIndividual>();
 	}
 
 	public void addRoleAssertion(OWLNamedIndividual subject, OWLObjectProperty role, OWLNamedIndividual object) {
@@ -74,7 +74,7 @@ public class RoleAssertionList {
 	 */
 	public Set<OWLObjectPropertyAssertionAxiom> getSetOfRoleAssertions() {
 		OWLDataFactory dataFactory = OWLManager.getOWLDataFactory();
-		Set<OWLObjectPropertyAssertionAxiom> roleAssertions = new HashSet<>();
+		Set<OWLObjectPropertyAssertionAxiom> roleAssertions = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		for (int i = 0; i < getSize(); i++) {
 			OWLObjectPropertyAssertionAxiom newAssertion = dataFactory.getOWLObjectPropertyAssertionAxiom(getRole(i),
 					getSubject(i), getObject(i));

@@ -17,7 +17,7 @@ import orar.modeling.ontology.OrarOntology;
 public class AxiomOfSpecificTypeGetter {
 
 	public static Set<OWLFunctionalObjectPropertyAxiom> getFunctionalAxioms(OrarOntology ontology) {
-		Set<OWLFunctionalObjectPropertyAxiom> functionalAxioms = new HashSet<>();
+		Set<OWLFunctionalObjectPropertyAxiom> functionalAxioms = new HashSet<OWLFunctionalObjectPropertyAxiom>();
 
 		for (OWLAxiom axiom : ontology.getTBoxAxioms()) {
 			if (axiom.isOfType(AxiomType.FUNCTIONAL_OBJECT_PROPERTY)) {
@@ -31,7 +31,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLFunctionalObjectPropertyAxiom> getFunctionalAxioms(Set<OWLAxiom> tboxRboxAxioms) {
-		Set<OWLFunctionalObjectPropertyAxiom> functionalAxioms = new HashSet<>();
+		Set<OWLFunctionalObjectPropertyAxiom> functionalAxioms = new HashSet<OWLFunctionalObjectPropertyAxiom>();
 
 		for (OWLAxiom axiom : tboxRboxAxioms) {
 			if (axiom.isOfType(AxiomType.FUNCTIONAL_OBJECT_PROPERTY)) {
@@ -46,7 +46,7 @@ public class AxiomOfSpecificTypeGetter {
 
 	public static Set<OWLInverseFunctionalObjectPropertyAxiom> getInverseInverseFunctionalPropertyAxioms(
 			OrarOntology ontology) {
-		Set<OWLInverseFunctionalObjectPropertyAxiom> inverseFunctionalAxioms = new HashSet<>();
+		Set<OWLInverseFunctionalObjectPropertyAxiom> inverseFunctionalAxioms = new HashSet<OWLInverseFunctionalObjectPropertyAxiom>();
 		for (OWLAxiom axiom : ontology.getTBoxAxioms()) {
 			if (axiom.isOfType(AxiomType.INVERSE_FUNCTIONAL_OBJECT_PROPERTY)) {
 
@@ -60,7 +60,7 @@ public class AxiomOfSpecificTypeGetter {
 
 	public static Set<OWLInverseFunctionalObjectPropertyAxiom> getInverseInverseFunctionalPropertyAxioms(
 			Set<OWLAxiom> tboxRboxAxioms) {
-		Set<OWLInverseFunctionalObjectPropertyAxiom> inverseFunctionalAxioms = new HashSet<>();
+		Set<OWLInverseFunctionalObjectPropertyAxiom> inverseFunctionalAxioms = new HashSet<OWLInverseFunctionalObjectPropertyAxiom>();
 		for (OWLAxiom axiom : tboxRboxAxioms) {
 			if (axiom.isOfType(AxiomType.INVERSE_FUNCTIONAL_OBJECT_PROPERTY)) {
 
@@ -73,7 +73,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLInverseObjectPropertiesAxiom> getInverseObjectPropertyAxioms(OrarOntology ontology) {
-		Set<OWLInverseObjectPropertiesAxiom> iopAxioms = new HashSet<>();
+		Set<OWLInverseObjectPropertiesAxiom> iopAxioms = new HashSet<OWLInverseObjectPropertiesAxiom>();
 
 		for (OWLAxiom axiom : ontology.getTBoxAxioms()) {
 			if (axiom.isOfType(AxiomType.INVERSE_OBJECT_PROPERTIES)) {
@@ -85,7 +85,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLInverseObjectPropertiesAxiom> getInverseObjectPropertyAxioms(Set<OWLAxiom> tboxRboxAxioms) {
-		Set<OWLInverseObjectPropertiesAxiom> iopAxioms = new HashSet<>();
+		Set<OWLInverseObjectPropertiesAxiom> iopAxioms = new HashSet<OWLInverseObjectPropertiesAxiom>();
 
 		for (OWLAxiom axiom : tboxRboxAxioms) {
 			if (axiom.isOfType(AxiomType.INVERSE_OBJECT_PROPERTIES)) {
@@ -97,7 +97,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLSubObjectPropertyOfAxiom> getSubObjectPropertyAxioms(OrarOntology aromaOntology) {
-		Set<OWLSubObjectPropertyOfAxiom> sopAxioms = new HashSet<>();
+		Set<OWLSubObjectPropertyOfAxiom> sopAxioms = new HashSet<OWLSubObjectPropertyOfAxiom>();
 		for (OWLAxiom axiom : aromaOntology.getTBoxAxioms()) {
 			if (axiom.isOfType(AxiomType.SUB_OBJECT_PROPERTY)) {
 				OWLSubObjectPropertyOfAxiom sopAxiom = (OWLSubObjectPropertyOfAxiom) axiom;
@@ -108,7 +108,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLSubObjectPropertyOfAxiom> getSubObjectPropertyAxioms(Set<OWLAxiom> tboxRboxAxioms) {
-		Set<OWLSubObjectPropertyOfAxiom> sopAxioms = new HashSet<>();
+		Set<OWLSubObjectPropertyOfAxiom> sopAxioms = new HashSet<OWLSubObjectPropertyOfAxiom>();
 		for (OWLAxiom axiom : tboxRboxAxioms) {
 			if (axiom.isOfType(AxiomType.SUB_OBJECT_PROPERTY)) {
 				OWLSubObjectPropertyOfAxiom sopAxiom = (OWLSubObjectPropertyOfAxiom) axiom;
@@ -119,7 +119,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLSymmetricObjectPropertyAxiom> getSymetricPropertyAxioms(OrarOntology aromaOntology) {
-		Set<OWLSymmetricObjectPropertyAxiom> axioms = new HashSet<>();
+		Set<OWLSymmetricObjectPropertyAxiom> axioms = new HashSet<OWLSymmetricObjectPropertyAxiom>();
 		for (OWLAxiom axiom : aromaOntology.getTBoxAxioms()) {
 			if (axiom.isOfType(AxiomType.SYMMETRIC_OBJECT_PROPERTY)) {
 				OWLSymmetricObjectPropertyAxiom symetricAxiom = (OWLSymmetricObjectPropertyAxiom) axiom;
@@ -130,7 +130,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLSymmetricObjectPropertyAxiom> getSymetricPropertyAxioms(Set<OWLAxiom> tboxRboxAxioms) {
-		Set<OWLSymmetricObjectPropertyAxiom> axioms = new HashSet<>();
+		Set<OWLSymmetricObjectPropertyAxiom> axioms = new HashSet<OWLSymmetricObjectPropertyAxiom>();
 		for (OWLAxiom axiom : tboxRboxAxioms) {
 			if (axiom.isOfType(AxiomType.SYMMETRIC_OBJECT_PROPERTY)) {
 				OWLSymmetricObjectPropertyAxiom symetricAxiom = (OWLSymmetricObjectPropertyAxiom) axiom;
@@ -141,7 +141,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLAxiom> getObjectPropertyAxiomsForComputingRoleHierarchy(OrarOntology aromaOntology) {
-		Set<OWLAxiom> axioms = new HashSet<>();
+		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
 		for (OWLAxiom axiom : aromaOntology.getTBoxAxioms()) {
 			if (axiom.isOfType(AxiomType.SUB_OBJECT_PROPERTY) || axiom.isOfType(AxiomType.INVERSE_OBJECT_PROPERTIES)
 					|| axiom.isOfType(AxiomType.SYMMETRIC_OBJECT_PROPERTY)
@@ -154,7 +154,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLAxiom> getObjectPropertyAxiomsForComputingRoleHierarchy(Set<OWLAxiom> tboxRboxAxioms) {
-		Set<OWLAxiom> resultingAxioms = new HashSet<>();
+		Set<OWLAxiom> resultingAxioms = new HashSet<OWLAxiom>();
 		for (OWLAxiom axiom : tboxRboxAxioms) {
 			if (axiom.isOfType(AxiomType.SUB_OBJECT_PROPERTY) || axiom.isOfType(AxiomType.INVERSE_OBJECT_PROPERTIES)
 					|| axiom.isOfType(AxiomType.SYMMETRIC_OBJECT_PROPERTY)
@@ -168,7 +168,7 @@ public class AxiomOfSpecificTypeGetter {
 	}
 
 	public static Set<OWLTransitiveObjectPropertyAxiom> getTranRoleAxioms(Set<OWLAxiom> tboxRboxAxioms) {
-		Set<OWLTransitiveObjectPropertyAxiom> resultingAxioms = new HashSet<>();
+		Set<OWLTransitiveObjectPropertyAxiom> resultingAxioms = new HashSet<OWLTransitiveObjectPropertyAxiom>();
 		for (OWLAxiom axiom : tboxRboxAxioms) {
 			if (axiom.isOfType(AxiomType.TRANSITIVE_OBJECT_PROPERTY)) {
 				resultingAxioms.add((OWLTransitiveObjectPropertyAxiom) axiom);

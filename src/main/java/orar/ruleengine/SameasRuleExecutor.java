@@ -46,14 +46,14 @@ public class SameasRuleExecutor implements RuleExecutor {
 
 	private List<Set<OWLNamedIndividual>> computeConnectedComponents() {
 		Set<OWLNamedIndividual> allIndividualsInSameasMap = this.orarOntology.getSameasBox().getAllIndividuals();
-		Queue<OWLNamedIndividual> todoIndividuals = new LinkedList<>(allIndividualsInSameasMap);
-		List<Set<OWLNamedIndividual>> components = new ArrayList<>();
+		Queue<OWLNamedIndividual> todoIndividuals = new LinkedList<OWLNamedIndividual>(allIndividualsInSameasMap);
+		List<Set<OWLNamedIndividual>> components = new ArrayList<Set<OWLNamedIndividual>>();
 		while (!todoIndividuals.isEmpty()) {
 			OWLNamedIndividual a = todoIndividuals.poll();
 			// compute component for each individual a in todoIndividuals.
-			Set<OWLNamedIndividual> newComponent = new HashSet<>();
+			Set<OWLNamedIndividual> newComponent = new HashSet<OWLNamedIndividual>();
 			newComponent.add(a);
-			Stack<OWLNamedIndividual> stackForDFS = new Stack<>();
+			Stack<OWLNamedIndividual> stackForDFS = new Stack<OWLNamedIndividual>();
 			stackForDFS.push(a);
 			while (!stackForDFS.isEmpty()) {
 				OWLNamedIndividual ind = stackForDFS.pop();
@@ -71,13 +71,13 @@ public class SameasRuleExecutor implements RuleExecutor {
 	@Override
 	public Set<Set<OWLNamedIndividual>> getNewSameasAssertions() {
 		// return empty set in this rule
-		return new HashSet<>();
+		return new HashSet<Set<OWLNamedIndividual>>();
 	}
 
 	@Override
 	public Set<OWLObjectPropertyAssertionAxiom> getNewRoleAssertions() {
 		// return empty set in this rule
-		return new HashSet<>();
+		return new HashSet<OWLObjectPropertyAssertionAxiom>();
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class SameasRuleExecutor implements RuleExecutor {
 	public void incrementalMaterialize(Set<OWLNamedIndividual> setOfSameasIndividuals) {
 //		logger.info("SameasRuleExecutor.incrementalMaterialize");
 		// get union of equivalent individuals in the set.
-		Set<OWLNamedIndividual> accumulatedSameasIndividuals = new HashSet<>();
+		Set<OWLNamedIndividual> accumulatedSameasIndividuals = new HashSet<OWLNamedIndividual>();
 		accumulatedSameasIndividuals.addAll(setOfSameasIndividuals);
 		for (OWLNamedIndividual ind : setOfSameasIndividuals) {
 			accumulatedSameasIndividuals.addAll(this.orarOntology.getSameIndividuals(ind));

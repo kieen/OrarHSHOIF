@@ -53,10 +53,10 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 	// role-hierarchy rule, trans rule, and functionality rule.
 
 	public MapbasedRoleAssertionBox() {
-		this.roleAssertionMapWithSubjectAsKey = new HashMap<>();
-		this.roleAssertionMapWithObjectAsKey = new HashMap<>();
-		this.roleAssertionMapWithRoleAsKeyAndObjectAsValue = new HashMap<>();
-		this.roleAssertionMapWithRoleAsKeyAndSubjectAsValue = new HashMap<>();
+		this.roleAssertionMapWithSubjectAsKey = new HashMap<OWLNamedIndividual, Map<OWLObjectProperty, Set<OWLNamedIndividual>>>();
+		this.roleAssertionMapWithObjectAsKey = new HashMap<OWLNamedIndividual, Map<OWLObjectProperty, Set<OWLNamedIndividual>>>();
+		this.roleAssertionMapWithRoleAsKeyAndObjectAsValue = new HashMap<OWLObjectProperty, Set<OWLNamedIndividual>>();
+		this.roleAssertionMapWithRoleAsKeyAndSubjectAsValue = new HashMap<OWLObjectProperty, Set<OWLNamedIndividual>>();
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 		// TODO: optimization: add only in case of TRANS or FUCTIONAL roles
 		Set<OWLNamedIndividual> existingSet = roleAssertionMapWithRoleAsKey.get(role);
 		if (existingSet == null) {
-			existingSet = new HashSet<>();
+			existingSet = new HashSet<OWLNamedIndividual>();
 		}
 		existingSet.add(individual);
 		roleAssertionMapWithRoleAsKey.put(role, existingSet);
@@ -95,11 +95,11 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 
 		Map<OWLObjectProperty, Set<OWLNamedIndividual>> subMap = map.get(ind1);
 		if (subMap == null) {
-			subMap = new HashMap<>();
+			subMap = new HashMap<OWLObjectProperty, Set<OWLNamedIndividual>>();
 		}
 		Set<OWLNamedIndividual> neighbours = subMap.get(property);
 		if (neighbours == null) {
-			neighbours = new HashSet<>();
+			neighbours = new HashSet<OWLNamedIndividual>();
 		}
 		boolean addingSuccess = neighbours.add(ind2);
 		subMap.put(property, neighbours);
@@ -132,7 +132,7 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 	@Override
 	public Set<OWLObjectPropertyAssertionAxiom> getOWLAPIRoleAssertions() {
 		OWLDataFactory owlDataFactory = OWLManager.getOWLDataFactory();
-		Set<OWLObjectPropertyAssertionAxiom> assertions = new HashSet<>();
+		Set<OWLObjectPropertyAssertionAxiom> assertions = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		Iterator<Entry<OWLNamedIndividual, Map<OWLObjectProperty, Set<OWLNamedIndividual>>>> iterator = this.roleAssertionMapWithSubjectAsKey
 				.entrySet().iterator();
 		while (iterator.hasNext()) {
@@ -158,9 +158,9 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 	public Set<OWLNamedIndividual> getSubjectsInRoleAssertions(OWLObjectProperty role) {
 		Set<OWLNamedIndividual> subjects = this.roleAssertionMapWithRoleAsKeyAndSubjectAsValue.get(role);
 		if (subjects != null) {
-			return new HashSet<>(subjects);
+			return new HashSet<OWLNamedIndividual>(subjects);
 		} else {
-			return new HashSet<>();
+			return new HashSet<OWLNamedIndividual>();
 		}
 	}
 
@@ -168,15 +168,15 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 	public Set<OWLNamedIndividual> getObjectsInRoleAssertions(OWLObjectProperty role) {
 		Set<OWLNamedIndividual> subjects = this.roleAssertionMapWithRoleAsKeyAndObjectAsValue.get(role);
 		if (subjects != null) {
-			return new HashSet<>(subjects);
+			return new HashSet<OWLNamedIndividual>(subjects);
 		} else {
-			return new HashSet<>();
+			return new HashSet<OWLNamedIndividual>();
 		}
 	}
 
 	@Override
 	public Set<OWLNamedIndividual> getAllIndividuals() {
-		Set<OWLNamedIndividual> allIndividuals = new HashSet<>();
+		Set<OWLNamedIndividual> allIndividuals = new HashSet<OWLNamedIndividual>();
 		allIndividuals.addAll(this.roleAssertionMapWithSubjectAsKey.keySet());
 		allIndividuals.addAll(this.roleAssertionMapWithObjectAsKey.keySet());
 		return allIndividuals;
@@ -188,7 +188,7 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 		Map<OWLObjectProperty, Set<OWLNamedIndividual>> successorAssertionsAsMap = this.roleAssertionMapWithSubjectAsKey
 				.get(subjectIndividual);
 		if (successorAssertionsAsMap==null) {
-			successorAssertionsAsMap = new HashMap<>();
+			successorAssertionsAsMap = new HashMap<OWLObjectProperty, Set<OWLNamedIndividual>>();
 		}
 		return successorAssertionsAsMap;
 	}
@@ -199,7 +199,7 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 		Map<OWLObjectProperty, Set<OWLNamedIndividual>> predecessorAssertionsAsMap = this.roleAssertionMapWithObjectAsKey
 				.get(objectIndividual);
 		if (predecessorAssertionsAsMap==null) {
-			predecessorAssertionsAsMap = new HashMap<>();
+			predecessorAssertionsAsMap = new HashMap<OWLObjectProperty, Set<OWLNamedIndividual>>();
 		}
 		return predecessorAssertionsAsMap;
 	}

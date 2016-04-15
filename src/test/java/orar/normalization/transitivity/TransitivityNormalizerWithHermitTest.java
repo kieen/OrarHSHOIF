@@ -60,7 +60,7 @@ public class TransitivityNormalizerWithHermitTest {
 		/*
 		 * compare results
 		 */
-		Set<OWLAxiom> expectedAxioms = new HashSet<>();
+		Set<OWLAxiom> expectedAxioms = new HashSet<OWLAxiom>();
 		expectedAxioms.addAll(ontology1.getAxioms());
 
 		OWLClass C1 = testData
@@ -99,7 +99,7 @@ public class TransitivityNormalizerWithHermitTest {
 		/*
 		 * compare results
 		 */
-		Set<OWLAxiom> expectedAxioms = new HashSet<>();
+		Set<OWLAxiom> expectedAxioms = new HashSet<OWLAxiom>();
 		expectedAxioms.addAll(ontology2.getAxioms());
 
 		OWLClass C1 = testData
@@ -145,7 +145,7 @@ public class TransitivityNormalizerWithHermitTest {
 		/*
 		 * compare results
 		 */
-		Set<OWLAxiom> expectedAxioms = new HashSet<>();
+		Set<OWLAxiom> expectedAxioms = new HashSet<OWLAxiom>();
 		expectedAxioms.addAll(ontology3.getAxioms());
 
 		OWLClass C1 = testData
@@ -191,7 +191,7 @@ public class TransitivityNormalizerWithHermitTest {
 		/*
 		 * compare results
 		 */
-		Set<OWLAxiom> expectedAxioms = new HashSet<>();
+		Set<OWLAxiom> expectedAxioms = new HashSet<OWLAxiom>();
 		expectedAxioms.addAll(ontology4.getAxioms());
 
 		OWLClass C1 = testData

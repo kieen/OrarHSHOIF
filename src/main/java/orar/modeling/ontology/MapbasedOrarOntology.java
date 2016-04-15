@@ -65,15 +65,15 @@ public class MapbasedOrarOntology implements OrarOntology {
 	private DLFragment targetDLFragment;
 
 	public MapbasedOrarOntology() {
-		this.tboxAxioms = new HashSet<>();
+		this.tboxAxioms = new HashSet<OWLAxiom>();
 		this.conceptAssertionBox = new MapbasedConceptAssertionBox();
 		this.roleAssertionBox = new MapbasedRoleAssertionBox();
 		this.sameasBox = new MapbasedSameAsBox();
 
-		this.individualsInSignature = new HashSet<>();
-		this.conceptNamesInSignature = new HashSet<>();
-		this.roleNamesInSignature = new HashSet<>();
-		this.actualDLConstructors = new HashSet<>();
+		this.individualsInSignature = new HashSet<OWLNamedIndividual>();
+		this.conceptNamesInSignature = new HashSet<OWLClass>();
+		this.roleNamesInSignature = new HashSet<OWLObjectProperty>();
+		this.actualDLConstructors = new HashSet<DLConstructor>();
 	}
 
 	/*
@@ -186,12 +186,12 @@ public class MapbasedOrarOntology implements OrarOntology {
 		OWLDataFactory owlDataFactory = manager.getOWLDataFactory();
 		OWLClass thingConcept = OWLManager.getOWLDataFactory().getOWLThing();
 		Set<OWLNamedIndividual> allIndividuals = this.getIndividualsInSignature();
-		Set<OWLClassAssertionAxiom> conceptAssertions = new HashSet<>();
+		Set<OWLClassAssertionAxiom> conceptAssertions = new HashSet<OWLClassAssertionAxiom>();
 		for (OWLNamedIndividual a : allIndividuals) {
 			Set<OWLNamedIndividual> sameasOfa = this.getSameIndividuals(a);
 			sameasOfa.add(a);
 			// logger.info(" ***********sameas a:"+sameasOfa);
-			Set<OWLClass> assertedConcepts = new HashSet<>();
+			Set<OWLClass> assertedConcepts = new HashSet<OWLClass>();
 			for (OWLNamedIndividual eachInd : sameasOfa) {
 				assertedConcepts.addAll(this.getAssertedConcepts(eachInd));
 			}
@@ -223,7 +223,7 @@ public class MapbasedOrarOntology implements OrarOntology {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLDataFactory owlDataFactory = manager.getOWLDataFactory();
 		Set<OWLNamedIndividual> allIndividuals = this.getIndividualsInSignature();
-		Set<OWLObjectPropertyAssertionAxiom> resultingRoleAssertions = new HashSet<>();
+		Set<OWLObjectPropertyAssertionAxiom> resultingRoleAssertions = new HashSet<OWLObjectPropertyAssertionAxiom>();
 
 		for (OWLNamedIndividual ind_a : allIndividuals) {
 			Set<OWLNamedIndividual> sameasOf_a = getSameIndividuals(ind_a);
@@ -314,7 +314,7 @@ public class MapbasedOrarOntology implements OrarOntology {
 	public Set<OWLNamedIndividual> getSameIndividuals(OWLNamedIndividual individual) {
 		Set<OWLNamedIndividual> equalIndividuals = this.sameasBox.getSameIndividuals(individual);
 		if (equalIndividuals == null) {
-			equalIndividuals = new HashSet<>();
+			equalIndividuals = new HashSet<OWLNamedIndividual>();
 		}
 		return equalIndividuals;
 	}
@@ -342,7 +342,7 @@ public class MapbasedOrarOntology implements OrarOntology {
 				.getPredecessorRoleAssertionsAsMap(object);
 		Set<OWLNamedIndividual> setOfPredecessors = predecessorAssertionAsMap.get(role);
 		if (setOfPredecessors == null) {
-			setOfPredecessors = new HashSet<>();
+			setOfPredecessors = new HashSet<OWLNamedIndividual>();
 		}
 		return setOfPredecessors;
 	}
@@ -353,7 +353,7 @@ public class MapbasedOrarOntology implements OrarOntology {
 				.getSuccesorRoleAssertionsAsMap(subject);
 		Set<OWLNamedIndividual> setOfSuccessors = successorAssertionAsMap.get(role);
 		if (setOfSuccessors == null) {
-			setOfSuccessors = new HashSet<>();
+			setOfSuccessors = new HashSet<OWLNamedIndividual>();
 		}
 		return setOfSuccessors;
 	}
@@ -379,7 +379,7 @@ public class MapbasedOrarOntology implements OrarOntology {
 	@Override
 	public Set<OWLNamedIndividual> getPredecessorsTakingEqualityIntoAccount(OWLNamedIndividual object,
 			OWLObjectProperty role) {
-		Set<OWLNamedIndividual> subjects = new HashSet<>();
+		Set<OWLNamedIndividual> subjects = new HashSet<OWLNamedIndividual>();
 		Set<OWLNamedIndividual> equivalentIndsOf_object = this.getSameIndividuals(object);
 		equivalentIndsOf_object.add(object);
 		for (OWLNamedIndividual eachobject : equivalentIndsOf_object) {
@@ -391,7 +391,7 @@ public class MapbasedOrarOntology implements OrarOntology {
 	@Override
 	public Set<OWLNamedIndividual> getSuccessorsTakingEqualityIntoAccount(OWLNamedIndividual subject,
 			OWLObjectProperty role) {
-		Set<OWLNamedIndividual> objects = new HashSet<>();
+		Set<OWLNamedIndividual> objects = new HashSet<OWLNamedIndividual>();
 		Set<OWLNamedIndividual> equivalentIndsOf_subject = getSameIndividuals(subject);
 		equivalentIndsOf_subject.add(subject);
 		for (OWLNamedIndividual eachSubject : equivalentIndsOf_subject) {
@@ -422,12 +422,12 @@ public class MapbasedOrarOntology implements OrarOntology {
 	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getEntailedSameasAssertions() {
 		Set<OWLNamedIndividual> allIndividuals = getIndividualsInSignature();
 //		logger.info("***DEBUG*** all Individuals:"+allIndividuals);
-		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> allEntailedSameasMap = new HashMap<>(
+		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> allEntailedSameasMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>(
 				getSameasBox().getSameasMap());
 		for (OWLNamedIndividual ind : allIndividuals) {
 			Set<OWLNamedIndividual> existingInds = allEntailedSameasMap.get(ind);
 			if (existingInds == null) {
-				existingInds = new HashSet<>();
+				existingInds = new HashSet<OWLNamedIndividual>();
 				existingInds.add(ind);
 			}
 			existingInds.add(ind);

@@ -41,14 +41,14 @@ public class HermitRoleReasoner implements RoleReasoner {
 	private OWLDataFactory owlDataFactory;
 
 	public HermitRoleReasoner(Set<OWLAxiom> tboxRboxAxioms) {
-		this.functionalRoles = new HashSet<>();
-		this.inverseFunctionalRoles = new HashSet<>();
-		this.subRoleMaps = new HashMap<>();
-		this.transitiveRoles = new HashSet<>();
+		this.functionalRoles = new HashSet<OWLObjectProperty>();
+		this.inverseFunctionalRoles = new HashSet<OWLObjectProperty>();
+		this.subRoleMaps = new HashMap<OWLObjectProperty, Set<OWLObjectPropertyExpression>>();
+		this.transitiveRoles = new HashSet<OWLObjectProperty>();
 
 		this.tboxRboxAxioms = tboxRboxAxioms;
 		this.owlDataFactory = OWLManager.getOWLDataFactory();
-		this.inverseRoleMap = new HashMap<>();
+		this.inverseRoleMap = new HashMap<OWLObjectProperty, Set<OWLObjectPropertyExpression>>();
 
 	}
 
@@ -310,7 +310,7 @@ public class HermitRoleReasoner implements RoleReasoner {
 	private void addEntryToAMap(OWLObjectProperty key, Set<OWLObjectPropertyExpression> values, Map<OWLObjectProperty, Set<OWLObjectPropertyExpression>> map) {
 		Set<OWLObjectPropertyExpression> existingValues = map.get(key);
 		if (existingValues == null) {
-			existingValues = new HashSet<>();
+			existingValues = new HashSet<OWLObjectPropertyExpression>();
 		}
 		existingValues.addAll(values);
 		map.put(key, existingValues);

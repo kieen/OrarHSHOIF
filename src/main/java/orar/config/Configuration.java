@@ -34,8 +34,8 @@ public class Configuration {
 		// koncludeConfigFileName="/data/kien/benchmark/software/konclude-load-config.xml";
 		savedOntologyFileName = "ontologyForKonclude.funcionalsyntax.owl";
 
-		this.logInfos = new HashSet<>();
-		this.debuglevels = new HashSet<>();
+		this.logInfos = new HashSet<LogInfo>();
+		this.debuglevels = new HashSet<DebugLevel>();
 	}
 
 	public static Configuration getInstance() {

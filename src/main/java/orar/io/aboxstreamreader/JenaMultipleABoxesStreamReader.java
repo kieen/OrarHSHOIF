@@ -42,7 +42,7 @@ public class JenaMultipleABoxesStreamReader implements ABoxStreamReader {
 	}
 
 	private Set<String> getABoxList(String aboxListFile) {
-		Set<String> aboxList = new HashSet<>();
+		Set<String> aboxList = new HashSet<String>();
 
 		File file = new File(aboxListFile);
 		try {

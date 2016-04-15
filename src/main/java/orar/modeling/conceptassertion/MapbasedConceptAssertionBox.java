@@ -33,13 +33,13 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 		if (assertedConcepts != null) {
 			return assertedConcepts;
 		}
-		return new HashSet<>();
+		return new HashSet<OWLClass>();
 
 	}
 
 	@Override
 	public Set<OWLClassAssertionAxiom> getOWLAPIConceptAssertions() {
-		Set<OWLClassAssertionAxiom> classAssertionAxioms = new HashSet<>();
+		Set<OWLClassAssertionAxiom> classAssertionAxioms = new HashSet<OWLClassAssertionAxiom>();
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLDataFactory owlDataFactory = manager.getOWLDataFactory();
 
@@ -62,9 +62,11 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 
 		Set<OWLClass> existingClasses = this.conceptAssertionMap.get(individual);
 		if (existingClasses == null) {
-			existingClasses = new HashSet<>();
+			existingClasses = new HashSet<OWLClass>();
 		}
+
 		boolean hasNewElement = existingClasses.addAll(concepts);
+
 		this.conceptAssertionMap.put(individual, existingClasses);
 		return hasNewElement;
 	}
@@ -73,7 +75,7 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 	public boolean addConceptAssertion(OWLNamedIndividual individual, OWLClass concept) {
 		Set<OWLClass> existingClasses = this.conceptAssertionMap.get(individual);
 		if (existingClasses == null) {
-			existingClasses = new HashSet<>();
+			existingClasses = new HashSet<OWLClass>();
 		}
 		boolean hasNewElement = existingClasses.add(concept);
 		this.conceptAssertionMap.put(individual, existingClasses);
@@ -99,7 +101,7 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 	@Override
 	public Set<OWLClassAssertionAxiom> getOWLAPIConceptAssertionsWithoutNormalizationSymbols() {
 
-		Set<OWLClassAssertionAxiom> classAssertionAxioms = new HashSet<>();
+		Set<OWLClassAssertionAxiom> classAssertionAxioms = new HashSet<OWLClassAssertionAxiom>();
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLDataFactory owlDataFactory = manager.getOWLDataFactory();
 		OWLClass thingConcept = OWLManager.getOWLDataFactory().getOWLThing();
@@ -128,7 +130,7 @@ public class MapbasedConceptAssertionBox implements ConceptAssertionBox {
 
 	@Override
 	public Set<OWLNamedIndividual> getAllIndividuals() {
-		return new HashSet<>(this.conceptAssertionMap.keySet());
+		return new HashSet<OWLNamedIndividual>(this.conceptAssertionMap.keySet());
 	}
 
 }

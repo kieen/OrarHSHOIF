@@ -51,7 +51,7 @@ public class JenaABoxStreamReaderTest {
 		 * Note that sometimes, TBox files does contain assertions. We must take
 		 * that into account.
 		 */
-		HashSet<OWLClassAssertionAxiom> conceptAssertoinOfOrarOntologyPlusAssertionInTBox = new HashSet<>(
+		HashSet<OWLClassAssertionAxiom> conceptAssertoinOfOrarOntologyPlusAssertionInTBox = new HashSet<OWLClassAssertionAxiom>(
 				conceptAssertoinOfOrarOntology);
 		conceptAssertoinOfOrarOntologyPlusAssertionInTBox.addAll(tbox.getAxioms(AxiomType.CLASS_ASSERTION, true));
 
@@ -86,7 +86,7 @@ public class JenaABoxStreamReaderTest {
 		 * Note that sometimes, TBox files does contain assertions. We must take
 		 * that into account.
 		 */
-		Set<OWLObjectPropertyAssertionAxiom> roleAssertionOfOrarOntologyPlusOnesInTBox = new HashSet<>(
+		Set<OWLObjectPropertyAssertionAxiom> roleAssertionOfOrarOntologyPlusOnesInTBox = new HashSet<OWLObjectPropertyAssertionAxiom>(
 				roleAssertionOfOrarOntology);
 		roleAssertionOfOrarOntologyPlusOnesInTBox.addAll(tbox.getAxioms(AxiomType.OBJECT_PROPERTY_ASSERTION, true));
 

@@ -211,7 +211,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 	}
 
 	private void getRoleAssertionOfInstancesOfSingletonConcepts() {
-		Set<OWLNamedIndividual> individuals = new HashSet<>(this.instancesOfSingletonConcepts);
+		Set<OWLNamedIndividual> individuals = new HashSet<OWLNamedIndividual>(this.instancesOfSingletonConcepts);
 		if (config.getDebuglevels().contains(DebugLevel.PRINT_MARKING_INDIVIDUALS)) {
 			logger.info("***DEBUG*** individuals are instances of singleton concepts:");
 			PrintingHelper.printSet(individuals);
@@ -248,7 +248,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 	}
 
 	private void getInverseRoleAssertionOfInstancesOfSingletonConcepts() {
-		Set<OWLNamedIndividual> allPredecessorsOfSingletonConcepts = new HashSet<>(
+		Set<OWLNamedIndividual> allPredecessorsOfSingletonConcepts = new HashSet<OWLNamedIndividual>(
 				this.instancesOfPredecessorOfSingletonConcept);
 		// retain only to U
 		allPredecessorsOfSingletonConcepts.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
@@ -323,7 +323,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 				.iterator();
 		while (iterator.hasNext()) {
 			Entry<OWLClass, Set<OWLNamedIndividual>> entry = iterator.next();
-			Set<OWLNamedIndividual> sameInds = new HashSet<>(entry.getValue());
+			Set<OWLNamedIndividual> sameInds = new HashSet<OWLNamedIndividual>(entry.getValue());
 			/*
 			 * retain only u and x
 			 */
@@ -345,7 +345,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 	private void addToSameAsMap(OWLNamedIndividual ind, Set<OWLNamedIndividual> sameInds) {
 		Set<OWLNamedIndividual> existingElements = this.sameAsMap.get(ind);
 		if (existingElements == null) {
-			existingElements = new HashSet<>();
+			existingElements = new HashSet<OWLNamedIndividual>();
 		}
 		existingElements.addAll(sameInds);
 		this.sameAsMap.put(ind, existingElements);
@@ -357,11 +357,11 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 		// this.abstractDataFactory.getUAbstractIndividuals();
 		// logger.info("***DEBUG***number of u
 		// individuals:"+this.abstractDataFactory.getUAbstractIndividuals().size());
-		Set<OWLNamedIndividual> instancesOfSingletonConcepts = new HashSet<>(this.instancesOfSingletonConcepts);
+		Set<OWLNamedIndividual> instancesOfSingletonConcepts = new HashSet<OWLNamedIndividual>(this.instancesOfSingletonConcepts);
 		instancesOfSingletonConcepts.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
 		// logger.info("***DEBUG***number of u individuals in the ontology:"+
 		// allIndividualsFromConceptType.size());
-		Queue<OWLNamedIndividual> todoIndividuals = new LinkedList<>(instancesOfSingletonConcepts);
+		Queue<OWLNamedIndividual> todoIndividuals = new LinkedList<OWLNamedIndividual>(instancesOfSingletonConcepts);
 		while (!todoIndividuals.isEmpty()) {
 			OWLNamedIndividual anIndividual = todoIndividuals.poll();
 			Set<OWLNamedIndividual> equivalentIndividuals = reasoner.getSameIndividuals(anIndividual).getEntities();

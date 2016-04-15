@@ -70,8 +70,8 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		/*
 		 * init data
 		 */
-		this.conceptAssertionsMap = new HashMap<>();
-		this.sameAsMap = new HashMap<>();
+		this.conceptAssertionsMap = new HashMap<OWLNamedIndividual, Set<OWLClass>>();
+		this.sameAsMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
 		this.roleAssertionList = new AbstractRoleAssertionBox();
 
 		/*
@@ -86,17 +86,17 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		this.metadataOfOntology = MetaDataOfOntology.getInstance();
 
 		this.axiomsAdder = new MarkingAxiomAdder(owlOntology);
-		this.instancesOfSingletonConcepts = new HashSet<>();
-		this.instancesOfLoopConcepts = new HashSet<>();
-		this.instancesOfHasTranConcepts = new HashSet<>();
-		this.instancesOfPredecessorOfSingletonConcept = new HashSet<>();
-		this.rolesForPredecessorOfSingletonConcept = new HashSet<>();
+		this.instancesOfSingletonConcepts = new HashSet<OWLNamedIndividual>();
+		this.instancesOfLoopConcepts = new HashSet<OWLNamedIndividual>();
+		this.instancesOfHasTranConcepts = new HashSet<OWLNamedIndividual>();
+		this.instancesOfPredecessorOfSingletonConcept = new HashSet<OWLNamedIndividual>();
+		this.rolesForPredecessorOfSingletonConcept = new HashSet<OWLObjectProperty>();
 		/*
 		 * maps
 		 */
-		this.nominalConceptMap2Instances = new HashMap<>();
-		this.predecessorOfNominalMap2Instances = new HashMap<>();
-		this.successorOfNominalMap2Instances = new HashMap<>();
+		this.nominalConceptMap2Instances = new HashMap<OWLClass, Set<OWLNamedIndividual>>();
+		this.predecessorOfNominalMap2Instances = new HashMap<OWLClass, Set<OWLNamedIndividual>>();
+		this.successorOfNominalMap2Instances = new HashMap<OWLClass, Set<OWLNamedIndividual>>();
 	}
 
 	@Override
@@ -284,14 +284,14 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 
 			else {
 				if (this.metadataOfOntology.getNominalConcepts().contains(eachConceptName)) {
-					this.nominalConceptMap2Instances.put(eachConceptName, new HashSet<>(instances));
+					this.nominalConceptMap2Instances.put(eachConceptName, new HashSet<OWLNamedIndividual>(instances));
 				}
 				/*
 				 * filter out asserted instances
 				 */
 				Set<OWLClassAssertionAxiom> assertedAssertions = this.owlOntology
 						.getClassAssertionAxioms(eachConceptName);
-				Set<OWLNamedIndividual> assertedIndividuals = new HashSet<>();
+				Set<OWLNamedIndividual> assertedIndividuals = new HashSet<OWLNamedIndividual>();
 				for (OWLClassAssertionAxiom eachAssertion : assertedAssertions) {
 					assertedIndividuals.add(eachAssertion.getIndividual().asOWLNamedIndividual());
 				}
@@ -343,7 +343,7 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		for (OWLNamedIndividual ind : instances) {
 			Set<OWLClass> concepts = this.conceptAssertionsMap.get(ind);
 			if (concepts == null) {
-				concepts = new HashSet<>();
+				concepts = new HashSet<OWLClass>();
 			}
 			concepts.add(concept);
 			this.conceptAssertionsMap.put(ind, concepts);

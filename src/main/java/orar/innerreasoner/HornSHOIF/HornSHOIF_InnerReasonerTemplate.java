@@ -27,7 +27,7 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 	 */
 	@Override
 	protected void computeRoleAssertionForInstancesOfLoopConcepts() {
-		Set<OWLNamedIndividual> individuals = new HashSet<>(this.instancesOfLoopConcepts);
+		Set<OWLNamedIndividual> individuals = new HashSet<OWLNamedIndividual>(this.instancesOfLoopConcepts);
 		/*
 		 * retain only U-individuals.
 		 */
@@ -51,7 +51,7 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 	 */
 	@Override
 	protected void computeRoleAssertionForInstancesOfConceptHasTranRole() {
-		Set<OWLNamedIndividual> individuals = new HashSet<>(this.instancesOfHasTranConcepts);
+		Set<OWLNamedIndividual> individuals = new HashSet<OWLNamedIndividual>(this.instancesOfHasTranConcepts);
 		/*
 		 * retain only U-individuals.
 		 */
@@ -92,7 +92,7 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 
 	@Override
 	protected void computeRoleAssertionForInstancesOfSingletonConcept() {
-		Set<OWLNamedIndividual> individuals = new HashSet<>(this.instancesOfSingletonConcepts);
+		Set<OWLNamedIndividual> individuals = new HashSet<OWLNamedIndividual>(this.instancesOfSingletonConcepts);
 		for (Set<OWLNamedIndividual> eachSetOfNominals:this.nominalConceptMap2Instances.values()){
 		individuals.addAll(eachSetOfNominals);
 		}
@@ -170,7 +170,7 @@ public abstract class HornSHOIF_InnerReasonerTemplate extends InnerReasonerTempl
 		allIndividualsFromConceptType.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
 		// logger.info("***DEBUG***number of u individuals in the ontology:"+
 		// allIndividualsFromConceptType.size());
-		Queue<OWLNamedIndividual> todoIndividuals = new LinkedList<>(allIndividualsFromConceptType);
+		Queue<OWLNamedIndividual> todoIndividuals = new LinkedList<OWLNamedIndividual>(allIndividualsFromConceptType);
 		while (!todoIndividuals.isEmpty()) {
 			OWLNamedIndividual anIndividual = todoIndividuals.poll();
 			Set<OWLNamedIndividual> equivalentIndividuals = reasoner.getSameIndividuals(anIndividual).getEntities();

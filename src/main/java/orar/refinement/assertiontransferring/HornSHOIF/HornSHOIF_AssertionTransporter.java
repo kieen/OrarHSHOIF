@@ -6,16 +6,20 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
+import orar.config.DebugLevel;
 import orar.modeling.ontology.OrarOntology;
 import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
 import orar.refinement.abstractroleassertion.RoleAssertionList;
 import orar.refinement.assertiontransferring.AssertionTransporterTemplate;
+import orar.util.PrintingHelper;
 
 public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate {
+	private Logger logger = Logger.getLogger(HornSHOIF_AssertionTransporter.class);
 
 	public HornSHOIF_AssertionTransporter(OrarOntology orarOntoloy,
 			Map<OWLNamedIndividual, Set<OWLClass>> abstractConceptAssertionsAsMap,
@@ -34,7 +38,7 @@ public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate
 		while (iterator.hasNext()) {
 			Entry<OWLNamedIndividual, Set<OWLNamedIndividual>> entry = iterator.next();
 			// compute a set of equivalent individuals in the original ABox
-			Set<OWLNamedIndividual> equivalentOriginalInds = new HashSet<>();
+			Set<OWLNamedIndividual> equivalentOriginalInds = new HashSet<OWLNamedIndividual>();
 			// for the key
 			OWLNamedIndividual u = entry.getKey();
 			Set<OWLNamedIndividual> originalInds_of_u = this.dataForTransferingEntailments.getOriginalIndividuals(u);
@@ -46,26 +50,18 @@ public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate
 						.addAll(this.dataForTransferingEntailments.getOriginalIndividuals(eachAbstractInd));
 			}
 
-			// add sameas assertions to the original Abox.
-			// boolean newAssertionsAdded = false;
 			if (equivalentOriginalInds.size() > 1) {
 				if (this.orarOntology.addSameasAssertion(equivalentOriginalInds)) {
 					this.isABoxExtended = true;
+					if (this.config.getDebuglevels().contains(DebugLevel.TRANSFER_SAMEAS)) {
+						logger.info("***DEBUG***TRANSFER_SAMEAS:");
+						PrintingHelper.printSet(equivalentOriginalInds);
+						logger.info("updated=true");
+					}
 					this.newSameasAssertions.add(equivalentOriginalInds);
 				}
 			}
-			//
-			// for (OWLNamedIndividual eachOriginalInd : equivalentOriginalInds)
-			// {
-			// if (this.orarOntology.addManySameAsAssertions(eachOriginalInd,
-			// equivalentOriginalInds)) {
-			// newAssertionsAdded = true;
-			// }
-			// }
-			// if (newAssertionsAdded) {
-			// this.isABoxExtended = true;
-			// this.newSameasAssertions.add(equivalentOriginalInds);
-			// }
+
 		}
 
 	}
@@ -95,6 +91,12 @@ public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate
 					if (this.orarOntology.addRoleAssertion(originalSubject, role, originalObject)) {
 						this.isABoxExtended = true;
 						this.newRoleAssertions.addRoleAssertion(originalSubject, role, originalObject);
+
+						if (this.config.getDebuglevels().contains(DebugLevel.TRANSFER_ROLEASSERTION)) {
+							logger.info("***DEBUG***TRANSFER_ROLEASSERTION:");
+							logger.info(originalSubject + ", " + role + ", " + originalObject);
+							logger.info("updated=true");
+						}
 					}
 				}
 
@@ -118,6 +120,12 @@ public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate
 				if (this.orarOntology.addRoleAssertion(originalSubject, role, nominal)) {
 					this.isABoxExtended = true;
 					this.newRoleAssertions.addRoleAssertion(originalSubject, role, nominal);
+					
+					if (this.config.getDebuglevels().contains(DebugLevel.TRANSFER_ROLEASSERTION)) {
+						logger.info("***DEBUG***TRANSFER_ROLEASSERTION:");
+						logger.info(originalSubject + ", " + role + ", " + nominal);
+						logger.info("updated=true");
+					}
 				}
 
 			}
@@ -140,6 +148,12 @@ public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate
 				if (this.orarOntology.addRoleAssertion(nominal, role, eachOriginalObject)) {
 					this.isABoxExtended = true;
 					this.newRoleAssertions.addRoleAssertion(nominal, role, eachOriginalObject);
+					
+					if (this.config.getDebuglevels().contains(DebugLevel.TRANSFER_ROLEASSERTION)) {
+						logger.info("***DEBUG***TRANSFER_ROLEASSERTION:");
+						logger.info(nominal + ", " + role + ", " + eachOriginalObject);
+						logger.info("updated=true");
+					}
 				}
 
 			}

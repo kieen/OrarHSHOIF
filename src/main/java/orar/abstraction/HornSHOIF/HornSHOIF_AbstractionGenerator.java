@@ -21,7 +21,7 @@ public class HornSHOIF_AbstractionGenerator extends HornSHIF_AbstractionGenerato
 
 	@Override
 	protected Set<OWLAxiom> getConceptAssertionsForConceptType(IndividualType type) {
-		Set<OWLAxiom> abstractAssertions = new HashSet<>();
+		Set<OWLAxiom> abstractAssertions = new HashSet<OWLAxiom>();
 		/*
 		 * create u
 		 */

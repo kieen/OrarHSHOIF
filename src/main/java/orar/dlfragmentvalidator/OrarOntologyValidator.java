@@ -16,7 +16,7 @@ public abstract class OrarOntologyValidator {
 
 	public OrarOntologyValidator(OrarOntology inputOrarOntology) {
 		this.inputOrarOntology = inputOrarOntology;
-		this.validatedAxioms = new HashSet<>();
+		this.validatedAxioms = new HashSet<OWLAxiom>();
 		this.validatingDone = false;
 		this.dlfrangment = "dlfragment";// default value
 		initAxiomValidator();

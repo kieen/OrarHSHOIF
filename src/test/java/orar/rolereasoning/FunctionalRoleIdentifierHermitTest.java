@@ -77,7 +77,7 @@ public class FunctionalRoleIdentifierHermitTest {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology ontology = manager.loadOntologyFromOntologyDocument(new File(file));
 
-		Set<OWLAxiom> tboxRboxAxioms = new HashSet<>();
+		Set<OWLAxiom> tboxRboxAxioms = new HashSet<OWLAxiom>();
 		tboxRboxAxioms.addAll(ontology.getTBoxAxioms(true));
 		tboxRboxAxioms.addAll(ontology.getRBoxAxioms(true));
 
@@ -99,13 +99,13 @@ public class FunctionalRoleIdentifierHermitTest {
 		OWLObjectProperty invSubF1 = defautDataFact.getRole("InvSubF1");
 		OWLObjectProperty invSubF2 = defautDataFact.getRole("InvSubF2");
 
-		Set<OWLObjectProperty> expectedFunctionalRoles = new HashSet<>();
+		Set<OWLObjectProperty> expectedFunctionalRoles = new HashSet<OWLObjectProperty>();
 		expectedFunctionalRoles.add(f1);
 		expectedFunctionalRoles.add(subF1);
 		expectedFunctionalRoles.add(invSubF2);
 		expectedFunctionalRoles.add(f3);
 
-		Set<OWLObjectProperty> expectedInverseFunctionalRoles = new HashSet<>();
+		Set<OWLObjectProperty> expectedInverseFunctionalRoles = new HashSet<OWLObjectProperty>();
 		expectedInverseFunctionalRoles.add(f2);
 		expectedInverseFunctionalRoles.add(subF2);
 		expectedInverseFunctionalRoles.add(invSubF1);
@@ -128,7 +128,7 @@ public class FunctionalRoleIdentifierHermitTest {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		OWLOntology ontology = manager.loadOntologyFromOntologyDocument(new File(file));
 
-		Set<OWLAxiom> tboxRboxAxioms = new HashSet<>();
+		Set<OWLAxiom> tboxRboxAxioms = new HashSet<OWLAxiom>();
 		tboxRboxAxioms.addAll(ontology.getTBoxAxioms(true));
 		tboxRboxAxioms.addAll(ontology.getRBoxAxioms(true));
 
@@ -146,7 +146,7 @@ public class FunctionalRoleIdentifierHermitTest {
 
 		OWLObjectProperty subsubF = defautDataFact.getRole("SubSubF");
 
-		Set<OWLObjectProperty> expectedFunctionalRoles = new HashSet<>();
+		Set<OWLObjectProperty> expectedFunctionalRoles = new HashSet<OWLObjectProperty>();
 		expectedFunctionalRoles.add(f);
 		expectedFunctionalRoles.add(subF);
 		expectedFunctionalRoles.add(subsubF);
@@ -163,7 +163,7 @@ public class FunctionalRoleIdentifierHermitTest {
 	public void shouldComputeTranRolesProperly(){
 		
 		
-		Set<OWLAxiom> tboxRboxAxioms = new HashSet<>();
+		Set<OWLAxiom> tboxRboxAxioms = new HashSet<OWLAxiom>();
 		OWLTransitiveObjectPropertyAxiom transR = dataFactory.getOWLTransitiveObjectPropertyAxiom(R);
 		OWLTransitiveObjectPropertyAxiom tranInvS = dataFactory.getOWLTransitiveObjectPropertyAxiom(dataFactory.getOWLObjectInverseOf(S));
 		tboxRboxAxioms.add(transR);
@@ -175,7 +175,7 @@ public class FunctionalRoleIdentifierHermitTest {
 		
 	
 		
-		Set<OWLObjectProperty> expectedFunctionalRoles = new HashSet<>();
+		Set<OWLObjectProperty> expectedFunctionalRoles = new HashSet<OWLObjectProperty>();
 		expectedFunctionalRoles.add(R);
 		expectedFunctionalRoles.add(S);
 		

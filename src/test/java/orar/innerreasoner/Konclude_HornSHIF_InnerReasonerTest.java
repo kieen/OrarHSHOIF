@@ -214,7 +214,7 @@ public class Konclude_HornSHIF_InnerReasonerTest {
 		/*
 		 * Test with the reasoner
 		 */
-		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> expectedResult = new HashMap<>();
+		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> expectedResult = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
 		expectedResult.put(a, testData.getSetOfIndividuals(b));
 
 		InnerReasoner hermitInnerReasoner = computeEntailmentsByInnerReasoner(ontology);
@@ -309,7 +309,7 @@ public class Konclude_HornSHIF_InnerReasonerTest {
 		/*
 		 * Test with the reasoner
 		 */
-		Set<OWLObjectPropertyAssertionAxiom> expectedResult = new HashSet<>();
+		Set<OWLObjectPropertyAssertionAxiom> expectedResult = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(T, a, o));
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(T, a, b));
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(T, o, b));
@@ -416,7 +416,7 @@ public class Konclude_HornSHIF_InnerReasonerTest {
 		/*
 		 * Test with the reasoner
 		 */
-		Set<OWLObjectPropertyAssertionAxiom> expectedResult = new HashSet<>();
+		Set<OWLObjectPropertyAssertionAxiom> expectedResult = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(F, a, a));
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(F, a, b));
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(F, a, o));
@@ -508,7 +508,7 @@ public class Konclude_HornSHIF_InnerReasonerTest {
 		/*
 		 * Test with the reasoner
 		 */
-		Set<OWLObjectPropertyAssertionAxiom> expectedResult = new HashSet<>();
+		Set<OWLObjectPropertyAssertionAxiom> expectedResult = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(F, a, b));
 		expectedResult.add(dataFactory.getOWLObjectPropertyAssertionAxiom(R, a, b));
 

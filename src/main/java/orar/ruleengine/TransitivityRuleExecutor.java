@@ -25,7 +25,7 @@ public class TransitivityRuleExecutor implements RuleExecutor {
 	private final Logger logger =Logger.getLogger(TransitivityRuleExecutor.class);
 	public TransitivityRuleExecutor(OrarOntology orarOntology) {
 		this.orarOntology = orarOntology;
-		this.newRoleAssertions = new HashSet<>();
+		this.newRoleAssertions = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		this.metaDataOfOntology = MetaDataOfOntology.getInstance();
 		this.dataFactory = OWLManager.getOWLDataFactory();
 		this.isABoxExtended = false;
@@ -56,7 +56,7 @@ public class TransitivityRuleExecutor implements RuleExecutor {
 	}
 
 	private Queue<OWLObjectPropertyAssertionAxiom> getAllTransitiveRoleAssertions() {
-		Queue<OWLObjectPropertyAssertionAxiom> transRoleAssertions = new LinkedList<>();
+		Queue<OWLObjectPropertyAssertionAxiom> transRoleAssertions = new LinkedList<OWLObjectPropertyAssertionAxiom>();
 		Set<OWLObjectProperty> allTranRoles = this.metaDataOfOntology.getTransitiveRoles();
 		for (OWLObjectProperty eachTranRole : allTranRoles) {
 			Set<OWLNamedIndividual> subjects = this.orarOntology.getSubjectsInRoleAssertions(eachTranRole);
@@ -75,8 +75,8 @@ public class TransitivityRuleExecutor implements RuleExecutor {
 	public void incrementalMaterialize(Set<OWLNamedIndividual> setOfSameasIndividuals) {
 		Set<OWLObjectProperty> allTranRoles = this.metaDataOfOntology.getTransitiveRoles();
 		for (OWLObjectProperty eachTranRole : allTranRoles) {
-			Set<OWLNamedIndividual> allPredecessors = new HashSet<>();
-			Set<OWLNamedIndividual> allSuccessors = new HashSet<>();
+			Set<OWLNamedIndividual> allPredecessors = new HashSet<OWLNamedIndividual>();
+			Set<OWLNamedIndividual> allSuccessors = new HashSet<OWLNamedIndividual>();
 			for (OWLNamedIndividual eachIndividual : setOfSameasIndividuals) {
 				allPredecessors.addAll(
 						this.orarOntology.getPredecessorsTakingEqualityIntoAccount(eachIndividual, eachTranRole));
@@ -128,7 +128,7 @@ public class TransitivityRuleExecutor implements RuleExecutor {
 	@Override
 	public Set<Set<OWLNamedIndividual>> getNewSameasAssertions() {
 		// nothing to do with sameas
-		return new HashSet<>();
+		return new HashSet<Set<OWLNamedIndividual>>();
 	}
 
 	@Override

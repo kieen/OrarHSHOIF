@@ -31,7 +31,7 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 	// flag for abox updating
 	protected boolean isABoxExtended;
 	// debugging
-	private final Configuration config;
+	protected final Configuration config;
 	private static final Logger logger = Logger.getLogger(AssertionTransporterTemplate.class);
 	// map/data for transferring assertions
 	protected final DataForTransferingEntailments dataForTransferingEntailments;
@@ -48,7 +48,7 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 		this.config = Configuration.getInstance();
 		this.dataForTransferingEntailments = DataForTransferingEntailments.getInstance();
 		this.newRoleAssertions = new RoleAssertionList();
-		this.newSameasAssertions = new HashSet<>();
+		this.newSameasAssertions = new HashSet<Set<OWLNamedIndividual>>();
 	}
 
 	@Override
@@ -222,9 +222,19 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 					/*
 					 * end of debug
 					 */
-
+					Set<OWLClass> existingAssertedConcept = new HashSet<OWLClass>();
+					if (this.config.getDebuglevels().contains(DebugLevel.TRANSFER_CONCEPTASSERTION)) {
+						existingAssertedConcept = this.orarOntology.getAssertedConcepts(originalInd);
+					}
 					if (this.orarOntology.addManyConceptAssertions(originalInd, concepts)) {
 						this.isABoxExtended = true;
+						if (this.config.getDebuglevels().contains(DebugLevel.TRANSFER_CONCEPTASSERTION)) {
+							logger.info("***DEBUG***TRANSFER_CONCEPTASSERTION:");
+							logger.info("For individual:" + originalInd);
+							logger.info("Existing asserted concepts:"+existingAssertedConcept);
+							logger.info("Newly added asserted concepts:" + concepts);
+							logger.info("updated=true");
+						}
 					}
 				}
 			}

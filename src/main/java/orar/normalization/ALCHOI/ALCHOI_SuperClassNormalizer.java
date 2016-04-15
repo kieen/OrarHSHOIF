@@ -66,7 +66,7 @@ public class ALCHOI_SuperClassNormalizer implements SuperClassNormalizer {
 	@Override
 	public OWLClassExpression visit(OWLObjectIntersectionOf ce) {
 
-		Set<OWLClassExpression> normalizedOperands = new HashSet<>();
+		Set<OWLClassExpression> normalizedOperands = new HashSet<OWLClassExpression>();
 
 		Set<OWLClassExpression> operands = ce.getOperands();
 		for (OWLClassExpression operand : operands) {
@@ -97,7 +97,7 @@ public class ALCHOI_SuperClassNormalizer implements SuperClassNormalizer {
 
 	@Override
 	public OWLClassExpression visit(OWLObjectUnionOf ce) {
-		Set<OWLClassExpression> normalizedOperands = new HashSet<>();
+		Set<OWLClassExpression> normalizedOperands = new HashSet<OWLClassExpression>();
 
 		Set<OWLClassExpression> operands = ce.getOperands();
 		for (OWLClassExpression operand : operands) {

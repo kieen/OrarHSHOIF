@@ -93,7 +93,7 @@ public class Basic_TypeComputorTest {
 		// Type for a1 and a2
 		Set<OWLClass> set_A1A2 = testData.getSetOfConcepts(A1, A2);
 		Set<OWLObjectProperty> set_R1R2 = testData.getSetOfRoles("R1", "R2");
-		Set<OWLObjectProperty> emptySetOfRoles = new HashSet<>();
+		Set<OWLObjectProperty> emptySetOfRoles = new HashSet<OWLObjectProperty>();
 		IndividualType typeFor_a1a2 = typeFactory.getIndividualType(set_A1A2, emptySetOfRoles, set_R1R2);
 		Set<OWLNamedIndividual> set_a1a2 = testData.getSetOfIndividuals(a1, a2);
 		Assert.assertEquals(set_a1a2, typeMap2Individuals.get(typeFor_a1a2));

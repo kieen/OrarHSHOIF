@@ -75,7 +75,7 @@ public class ABoxNormalizer implements OWLAxiomVisitorEx<OWLAxiom> {
 
 	public ABoxNormalizer() {
 
-		additionalAxioms = new HashSet<>();
+		additionalAxioms = new HashSet<OWLAxiom>();
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		normFactory = NormalizationDataFactory.getInstance();
 	}
@@ -149,7 +149,7 @@ public class ABoxNormalizer implements OWLAxiomVisitorEx<OWLAxiom> {
 	@Override
 	public OWLAxiom visit(OWLDifferentIndividualsAxiom axiom) {
 		Set<OWLIndividual> inds = axiom.getIndividuals();
-		Set<OWLClass> newSetOfClassesForNom = new HashSet<>();
+		Set<OWLClass> newSetOfClassesForNom = new HashSet<OWLClass>();
 
 		for (OWLIndividual ind : inds) {
 			OWLNamedIndividual namedInd = ind.asOWLNamedIndividual();
@@ -327,9 +327,9 @@ public class ABoxNormalizer implements OWLAxiomVisitorEx<OWLAxiom> {
 	public OWLAxiom visit(OWLSameIndividualAxiom axiom) {
 		Set<OWLIndividual> inds = axiom.getIndividuals();
 
-		Set<OWLClass> newSetOfClassesForNom = new HashSet<>();
+		Set<OWLClass> newSetOfClassesForNom = new HashSet<OWLClass>();
 		
-		Set<OWLClassExpression> newSetOfNominalClasses= new HashSet<>();
+		Set<OWLClassExpression> newSetOfNominalClasses= new HashSet<OWLClassExpression>();
 
 		for (OWLIndividual ind : inds) {
 			OWLNamedIndividual namedInd = ind.asOWLNamedIndividual();

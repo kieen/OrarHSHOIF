@@ -41,8 +41,8 @@ public class ALCHOIF_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 	public ALCHOIF_SubClass_Validator() {
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		profilingFactory = ValidatorDataFactory.getInstance();
-		this.dlConstructorsInInputOntology = new HashSet<>();
-		this.dlConstructorsInValidatedOntology=new HashSet<>();
+		this.dlConstructorsInInputOntology = new HashSet<DLConstructor>();
+		this.dlConstructorsInValidatedOntology=new HashSet<DLConstructor>();
 	}
 
 	public Set<DLConstructor> getDlConstructorsInInputOntology() {

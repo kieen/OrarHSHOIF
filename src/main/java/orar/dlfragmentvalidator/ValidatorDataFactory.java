@@ -33,7 +33,7 @@ public class ValidatorDataFactory {
 		count = 0;
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		newClasses = new HashSet<OWLClass>();
-		newProperties = new HashSet<>();
+		newProperties = new HashSet<OWLObjectProperty>();
 		anonymous2NamedIndividualMap = new HashMap<OWLAnonymousIndividual, OWLNamedIndividual>();
 
 	}
@@ -102,6 +102,6 @@ public class ValidatorDataFactory {
 
 	public Set<OWLNamedIndividual> getNamedIndividualGeneratedDuringValidation() {
 
-		return new HashSet<>(this.anonymous2NamedIndividualMap.values());
+		return new HashSet<OWLNamedIndividual>(this.anonymous2NamedIndividualMap.values());
 	}
 }

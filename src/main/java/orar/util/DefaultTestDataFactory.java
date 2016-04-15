@@ -69,7 +69,7 @@ public class DefaultTestDataFactory {
 	}
 
 	public Set<OWLClassAssertionAxiom> getSetOfConceptAssertions(OWLClassAssertionAxiom... conceptAssertions) {
-		HashSet<OWLClassAssertionAxiom> setOfCA = new HashSet<>();
+		HashSet<OWLClassAssertionAxiom> setOfCA = new HashSet<OWLClassAssertionAxiom>();
 		for (OWLClassAssertionAxiom axiom : conceptAssertions) {
 			setOfCA.add(axiom);
 		}
@@ -78,7 +78,7 @@ public class DefaultTestDataFactory {
 
 	public Set<OWLObjectPropertyAssertionAxiom> getSetOfRoleAssertions(
 			OWLObjectPropertyAssertionAxiom... roleAssertions) {
-		HashSet<OWLObjectPropertyAssertionAxiom> setOfCA = new HashSet<>();
+		HashSet<OWLObjectPropertyAssertionAxiom> setOfCA = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		for (OWLObjectPropertyAssertionAxiom axiom : roleAssertions) {
 			setOfCA.add(axiom);
 		}
@@ -132,14 +132,14 @@ public class DefaultTestDataFactory {
 	public OWLObjectIntersectionOf getConjunctionOfConcepts(String concept1, String concept2) {
 		OWLClass owlConcept1 = getConcept(concept1);
 		OWLClass owlConcept2 = getConcept(concept2);
-		Set<OWLClass> c12Set = new HashSet<>();
+		Set<OWLClass> c12Set = new HashSet<OWLClass>();
 		c12Set.add(owlConcept1);
 		c12Set.add(owlConcept2);
 		return dataFactory.getOWLObjectIntersectionOf(c12Set);
 	}
 
 	public OWLObjectIntersectionOf getConjunctionOfConcepts(String... concepts) {
-		Set<OWLClass> setOfConjuncts = new HashSet<>();
+		Set<OWLClass> setOfConjuncts = new HashSet<OWLClass>();
 		for (String concept : concepts) {
 			OWLClass owlConcept = getConcept(concept);
 			setOfConjuncts.add(owlConcept);
@@ -149,7 +149,7 @@ public class DefaultTestDataFactory {
 	}
 
 	public OWLObjectIntersectionOf getConjunctionOfConcepts(OWLClass... concepts) {
-		Set<OWLClass> setOfConjuncts = new HashSet<>();
+		Set<OWLClass> setOfConjuncts = new HashSet<OWLClass>();
 		for (OWLClass concept : concepts) {
 
 			setOfConjuncts.add(concept);
@@ -160,7 +160,7 @@ public class DefaultTestDataFactory {
 
 	public OWLObjectIntersectionOf getConjunctionOfConcepts(OWLClass owlClass1, OWLClass owlClass2) {
 
-		Set<OWLClass> c12Set = new HashSet<>();
+		Set<OWLClass> c12Set = new HashSet<OWLClass>();
 		c12Set.add(owlClass1);
 		c12Set.add(owlClass2);
 		return dataFactory.getOWLObjectIntersectionOf(c12Set);
@@ -168,7 +168,7 @@ public class DefaultTestDataFactory {
 
 	public OWLObjectUnionOf getDisjunctionOfConcepts(OWLClass owlClass1, OWLClass owlClass2) {
 
-		Set<OWLClass> c12Set = new HashSet<>();
+		Set<OWLClass> c12Set = new HashSet<OWLClass>();
 		c12Set.add(owlClass1);
 		c12Set.add(owlClass2);
 		return dataFactory.getOWLObjectUnionOf(c12Set);
@@ -176,14 +176,14 @@ public class DefaultTestDataFactory {
 
 	public OWLObjectUnionOf getDisjunctionOfConcepts(String owlClass1, String owlClass2) {
 
-		Set<OWLClass> c12Set = new HashSet<>();
+		Set<OWLClass> c12Set = new HashSet<OWLClass>();
 		c12Set.add(getConcept(owlClass1));
 		c12Set.add(getConcept(owlClass2));
 		return dataFactory.getOWLObjectUnionOf(c12Set);
 	}
 
 	public Set<OWLClass> getSetOfConcepts(String... conceptNames) {
-		Set<OWLClass> setOfConcepts = new HashSet<>();
+		Set<OWLClass> setOfConcepts = new HashSet<OWLClass>();
 		for (String name : conceptNames) {
 			OWLClass concept = getConcept(name);
 			setOfConcepts.add(concept);
@@ -192,7 +192,7 @@ public class DefaultTestDataFactory {
 	}
 
 	public Set<OWLClass> getSetOfConcepts(OWLClass... concepts) {
-		Set<OWLClass> setOfConcepts = new HashSet<>();
+		Set<OWLClass> setOfConcepts = new HashSet<OWLClass>();
 		for (OWLClass concept : concepts) {
 			setOfConcepts.add(concept);
 		}
@@ -200,7 +200,7 @@ public class DefaultTestDataFactory {
 	}
 
 	public Set<OWLNamedIndividual> getSetOfIndividuals(String... individualNames) {
-		Set<OWLNamedIndividual> setOfIndividuals = new HashSet<>();
+		Set<OWLNamedIndividual> setOfIndividuals = new HashSet<OWLNamedIndividual>();
 		for (String name : individualNames) {
 			OWLNamedIndividual individual = getIndividual(name);
 			setOfIndividuals.add(individual);
@@ -209,7 +209,7 @@ public class DefaultTestDataFactory {
 	}
 
 	public Set<OWLNamedIndividual> getSetOfIndividuals(OWLNamedIndividual... individuals) {
-		Set<OWLNamedIndividual> setOfIndividuals = new HashSet<>();
+		Set<OWLNamedIndividual> setOfIndividuals = new HashSet<OWLNamedIndividual>();
 		for (OWLNamedIndividual ind : individuals) {
 			setOfIndividuals.add(ind);
 		}
@@ -217,7 +217,7 @@ public class DefaultTestDataFactory {
 	}
 
 	public Set<OWLObjectProperty> getSetOfRoles(String... roleNames) {
-		Set<OWLObjectProperty> setOfRoles = new HashSet<>();
+		Set<OWLObjectProperty> setOfRoles = new HashSet<OWLObjectProperty>();
 		for (String name : roleNames) {
 			OWLObjectProperty role = getRole(name);
 			setOfRoles.add(role);
@@ -226,7 +226,7 @@ public class DefaultTestDataFactory {
 	}
 
 	public Set<OWLObjectProperty> getSetOfRoles(OWLObjectProperty... roles) {
-		Set<OWLObjectProperty> setOfRoles = new HashSet<>();
+		Set<OWLObjectProperty> setOfRoles = new HashSet<OWLObjectProperty>();
 		for (OWLObjectProperty role : roles) {
 			setOfRoles.add(role);
 		}
@@ -341,7 +341,7 @@ public class DefaultTestDataFactory {
 
 	public Map<OWLObjectProperty, Set<OWLNamedIndividual>> getMapFromRole2Individuals(OWLObjectProperty role,
 			Set<OWLNamedIndividual> individuals) {
-		HashMap<OWLObjectProperty, Set<OWLNamedIndividual>> map = new HashMap<>();
+		HashMap<OWLObjectProperty, Set<OWLNamedIndividual>> map = new HashMap<OWLObjectProperty, Set<OWLNamedIndividual>>();
 		map.put(role, individuals);
 		return map;
 	}

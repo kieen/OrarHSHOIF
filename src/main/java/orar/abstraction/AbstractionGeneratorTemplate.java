@@ -71,7 +71,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 	@Override
 	public List<OWLOntology> getAbstractOntologies(int numberOfTypePerOntology) {
 		Set<IndividualType> types = typeMap2Individuals.keySet();
-		List<OWLOntology> resultingAbstractOntologies = new ArrayList<>();
+		List<OWLOntology> resultingAbstractOntologies = new ArrayList<OWLOntology>();
 		if (numberOfTypePerOntology==0) {
 			logger.error("Ontology is empty.");
 			System.exit(1);
@@ -84,7 +84,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 		Iterator<IndividualType> iterator = types.iterator();
 
 		for (int i = 1; i <= numberOfOntologies; i++) {
-			Set<IndividualType> chunk = new HashSet<>();
+			Set<IndividualType> chunk = new HashSet<IndividualType>();
 			/*
 			 * Get a chunk of individual types.
 			 */
@@ -109,7 +109,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 
 		try {
 			OWLOntology abstractOntology = manager.createOntology();
-			Set<OWLAxiom> aBoxAssertions = new HashSet<>();
+			Set<OWLAxiom> aBoxAssertions = new HashSet<OWLAxiom>();
 			for (IndividualType type : types) {
 				/*
 				 * get abstraction assertions
@@ -128,7 +128,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 	}
 
 	private Set<OWLAxiom> generateAssertions(IndividualType type) {
-		Set<OWLAxiom> abstractAssertions = new HashSet<>();
+		Set<OWLAxiom> abstractAssertions = new HashSet<OWLAxiom>();
 		/*
 		 * create x
 		 */
@@ -183,7 +183,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 	}
 
 	protected Set<OWLAxiom> getPredecessorRoleAssertions(OWLNamedIndividual x, IndividualType type) {
-		Set<OWLAxiom> preRoleAssertions = new HashSet<>();
+		Set<OWLAxiom> preRoleAssertions = new HashSet<OWLAxiom>();
 		for (OWLObjectProperty preRole : type.getPredecessorRoles()) {
 			// if (propertyIn == null) {
 			// Printer.printSet(type.getPreRoles());
@@ -205,7 +205,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 			/*
 			 * map z to original individuals
 			 */
-			Set<OWLNamedIndividual> originalIndsMappedToZ = new HashSet<>();
+			Set<OWLNamedIndividual> originalIndsMappedToZ = new HashSet<OWLNamedIndividual>();
 
 			Set<OWLNamedIndividual> originalIndsForX = sharedMap.getMap_XAbstractIndiv_2_OriginalIndivs().get(x);
 			for (OWLNamedIndividual indForX : originalIndsForX) {
@@ -228,7 +228,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 	}
 
 	protected Set<OWLAxiom> getSuccessorRoleAssertions(OWLNamedIndividual x, IndividualType type) {
-		Set<OWLAxiom> propertyAssertions = new HashSet<>();
+		Set<OWLAxiom> propertyAssertions = new HashSet<OWLAxiom>();
 		for (OWLObjectProperty succRole : type.getSuccessorRoles()) {
 			/*
 			 * get y and its assertion
@@ -243,7 +243,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 			/*
 			 * map y to original individuals
 			 */
-			Set<OWLNamedIndividual> originalIndsMappedToY = new HashSet<>();
+			Set<OWLNamedIndividual> originalIndsMappedToY = new HashSet<OWLNamedIndividual>();
 
 			Set<OWLNamedIndividual> originalIndsForX = sharedMap.getMap_XAbstractIndiv_2_OriginalIndivs().get(x);
 			for (OWLNamedIndividual indForX : originalIndsForX) {

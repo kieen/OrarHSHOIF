@@ -27,11 +27,11 @@ public abstract class OWLOntologyValidator {
 
 	public OWLOntologyValidator(OWLOntology inputOWLOntology, DLFragment targetedDL) {
 		this.inputOWLOntology = inputOWLOntology;
-		this.validatedAxioms = new HashSet<>();
+		this.validatedAxioms = new HashSet<OWLAxiom>();
 		this.validatingDone = false;
 		this.targetedDLFrangment = targetedDL;
-		this.dlConstructorsInInputOntology = new HashSet<>();
-		this.dlConstructorsInValidatedOntology = new HashSet<>();
+		this.dlConstructorsInInputOntology = new HashSet<DLConstructor>();
+		this.dlConstructorsInValidatedOntology = new HashSet<DLConstructor>();
 		initAxiomValidator();
 	}
 
@@ -92,7 +92,7 @@ public abstract class OWLOntologyValidator {
 	}
 
 	public void validateOWLOntology() {
-		HashSet<OWLAxiom> allAxioms = new HashSet<>();
+		HashSet<OWLAxiom> allAxioms = new HashSet<OWLAxiom>();
 		allAxioms.addAll(this.inputOWLOntology.getTBoxAxioms(true));
 		allAxioms.addAll(this.inputOWLOntology.getRBoxAxioms(true));
 		allAxioms.addAll(this.inputOWLOntology.getABoxAxioms(true));
@@ -126,18 +126,18 @@ public abstract class OWLOntologyValidator {
 		/*
 		 * get DLExpressivity
 		 */
-		Set<OWLOntology> ontologies = new HashSet<>();
+		Set<OWLOntology> ontologies = new HashSet<OWLOntology>();
 		ontologies.add(inputOntology);
 		// TODO: could be improved since DLExpressivityChecker by OWLAPI is not
 		// so reliable.
 		DLExpressivityChecker checker = new DLExpressivityChecker(ontologies);
 		String dlname = checker.getDescriptionLogicName();
 
-		HashSet<Object> nonhornConstructors = new HashSet<>();
+		HashSet<Object> nonhornConstructors = new HashSet<Object>();
 		nonhornConstructors.add(DLConstructor.NonHorn_DISJUNCTION);
 		nonhornConstructors.add(DLConstructor.NonHorn_NEGATION);
 		nonhornConstructors.add(DLConstructor.NonHorn_UNIVERSAL_RESTRICTION);
-		HashSet<DLConstructor> copyOfConstructors = new HashSet<>(constructors);
+		HashSet<DLConstructor> copyOfConstructors = new HashSet<DLConstructor>(constructors);
 		copyOfConstructors.retainAll(nonhornConstructors);
 		if (!copyOfConstructors.isEmpty()) {
 			this.isInputOntologyInHorn = false;

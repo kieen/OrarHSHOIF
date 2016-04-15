@@ -139,7 +139,7 @@ public class AbstractRoleAssertionBox {
 	}
 
 	public Set<OWLObjectPropertyAssertionAxiom> getSetOfRoleAssertions() {
-		Set<OWLObjectPropertyAssertionAxiom> roleAssertions = new HashSet<>();
+		Set<OWLObjectPropertyAssertionAxiom> roleAssertions = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		roleAssertions.addAll(this.loopRoleAssertions.getSetOfRoleAssertions());
 		roleAssertions.addAll(this.uxRoleAssertionsForCTypeAndType.getSetOfRoleAssertions());
 		roleAssertions.addAll(this.xyRoleAssertionsForType.getSetOfRoleAssertions());

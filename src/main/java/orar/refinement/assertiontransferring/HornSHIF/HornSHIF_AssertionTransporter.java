@@ -19,7 +19,7 @@ public class HornSHIF_AssertionTransporter extends AssertionTransporterTemplate 
 		super(orarOntoloy);
 		this.abstractConceptAssertionsAsMap = abstractConceptAssertionsAsMap;
 		this.abstractRoleAssertionBox = abstractRoleAssertionBox;
-		this.abstractSameasMap = new HashMap<>();
+		this.abstractSameasMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
 	}
 
 	@Override

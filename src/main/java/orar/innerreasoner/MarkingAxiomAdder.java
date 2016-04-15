@@ -72,18 +72,18 @@ public class MarkingAxiomAdder {
 		this.config = Configuration.getInstance();
 		this.ontoManager = OWLManager.createOWLOntologyManager();
 
-		this.singletonConcepts = new HashSet<>();
-		this.loopConcepts = new HashSet<>();
-		this.conceptsHavingTranNeighbour = new HashSet<>();
+		this.singletonConcepts = new HashSet<OWLClass>();
+		this.loopConcepts = new HashSet<OWLClass>();
+		this.conceptsHavingTranNeighbour = new HashSet<OWLClass>();
 
-		this.predecessorOfSingletonConcepts = new HashSet<>();
-		this.predecessorOfSingletonConceptMap2Role = new HashMap<>();
+		this.predecessorOfSingletonConcepts = new HashSet<OWLClass>();
+		this.predecessorOfSingletonConceptMap2Role = new HashMap<OWLClass, OWLObjectProperty>();
 
-		this.predecessorOfNominals = new HashSet<>();
-		this.predecessorOfNominalMap2RoleAndNominal = new HashMap<>();
+		this.predecessorOfNominals = new HashSet<OWLClass>();
+		this.predecessorOfNominalMap2RoleAndNominal = new HashMap<OWLClass, RoleAndNominal>();
 
-		this.successorOfNominals = new HashSet<>();
-		this.successorOfNominalMap2NomialAndRole = new HashMap<>();
+		this.successorOfNominals = new HashSet<OWLClass>();
+		this.successorOfNominalMap2NomialAndRole = new HashMap<OWLClass, NominalAndRole>();
 	}
 
 	public void addMarkingAxioms() {
@@ -243,7 +243,7 @@ public class MarkingAxiomAdder {
 	 * roles.
 	 */
 	private void addAxiomsForSingletonConcept() {
-		Set<OWLAxiom> addedAxioms = new HashSet<>();
+		Set<OWLAxiom> addedAxioms = new HashSet<OWLAxiom>();
 		for (OWLClass nom_C : metaDataOfOntology.getNominalConcepts()) {
 			OWLClass singConcept_D = getFreshSingletonConcept();
 
@@ -326,7 +326,7 @@ public class MarkingAxiomAdder {
 	 * This marks individuals in rule R_t^3: N(a), N(b) --> T(a,b).
 	 */
 	private void addAxiomsForConceptsHavingTranNeighbours() {
-		HashSet<OWLClass> singletonAndNominalConcepts = new HashSet<>(this.singletonConcepts);
+		HashSet<OWLClass> singletonAndNominalConcepts = new HashSet<OWLClass>(this.singletonConcepts);
 		singletonAndNominalConcepts.addAll(this.metaDataOfOntology.getNominalConcepts());
 		for (OWLClass singletonConcept : singletonAndNominalConcepts) {
 			OWLClass newConcept = getFreshHasTranConcept();

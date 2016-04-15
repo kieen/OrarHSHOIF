@@ -26,7 +26,7 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 
 	public SubRoleRuleExecutor(OrarOntology orarOntology) {
 		this.orarOntology = orarOntology;
-		this.newRoleAssertions = new HashSet<>();
+		this.newRoleAssertions = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		this.metaDataOfOntology = MetaDataOfOntology.getInstance();
 		this.dataFactory = OWLManager.getOWLDataFactory();
 		this.isABoxExtended = false;
@@ -117,7 +117,7 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 	@Override
 	public Set<Set<OWLNamedIndividual>> getNewSameasAssertions() {
 		// return empty set
-		return new HashSet<>();
+		return new HashSet<Set<OWLNamedIndividual>>();
 	}
 
 	@Override

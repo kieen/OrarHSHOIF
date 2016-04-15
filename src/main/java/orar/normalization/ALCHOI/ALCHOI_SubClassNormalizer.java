@@ -16,7 +16,6 @@ import org.semanticweb.owlapi.model.OWLDataMaxCardinality;
 import org.semanticweb.owlapi.model.OWLDataMinCardinality;
 import org.semanticweb.owlapi.model.OWLDataSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectAllValuesFrom;
 import org.semanticweb.owlapi.model.OWLObjectComplementOf;
 import org.semanticweb.owlapi.model.OWLObjectExactCardinality;
@@ -24,6 +23,7 @@ import org.semanticweb.owlapi.model.OWLObjectHasSelf;
 import org.semanticweb.owlapi.model.OWLObjectHasValue;
 import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
 import org.semanticweb.owlapi.model.OWLObjectMaxCardinality;
+//import org.semanticweb.owlapi.model.OWLObjectMaxCardinality;
 import org.semanticweb.owlapi.model.OWLObjectMinCardinality;
 import org.semanticweb.owlapi.model.OWLObjectOneOf;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
@@ -31,8 +31,8 @@ import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLObjectUnionOf;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 
-import orar.data.NormalizationDataFactory;
 import orar.data.MetaDataOfOntology;
+import orar.data.NormalizationDataFactory;
 import orar.normalization.SubClassNormalizer;
 import orar.normalization.SuperClassNormalizer;
 
@@ -72,7 +72,7 @@ public class ALCHOI_SubClassNormalizer implements SubClassNormalizer {
 
 	@Override
 	public OWLClassExpression visit(OWLObjectIntersectionOf ce) {
-		Set<OWLClassExpression> normalizedOperands = new HashSet<>();
+		Set<OWLClassExpression> normalizedOperands = new HashSet<OWLClassExpression>();
 
 		Set<OWLClassExpression> operands = ce.getOperands();
 		for (OWLClassExpression operand : operands) {
@@ -85,7 +85,7 @@ public class ALCHOI_SubClassNormalizer implements SubClassNormalizer {
 
 	@Override
 	public OWLClassExpression visit(OWLObjectUnionOf ce) {
-		Set<OWLClassExpression> normalizedOperands = new HashSet<>();
+		Set<OWLClassExpression> normalizedOperands = new HashSet<OWLClassExpression>();
 
 		Set<OWLClassExpression> operands = ce.getOperands();
 		for (OWLClassExpression operand : operands) {
@@ -111,7 +111,7 @@ public class ALCHOI_SubClassNormalizer implements SubClassNormalizer {
 
 		OWLClass freshClass = normalizerDataFactory.getFreshConcept();
 
-//		logger.info("***DEBUG***"+ce);
+		// logger.info("***DEBUG***"+ce);
 		OWLClassExpression filler = ce.getFiller();
 		if (filler instanceof OWLObjectOneOf) {
 			Set<OWLIndividual> inds = ((OWLObjectOneOf) filler).getIndividuals();
@@ -186,11 +186,11 @@ public class ALCHOI_SubClassNormalizer implements SubClassNormalizer {
 
 	@Override
 	public OWLClassExpression visit(OWLObjectOneOf ce) {
-//		logger.info("***DEBUG*** OWLObjectOneOf"+ce);
-//		 Set<OWLIndividual> inds = ce.getIndividuals();
-//		 for (OWLIndividual ind : inds) {
-//		 sharedData.getNominals().add(ind.asOWLNamedIndividual());
-//		 }
+		// logger.info("***DEBUG*** OWLObjectOneOf"+ce);
+		// Set<OWLIndividual> inds = ce.getIndividuals();
+		// for (OWLIndividual ind : inds) {
+		// sharedData.getNominals().add(ind.asOWLNamedIndividual());
+		// }
 		return ce;
 	}
 

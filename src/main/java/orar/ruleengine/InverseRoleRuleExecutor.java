@@ -33,10 +33,10 @@ public class InverseRoleRuleExecutor implements RuleExecutor {
 
 	public InverseRoleRuleExecutor(OrarOntology orarOntology) {
 		this.orarOntology = orarOntology;
-		this.newRoleAssertions = new HashSet<>();
+		this.newRoleAssertions = new HashSet<OWLObjectPropertyAssertionAxiom>();
 		this.dataFactory = OWLManager.getOWLDataFactory();
 		this.isABoxExtended = false;
-		this.inverseRoleMap = new HashMap<>();
+		this.inverseRoleMap = new HashMap<OWLObjectProperty, Set<OWLObjectPropertyExpression>>();
 		/*
 		 * Create a map from each atomic role to its inverses
 		 */
@@ -129,7 +129,7 @@ public class InverseRoleRuleExecutor implements RuleExecutor {
 	private void addEntryToIverseRoleMap(OWLObjectProperty key, OWLObjectPropertyExpression value) {
 		Set<OWLObjectPropertyExpression> existingValues = this.inverseRoleMap.get(key);
 		if (existingValues == null) {
-			existingValues = new HashSet<>();
+			existingValues = new HashSet<OWLObjectPropertyExpression>();
 		}
 		existingValues.add(value);
 		this.inverseRoleMap.put(key, existingValues);
@@ -166,7 +166,7 @@ public class InverseRoleRuleExecutor implements RuleExecutor {
 	@Override
 	public Set<Set<OWLNamedIndividual>> getNewSameasAssertions() {
 		// return empty set
-		return new HashSet<>();
+		return new HashSet<Set<OWLNamedIndividual>>();
 	}
 
 	@Override

@@ -20,7 +20,7 @@ public class FunctionalityRuleExecutor implements RuleExecutor {
 
 	public FunctionalityRuleExecutor(OrarOntology orarOntology) {
 		this.orarOntology = orarOntology;
-		this.newSameasAssertions = new HashSet<>();
+		this.newSameasAssertions = new HashSet<Set<OWLNamedIndividual>>();
 		this.metaDataOfOntology = MetaDataOfOntology.getInstance();
 
 	}
@@ -80,7 +80,7 @@ public class FunctionalityRuleExecutor implements RuleExecutor {
 	private void mergePredecessorsForFunctionalRoles(Set<OWLNamedIndividual> setOfSameasIndividuals) {
 		Set<OWLObjectProperty> allInvFuncRoles = this.metaDataOfOntology.getInverseFunctionalRoles();
 		for (OWLObjectProperty eachInvFuncRole : allInvFuncRoles) {
-			Set<OWLNamedIndividual> allSubjects = new HashSet<>();
+			Set<OWLNamedIndividual> allSubjects = new HashSet<OWLNamedIndividual>();
 			for (OWLNamedIndividual eachIndividual : setOfSameasIndividuals) {
 				Set<OWLNamedIndividual> subjects = this.orarOntology.getPredecessors(eachIndividual, eachInvFuncRole);
 				allSubjects.addAll(subjects);
@@ -95,7 +95,7 @@ public class FunctionalityRuleExecutor implements RuleExecutor {
 	private void mergeSuccessorsForFunctionalRoles(Set<OWLNamedIndividual> setOfSameasIndividuals) {
 		Set<OWLObjectProperty> allFuncRoles = this.metaDataOfOntology.getFunctionalRoles();
 		for (OWLObjectProperty eachFuncRole : allFuncRoles) {
-			Set<OWLNamedIndividual> allObjects = new HashSet<>();
+			Set<OWLNamedIndividual> allObjects = new HashSet<OWLNamedIndividual>();
 			for (OWLNamedIndividual eachIndividual : setOfSameasIndividuals) {
 				Set<OWLNamedIndividual> objects = this.orarOntology
 						.getSuccessorsTakingEqualityIntoAccount(eachIndividual, eachFuncRole);
@@ -138,7 +138,7 @@ public class FunctionalityRuleExecutor implements RuleExecutor {
 	@Override
 	public Set<OWLObjectPropertyAssertionAxiom> getNewRoleAssertions() {
 		// return nothings
-		return (new HashSet<>());
+		return (new HashSet<OWLObjectPropertyAssertionAxiom>());
 	}
 
 	@Override

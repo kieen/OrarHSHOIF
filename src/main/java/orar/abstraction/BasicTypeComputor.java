@@ -36,7 +36,7 @@ public class BasicTypeComputor implements TypeComputor {
 
 	@Override
 	public Map<IndividualType, Set<OWLNamedIndividual>> computeTypes(OrarOntology orarOntology) {
-		Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals = new HashMap<>();
+		Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals = new HashMap<IndividualType, Set<OWLNamedIndividual>>();
 		Set<OWLNamedIndividual> todoIndividuals = orarOntology.getIndividualsInSignature();
 		/*
 		 * compute type for each individual, taking into account other equal
@@ -77,7 +77,7 @@ public class BasicTypeComputor implements TypeComputor {
 	 * 
 	 */
 	private Set<OWLClass> getConcepts(OWLNamedIndividual individual, OrarOntology orarOntology) {
-		Set<OWLClass> accumulatedConcepts = new HashSet<>();
+		Set<OWLClass> accumulatedConcepts = new HashSet<OWLClass>();
 		Set<OWLNamedIndividual> sameIndsOfCurrentIndividual = orarOntology.getSameIndividuals(individual);
 		// sameInds should contains also the "currentIndividual"
 		sameIndsOfCurrentIndividual.add(individual);
@@ -86,7 +86,7 @@ public class BasicTypeComputor implements TypeComputor {
 
 			Set<OWLClass> concepts = orarOntology.getAssertedConcepts(ind);
 			if (concepts == null) {
-				concepts = new HashSet<>();
+				concepts = new HashSet<OWLClass>();
 			}
 			accumulatedConcepts.addAll(concepts);
 		}
@@ -100,7 +100,7 @@ public class BasicTypeComputor implements TypeComputor {
 	 * 
 	 */
 	private Set<OWLClass> getConcepts(Set<OWLNamedIndividual> individuals, OrarOntology orarOntology) {
-		Set<OWLClass> accumulatedConcepts = new HashSet<>();
+		Set<OWLClass> accumulatedConcepts = new HashSet<OWLClass>();
 		for (OWLNamedIndividual individual : individuals) {
 			accumulatedConcepts.addAll(getConcepts(individual, orarOntology));
 		}
@@ -113,7 +113,7 @@ public class BasicTypeComputor implements TypeComputor {
 	 * @return a set of successor roles of all individual in {@code individuals}
 	 */
 	private Set<OWLObjectProperty> getSuccRoles(Set<OWLNamedIndividual> individuals, OrarOntology orarOntology) {
-		Set<OWLObjectProperty> accumulatedRoles = new HashSet<>();
+		Set<OWLObjectProperty> accumulatedRoles = new HashSet<OWLObjectProperty>();
 		for (OWLNamedIndividual ind : individuals) {
 
 			Set<OWLObjectProperty> sucRoles = orarOntology.getSuccessorRoleAssertionsAsMap(ind).keySet();
@@ -132,7 +132,7 @@ public class BasicTypeComputor implements TypeComputor {
 	 *         {@code individuals}
 	 */
 	private Set<OWLObjectProperty> getPreRoles(Set<OWLNamedIndividual> individuals, OrarOntology orarOntology) {
-		Set<OWLObjectProperty> accumulatedRoles = new HashSet<>();
+		Set<OWLObjectProperty> accumulatedRoles = new HashSet<OWLObjectProperty>();
 		for (OWLNamedIndividual ind : individuals) {
 
 			Set<OWLObjectProperty> sucRoles = orarOntology.getPredecessorRoleAssertionsAsMap(ind).keySet();

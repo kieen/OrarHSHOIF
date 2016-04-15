@@ -54,17 +54,17 @@ public class DataForTransferingEntailments {
 
 	private DataForTransferingEntailments() {
 
-		this.xAbstract2OriginalIndividualsMap = new HashMap<>();
-		this.yAbstract2OriginalIndividualsMap = new HashMap<>();
-		this.zAbstract2OriginalIndividualsMap = new HashMap<>();
+		this.xAbstract2OriginalIndividualsMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
+		this.yAbstract2OriginalIndividualsMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
+		this.zAbstract2OriginalIndividualsMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
 
-		this.uAbstract2OriginalIndividualsMap = new HashMap<>();
+		this.uAbstract2OriginalIndividualsMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
 
-		this.xyMap2Role = new HashMap<>();
-		this.zxMap2Role = new HashMap<>();
+		this.xyMap2Role = new HashMap<PairOfSubjectAndObject, OWLObjectProperty>();
+		this.zxMap2Role = new HashMap<PairOfSubjectAndObject, OWLObjectProperty>();
 
-		this.xAbstractHavingFunctionalRole = new HashSet<>();
-		this.zAbstractHavingInverseFunctionalRole = new HashSet<>();
+		this.xAbstractHavingFunctionalRole = new HashSet<OWLNamedIndividual>();
+		this.zAbstractHavingInverseFunctionalRole = new HashSet<OWLNamedIndividual>();
 
 	}
 
@@ -119,7 +119,7 @@ public class DataForTransferingEntailments {
 	 * @return a set of original individuals for which the abstractInd represents.<b> Note </b> that changing in this set will affect the mapping.
 	 */
 	public Set<OWLNamedIndividual> getOriginalIndividuals(OWLNamedIndividual abstractInd) {
-		Set<OWLNamedIndividual> originalInds = new HashSet<>();
+		Set<OWLNamedIndividual> originalInds = new HashSet<OWLNamedIndividual>();
 
 		Set<OWLNamedIndividual> originalOfX = this.xAbstract2OriginalIndividualsMap.get(abstractInd);
 		Set<OWLNamedIndividual> originalOfY = this.yAbstract2OriginalIndividualsMap.get(abstractInd);

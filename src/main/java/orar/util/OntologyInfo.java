@@ -82,7 +82,7 @@ public class OntologyInfo {
 	public static void printAssertionsPerRole(OWLOntology ontology) {
 		Set<OWLObjectProperty> roles = ontology
 				.getObjectPropertiesInSignature(true);
-		Map<OWLObjectProperty, Integer> roleFrequency = new HashMap<>();
+		Map<OWLObjectProperty, Integer> roleFrequency = new HashMap<OWLObjectProperty, Integer>();
 		int maxAssertions = 0;
 		OWLObjectProperty roleWithMaxAssertions = null;
 		Set<OWLObjectPropertyAssertionAxiom> roleAssertions = ontology
@@ -118,7 +118,7 @@ public class OntologyInfo {
 	public static void printAssertionPerConcept(OWLOntology ontology) {
 		// Set<OWLClass> concepts = ontology.getClassesInSignature(true);
 
-		Map<OWLClass, Integer> conceptFrequency = new HashMap<>();
+		Map<OWLClass, Integer> conceptFrequency = new HashMap<OWLClass, Integer>();
 		Set<OWLClassAssertionAxiom> classAssertons = ontology.getAxioms(
 				AxiomType.CLASS_ASSERTION, true);
 		for (OWLClassAssertionAxiom ca : classAssertons) {

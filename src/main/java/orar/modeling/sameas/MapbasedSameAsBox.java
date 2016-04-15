@@ -28,7 +28,7 @@ public class MapbasedSameAsBox implements SameAsBox {
 		if (equalIndividuals != null) {
 			return equalIndividuals;
 		} else {
-			return new HashSet<>();
+			return new HashSet<OWLNamedIndividual>();
 		}
 	}
 
@@ -36,7 +36,7 @@ public class MapbasedSameAsBox implements SameAsBox {
 	public boolean addSameAsAssertion(OWLNamedIndividual individual, OWLNamedIndividual equalIndividual) {
 		Set<OWLNamedIndividual> existingEqualIndividuals = this.sameAsMap.get(individual);
 		if (existingEqualIndividuals == null) {
-			existingEqualIndividuals = new HashSet<>();
+			existingEqualIndividuals = new HashSet<OWLNamedIndividual>();
 		}
 		boolean hasNewElement = existingEqualIndividuals.add(equalIndividual);
 		this.sameAsMap.put(individual, existingEqualIndividuals);
@@ -48,7 +48,7 @@ public class MapbasedSameAsBox implements SameAsBox {
 			Set<OWLNamedIndividual> manyEqualIndividuals) {
 		Set<OWLNamedIndividual> existingEqualIndividuals = this.sameAsMap.get(individual);
 		if (existingEqualIndividuals == null) {
-			existingEqualIndividuals = new HashSet<>();
+			existingEqualIndividuals = new HashSet<OWLNamedIndividual>();
 		}
 		boolean hasNewElement = existingEqualIndividuals.addAll(manyEqualIndividuals);
 		this.sameAsMap.put(individual, existingEqualIndividuals);
@@ -57,7 +57,7 @@ public class MapbasedSameAsBox implements SameAsBox {
 
 	@Override
 	public Set<OWLNamedIndividual> getAllIndividuals() {
-		Set<OWLNamedIndividual> allIndividuals = new HashSet<>();
+		Set<OWLNamedIndividual> allIndividuals = new HashSet<OWLNamedIndividual>();
 		allIndividuals.addAll(this.sameAsMap.keySet());
 		for (Set<OWLNamedIndividual> value : this.sameAsMap.values()) {
 			allIndividuals.addAll(value);
@@ -71,7 +71,7 @@ public class MapbasedSameAsBox implements SameAsBox {
 		for (OWLNamedIndividual anIndividual : setOfSameasIndividuals) {
 			Set<OWLNamedIndividual> existsingInds = this.sameAsMap.get(anIndividual);
 			if (existsingInds == null) {
-				existsingInds = new HashSet<>();
+				existsingInds = new HashSet<OWLNamedIndividual>();
 			}
 			if (existsingInds.addAll(setOfSameasIndividuals)) {
 				updated = true;
@@ -83,6 +83,6 @@ public class MapbasedSameAsBox implements SameAsBox {
 
 	@Override
 	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getSameasMap() {
-		return new HashMap<>(this.sameAsMap);
+		return new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>(this.sameAsMap);
 	}
 }

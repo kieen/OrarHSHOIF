@@ -84,19 +84,19 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 	private Set<OWLAxiom> generatedAxioms;
 
 	public HornALCHOIF_AxiomValidator() {
-		this.violatedAxioms = new HashSet<>();
-		this.constructorsInInputOntology = new HashSet<>();
-		this.constructorsInValidatedOntology = new HashSet<>();
+		this.violatedAxioms = new HashSet<OWLAxiom>();
+		this.constructorsInInputOntology = new HashSet<DLConstructor>();
+		this.constructorsInValidatedOntology = new HashSet<DLConstructor>();
 		this.subClassValidator = new HornALCHOIF_SubClass_Validator();
 		this.superClassValidator = new HornALCHOIF_SuperClass_Validator();
-		this.generatedAxioms = new HashSet<>();
+		this.generatedAxioms = new HashSet<OWLAxiom>();
 		this.owlDataFact = OWLManager.getOWLDataFactory();
 		this.validatorDataFactory = ValidatorDataFactory.getInstance();
 	}
 
 	@Override
 	public Set<DLConstructor> getDLConstructorsInInputOntology() {
-		Set<DLConstructor> constructors = new HashSet<>();
+		Set<DLConstructor> constructors = new HashSet<DLConstructor>();
 		constructors.addAll(this.constructorsInInputOntology);
 		constructors.addAll(this.subClassValidator.getDlConstructorsInInputOntology());
 		constructors.addAll(this.superClassValidator.getDlConstructorsInInputOntology());
@@ -430,7 +430,7 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public Set<DLConstructor> getDLConstructorsInValidatedOntology() {
-		Set<DLConstructor> constructors = new HashSet<>();
+		Set<DLConstructor> constructors = new HashSet<DLConstructor>();
 		constructors.addAll(this.constructorsInValidatedOntology);
 		constructors.addAll(this.subClassValidator.getDlConstructorsInValidatedOntology());
 		constructors.addAll(this.superClassValidator.getDlConstructorsInValidatedOntology());

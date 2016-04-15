@@ -34,9 +34,9 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 	private final Configuration config = Configuration.getInstance();
 
 	public DLReasonerTemplate(OWLOntology owlOntology) {
-		this.conceptAssertions = new HashSet<>();
-		this.roleAssertions = new HashSet<>();
-		this.sameasAssertionAsMap = new HashMap<>();
+		this.conceptAssertions = new HashSet<OWLClassAssertionAxiom>();
+		this.roleAssertions = new HashSet<OWLObjectPropertyAssertionAxiom>();
+		this.sameasAssertionAsMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
 		this.owlOntology = owlOntology;
 		this.dataFactory = OWLManager.getOWLDataFactory();
 		this.entailmentComputed = false;

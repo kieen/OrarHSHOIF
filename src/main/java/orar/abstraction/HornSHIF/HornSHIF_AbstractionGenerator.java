@@ -25,7 +25,7 @@ public class HornSHIF_AbstractionGenerator extends AbstractionGeneratorTemplate 
 		/*
 		 * for HornSHIF, there is no need for concept-type
 		 */
-		return new HashSet<>();
+		return new HashSet<OWLAxiom>();
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class HornSHIF_AbstractionGenerator extends AbstractionGeneratorTemplate 
 	 *         otherwise
 	 */
 	private <T> boolean intersectionNotEmpty(Set<T> set1, Set<T> set2) {
-		HashSet<T> copySet1 = new HashSet<>(set1);
+		HashSet<T> copySet1 = new HashSet<T>(set1);
 		copySet1.retainAll(set2);
 		return (!copySet1.isEmpty());
 	}

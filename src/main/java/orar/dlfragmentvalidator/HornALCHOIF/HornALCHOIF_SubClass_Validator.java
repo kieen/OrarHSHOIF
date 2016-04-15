@@ -3,7 +3,6 @@ package orar.dlfragmentvalidator.HornALCHOIF;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -37,12 +36,13 @@ public class HornALCHOIF_SubClass_Validator implements OWLClassExpressionVisitor
 	protected final ValidatorDataFactory profilingFactory;
 	private final Set<DLConstructor> dlConstructorsInInputOntology;
 	private final Set<DLConstructor> dlConstructorsInValidatedOntology;
-	private Logger logger =Logger.getLogger(HornALCHOIF_SubClass_Validator.class);
+
+	//	private Logger logger =Logger.getLogger(HornALCHOIF_SubClass_Validator.class);
 	public HornALCHOIF_SubClass_Validator() {
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		profilingFactory = ValidatorDataFactory.getInstance();
-		this.dlConstructorsInInputOntology = new HashSet<>();
-		this.dlConstructorsInValidatedOntology= new HashSet<>();
+		this.dlConstructorsInInputOntology = new HashSet<DLConstructor>();
+		this.dlConstructorsInValidatedOntology= new HashSet<DLConstructor>();
 	}
 
 	public Set<DLConstructor> getDlConstructorsInInputOntology() {

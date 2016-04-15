@@ -88,7 +88,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 
 	private Set<OWLSubClassOfAxiom> generateAxiomsSimulatingTransitivity() {
 
-		Set<OWLSubClassOfAxiom> generatedAxioms = new HashSet<>();
+		Set<OWLSubClassOfAxiom> generatedAxioms = new HashSet<OWLSubClassOfAxiom>();
 		// TODO: we should computed it in rolereasoning.
 		hermit.precomputeInferences(InferenceType.OBJECT_PROPERTY_HIERARCHY);
 		Set<OWLObjectPropertyExpression> allTransRoles = getTransitiveRoles();
@@ -137,7 +137,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 	private Set<OWLSubClassOfAxiom> getNormalizedAxiomsForEachSubClassAxiom(OWLClassExpression subClass,
 			OWLObjectPropertyExpression eachTransRole, OWLClassExpression fillerOfTheAxiom) {
 
-		Set<OWLSubClassOfAxiom> newAxioms = new HashSet<>();
+		Set<OWLSubClassOfAxiom> newAxioms = new HashSet<OWLSubClassOfAxiom>();
 
 		OWLClass newConcept = normalizerDataFactory.getFreshConceptForTransitivity();
 		OWLObjectAllValuesFrom forAllRestriction = owlDataFactory.getOWLObjectAllValuesFrom(eachTransRole, newConcept);
@@ -155,7 +155,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 	}
 
 	private Set<OWLSubClassOfAxiom> getSubClassOfAxioms() {
-		Set<OWLSubClassOfAxiom> subClassOfAxioms = new HashSet<>();
+		Set<OWLSubClassOfAxiom> subClassOfAxioms = new HashSet<OWLSubClassOfAxiom>();
 		SubClassOfValueRestrictionAxiomCollector axiomCollector = new SubClassOfValueRestrictionAxiomCollector();
 		Set<OWLAxiom> tboxAxioms = this.inputOntology.getTBoxAxioms(true);
 		for (OWLAxiom axiom : tboxAxioms) {
@@ -169,7 +169,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 	}
 
 	private Set<OWLObjectPropertyExpression> getTransitiveRoles() {
-		Set<OWLObjectPropertyExpression> transRoles = new HashSet<>();
+		Set<OWLObjectPropertyExpression> transRoles = new HashSet<OWLObjectPropertyExpression>();
 		Set<OWLTransitiveObjectPropertyAxiom> transAxioms = this.inputOntology
 				.getAxioms(AxiomType.TRANSITIVE_OBJECT_PROPERTY, true);
 		for (OWLTransitiveObjectPropertyAxiom axiom : transAxioms) {

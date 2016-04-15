@@ -55,12 +55,12 @@ public abstract class NormalizerTemplate implements Normalizer {
 		this.config = Configuration.getInstance();
 		this.inputOntology = inputOntology;
 		this.subClassAxiomStack = new Stack<OWLSubClassOfAxiom>();
-		this.normalizedSubClassAxioms = new HashSet<>();
+		this.normalizedSubClassAxioms = new HashSet<OWLAxiom>();
 
-		this.tboxAxiomsByNormalizingNominals = new HashSet<>();
-		this.aboxAxiomsByNomalizingNominals = new HashSet<>();
+		this.tboxAxiomsByNormalizingNominals = new HashSet<OWLAxiom>();
+		this.aboxAxiomsByNomalizingNominals = new HashSet<OWLAxiom>();
 		this.numberOfNormalizedAxioms = 0;
-		this.axiomsByNormalizingNominals = new HashSet<>();
+		this.axiomsByNormalizingNominals = new HashSet<OWLAxiom>();
 		// this.subClassNormalizer = new ALCHOISubClassNormalizer(
 		// subClassAxiomStack);
 		// this.superClassNormalizer = new ALCHOISuperClassNormalizer(
@@ -251,7 +251,7 @@ public abstract class NormalizerTemplate implements Normalizer {
 			/*
 			 * create {nominal}
 			 */
-			Set<OWLNamedIndividual> nominalSet = new HashSet<>();
+			Set<OWLNamedIndividual> nominalSet = new HashSet<OWLNamedIndividual>();
 			nominalSet.add(nominal);
 			OWLObjectOneOf nominalClass = owlDataFactory.getOWLObjectOneOf(nominalSet);
 			OWLEquivalentClassesAxiom newSubClass = owlDataFactory.getOWLEquivalentClassesAxiom(nominalConcept,
@@ -266,7 +266,7 @@ public abstract class NormalizerTemplate implements Normalizer {
 	}
 
 	private void nomalizeNominalsInABox() {
-		Set<OWLAxiom> individualAxioms = new HashSet<>();
+		Set<OWLAxiom> individualAxioms = new HashSet<OWLAxiom>();
 		individualAxioms.addAll(inputOntology.getAxioms(AxiomType.SAME_INDIVIDUAL, true));
 
 		individualAxioms.addAll(inputOntology.getAxioms(AxiomType.DIFFERENT_INDIVIDUALS, true));

@@ -27,7 +27,6 @@ import org.semanticweb.owlapi.model.OWLObjectMinCardinality;
 import org.semanticweb.owlapi.model.OWLObjectOneOf;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLObjectUnionOf;
-import org.semanticweb.owlapi.util.DLExpressivityChecker.Construct;
 
 import orar.dlfragmentvalidator.DLConstructor;
 import orar.dlfragmentvalidator.ValidatorDataFactory;
@@ -43,8 +42,8 @@ public class HornALCHOIF_SuperClass_Validator implements OWLClassExpressionVisit
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		profilingFactory = ValidatorDataFactory.getInstance();
 		subClassValidator = new HornALCHOIF_SubClass_Validator();
-		this.dlConstructorsInInputOntology = new HashSet<>();
-		this.dlConstructorsInValidatedOntology= new HashSet<>();
+		this.dlConstructorsInInputOntology = new HashSet<DLConstructor>();
+		this.dlConstructorsInValidatedOntology = new HashSet<DLConstructor>();
 	}
 
 	public Set<DLConstructor> getDlConstructorsInInputOntology() {

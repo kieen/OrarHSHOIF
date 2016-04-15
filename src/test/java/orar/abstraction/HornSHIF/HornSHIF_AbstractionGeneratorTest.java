@@ -112,7 +112,7 @@ public class HornSHIF_AbstractionGeneratorTest {
 		OWLNamedIndividual y1 = testData.getAbstractIndividual("Y1");
 		OWLClassAssertionAxiom A_x1 = testData.getConceptAssertion(A, x1);
 		OWLObjectPropertyAssertionAxiom funcRole_x1y1 = testData.getRoleAssertion(x1, funcRole, y1);
-		Set<OWLAxiom> expectedAxioms = new HashSet<>();
+		Set<OWLAxiom> expectedAxioms = new HashSet<OWLAxiom>();
 		expectedAxioms.add(A_x1);
 		expectedAxioms.add(funcRole_x1y1);
 
@@ -186,12 +186,12 @@ public class HornSHIF_AbstractionGeneratorTest {
 		OWLObjectPropertyAssertionAxiom funcRole_x1y1 = testData.getRoleAssertion(x1, funcRole, y1);
 		OWLObjectPropertyAssertionAxiom funcRole_z1X2 = testData.getRoleAssertion(z1, funcRole, x2);
 
-		Set<OWLAxiom> expectedAxioms = new HashSet<>();
+		Set<OWLAxiom> expectedAxioms = new HashSet<OWLAxiom>();
 		expectedAxioms.add(A_x1);
 		expectedAxioms.add(funcRole_x1y1);
 		expectedAxioms.add(funcRole_z1X2);
 
-		Set<OWLAxiom> actualAxioms = new HashSet<>();
+		Set<OWLAxiom> actualAxioms = new HashSet<OWLAxiom>();
 
 		for (OWLOntology abstraction : abstractions) {
 			System.out.println("====Abstraction====");

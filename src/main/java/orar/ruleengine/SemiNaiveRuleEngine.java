@@ -27,8 +27,8 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 
 	public SemiNaiveRuleEngine(OrarOntology orarOntology) {
 		this.orarOntology = orarOntology;
-		this.todoSameasAssertions = new LinkedList<>();
-		this.todoRoleAssertions = new LinkedList<>();
+		this.todoSameasAssertions = new LinkedList<Set<OWLNamedIndividual>>();
+		this.todoRoleAssertions = new LinkedList<OWLObjectPropertyAssertionAxiom>();
 
 		this.sameasRule = new SameasRuleExecutor(orarOntology);
 		this.funcRule = new FunctionalityRuleExecutor(orarOntology);
@@ -36,7 +36,7 @@ public class SemiNaiveRuleEngine implements RuleEngine {
 		this.subroRule = new SubRoleRuleExecutor(orarOntology);
 		this.inverseRule = new InverseRoleRuleExecutor(orarOntology);
 
-		this.ruleExecutors = new ArrayList<>();
+		this.ruleExecutors = new ArrayList<RuleExecutor>();
 		this.ruleExecutors.add(sameasRule);
 		this.ruleExecutors.add(subroRule);
 		this.ruleExecutors.add(tranRule);

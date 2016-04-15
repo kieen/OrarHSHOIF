@@ -9,29 +9,47 @@ import orar.config.LogInfo;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
+import orar.materializer.HornSHIF.HornSHIF_Materialization_Konclude;
 import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Hermit;
 import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Konclude;
 import orar.modeling.ontology.OrarOntology;
 
 public class UobmOrigin {
 	static String tboxFileName = "src/test/resources/uobm-origin/tbox/uobmtbox_origin.owl";
-	static String aboxListFileName = "/Users/kien/benchmarks/UOB/dl620/1/aboxListOriginU1.txt";
+	 static String aboxListFileName =
+	 "/Users/kien/benchmarks/UOB/dl620/1/aboxListOriginU1.txt";
 	static Logger logger = Logger.getLogger(NPD.class);
 
 	public static void main(String[] args) throws OWLOntologyCreationException {
 		Configuration.getInstance().clearDebugLevels();
 		Configuration.getInstance().clearLogInfoLevels();
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.LOADING_TIME, LogInfo.REASONING_TIME);
-		Configuration.getInstance().addDebugLevels(DebugLevel.PRINT_MARKING_INDIVIDUALS);
-		runWithSeperatedTBoxAndABoxes();
-		// runWithCombinedTBoxAndABoxes();
+		Configuration.getInstance().addDebugLevels(DebugLevel.TRANSFER_SAMEAS, DebugLevel.TRANSFER_CONCEPTASSERTION,
+				DebugLevel.TRANSFER_ROLEASSERTION);
+		 runWithSeperatedTBoxAndABoxes();
+//		runWithCombinedTBoxAndABoxes();
 
 	}
 
-	public static void runWithSeperatedTBoxAndABoxes() {
 	
+	 public static void runWithSeperatedTBoxAndABoxes() {
+	
+	 OntologyReader ontologyReader = new HornSHOIF_OntologyReader();
+	 OrarOntology normalizedOrarOntology =
+	 ontologyReader.getNormalizedOrarOntology(tboxFileName, aboxListFileName);
+	 logger.info(
+	 "Info: Concstructors in the validated ontology:" +
+	 normalizedOrarOntology.getActualDLConstructors());
+	 // long startAbstraction = System.currentTimeMillis();
+	 Materializer materializer = new
+	 HornSHOIF_Materialization_Konclude(normalizedOrarOntology);
+	 materializer.materialize();
+	
+	 }
+	public static void runWithCombinedTBoxAndABoxes() {
+
 		OntologyReader ontologyReader = new HornSHOIF_OntologyReader();
-		OrarOntology normalizedOrarOntology = ontologyReader.getNormalizedOrarOntology(tboxFileName, aboxListFileName);
+		OrarOntology normalizedOrarOntology = ontologyReader.getNormalizedOrarOntology(tboxFileName);
 		logger.info(
 				"Info: Concstructors in the validated ontology:" + normalizedOrarOntology.getActualDLConstructors());
 		// long startAbstraction = System.currentTimeMillis();
@@ -39,4 +57,5 @@ public class UobmOrigin {
 		materializer.materialize();
 
 	}
+
 }
