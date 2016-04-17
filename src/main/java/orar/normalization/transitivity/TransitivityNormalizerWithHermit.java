@@ -23,6 +23,7 @@ import org.semanticweb.owlapi.reasoner.InferenceType;
 import orar.config.Configuration;
 import orar.config.DebugLevel;
 import orar.data.NormalizationDataFactory;
+import orar.rolereasoning.AxiomOfSpecificTypeGetter;
 
 /**
  * @author kien Using Hermit reasoner to compute role hierarchy, which is the
@@ -58,8 +59,12 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 		OWLOntologyManager newOntologyManager = OWLManager.createOWLOntologyManager();
 		try {
 			OWLOntology tboxOntology = newOntologyManager.createOntology();
-			newOntologyManager.addAxioms(tboxOntology, this.inputOntology.getTBoxAxioms(true));
-			newOntologyManager.addAxioms(tboxOntology, this.inputOntology.getRBoxAxioms(true));
+			// newOntologyManager.addAxioms(tboxOntology,
+			// this.inputOntology.getTBoxAxioms(true));
+			newOntologyManager.addAxioms(tboxOntology,
+					AxiomOfSpecificTypeGetter.getObjectPropertyAxiomsForComputingRoleHierarchy(this.inputOntology));
+			logger.info("Size of Tbox:" + tboxOntology.getAxiomCount());
+
 			return tboxOntology;
 		} catch (OWLOntologyCreationException e) {
 			e.printStackTrace();

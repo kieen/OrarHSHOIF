@@ -15,7 +15,7 @@ public class Gazetter {
 
 	static Logger logger = Logger.getLogger(Gazetter.class);
 
-	static String combinedAboxAndTBox = "/Users/kien/benchmarks/gazetteer/gazetteer.xml.owl";
+	static String combinedAboxAndTBox = "/Users/kien/benchmarks/gazetteer/gazetteer_2-D_RL-ALEO-noSameIndividual.owl";
 
 	public static void main(String[] args) throws OWLOntologyCreationException {
 		Configuration.getInstance().clearDebugLevels();

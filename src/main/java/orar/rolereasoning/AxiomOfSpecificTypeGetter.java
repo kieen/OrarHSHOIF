@@ -8,6 +8,7 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLFunctionalObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLInverseFunctionalObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLInverseObjectPropertiesAxiom;
+import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
 import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
@@ -145,7 +146,8 @@ public class AxiomOfSpecificTypeGetter {
 		for (OWLAxiom axiom : aromaOntology.getTBoxAxioms()) {
 			if (axiom.isOfType(AxiomType.SUB_OBJECT_PROPERTY) || axiom.isOfType(AxiomType.INVERSE_OBJECT_PROPERTIES)
 					|| axiom.isOfType(AxiomType.SYMMETRIC_OBJECT_PROPERTY)
-					|| axiom.isOfType(AxiomType.EQUIVALENT_OBJECT_PROPERTIES)) {
+					|| axiom.isOfType(AxiomType.EQUIVALENT_OBJECT_PROPERTIES)
+					|| axiom.isOfType(AxiomType.TRANSITIVE_OBJECT_PROPERTY)) {
 				axioms.add(axiom);
 			}
 		}
@@ -153,6 +155,17 @@ public class AxiomOfSpecificTypeGetter {
 		return axioms;
 	}
 
+	public static Set<OWLAxiom> getObjectPropertyAxiomsForComputingRoleHierarchy(OWLOntology owlOntology) {
+		Set<OWLAxiom> axioms = new HashSet<OWLAxiom>();
+		Set<OWLAxiom> tboxAndRboxAxioms=new HashSet<>();
+		tboxAndRboxAxioms.addAll(owlOntology.getRBoxAxioms(true));
+		tboxAndRboxAxioms.addAll(owlOntology.getTBoxAxioms(true));
+		axioms=getObjectPropertyAxiomsForComputingRoleHierarchy(tboxAndRboxAxioms);
+
+		return axioms;
+	}
+
+	
 	public static Set<OWLAxiom> getObjectPropertyAxiomsForComputingRoleHierarchy(Set<OWLAxiom> tboxRboxAxioms) {
 		Set<OWLAxiom> resultingAxioms = new HashSet<OWLAxiom>();
 		for (OWLAxiom axiom : tboxRboxAxioms) {
@@ -176,4 +189,6 @@ public class AxiomOfSpecificTypeGetter {
 		}
 		return resultingAxioms;
 	}
+	
+	
 }
