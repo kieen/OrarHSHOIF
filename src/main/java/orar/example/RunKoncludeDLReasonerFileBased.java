@@ -24,7 +24,7 @@ public class RunKoncludeDLReasonerFileBased {
 		OntologyReader ontologyReader = new HornSHOIF_OntologyReader();
 		OWLOntology owlOntology = ontologyReader.getOWLAPIOntology(combinedAboxAndTBox);
 
-		DLReasoner dlReasoner = new KoncludeDLReasoner(owlOntology);
+		DLReasoner dlReasoner = new KoncludeDLReasonerFileBased(owlOntology);
 		dlReasoner.computeEntailments();
 
 	}

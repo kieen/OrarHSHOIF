@@ -18,7 +18,7 @@
     <CreateKB kb="http://init-ontology.ex"/>
     
 	<LoadOntologies kb="http://init-ontology.ex">
-		<OntologyIRI IRI="file:ontologyForKonclude.funcionalsyntax.owl"/>
+		<OntologyIRI IRI="file:/var/tmp/kien/iswc16benchmark/software/ontologyForKonclude.funcionalsyntax.owl"/>
 	</LoadOntologies>
 	
 	

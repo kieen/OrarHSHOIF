@@ -38,6 +38,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
 import orar.config.Configuration;
 import orar.config.LogInfo;
+import orar.config.StatisticVocabulary;
 
 public class KoncludeDLReasonerFileBased implements DLReasoner {
 	private OWLOntology ontology;
@@ -290,11 +291,13 @@ public class KoncludeDLReasonerFileBased implements DLReasoner {
 		askRoleAssertionForJustSomeIndividuals();
 		logger.info("computing samease assertions just for one individuals....");
 		askOneQueryOfSameas();
-
 		long endTime = System.currentTimeMillis();
 		this.reasoningTimeInSecond = (endTime - startTime) / 1000;
 		reasoner.dispose();
 		stopKoncludeServer();
+		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
+			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTimeInSecond);
+		}
 
 	}
 
@@ -329,7 +332,7 @@ public class KoncludeDLReasonerFileBased implements DLReasoner {
 		while (indIterator.hasNext()) {
 			anIndividual = indIterator.next();
 			count++;
-			if (count > 300) {
+			if (count > 1000) {
 				break;
 			}
 			for (OWLObjectProperty aRole : allRoles) {

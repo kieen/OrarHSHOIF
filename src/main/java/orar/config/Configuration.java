@@ -30,9 +30,13 @@ public class Configuration {
 		
 //		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/Konclude15April";
 		
-		koncludeConfigFileName = "/Users/kien/konclude/konclude-load-config.xml";
-		// koncludeConfigFileName="/data/kien/benchmark/software/konclude-load-config.xml";
-		savedOntologyFileName = "/Users/kien/konclude/ontologyForKonclude.funcionalsyntax.owl";
+//		koncludeConfigFileName = "/Users/kien/konclude/konclude-load-config.xml";
+//		// koncludeConfigFileName="/data/kien/benchmark/software/konclude-load-config.xml";
+//		savedOntologyFileName = "/Users/kien/konclude/ontologyForKonclude.funcionalsyntax.owl";
+		
+		//samwise
+		koncludeConfigFileName = "/var/tmp/kien/iswc16benchmark/software/konclude-load-config.xml";
+		savedOntologyFileName = "/var/tmp/kien/iswc16benchmark/software/ontologyForKonclude.funcionalsyntax.owl";
 
 		this.logInfos = new HashSet<LogInfo>();
 		this.debuglevels = new HashSet<DebugLevel>();

@@ -16,6 +16,7 @@ import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.FactDLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
 import orar.dlreasoner.KoncludeDLReasoner;
+import orar.dlreasoner.KoncludeDLReasonerFileBased;
 import orar.dlreasoner.PelletDLReasoner;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
@@ -132,7 +133,7 @@ public class DLReasonerCLI {
 			config.setKONCLUDE_BINARY_PATH(koncludePath);
 			String port = commandLine.getOptionValue(Argument.PORT);
 			int intPort = Integer.parseInt(port);
-			DLReasoner = new KoncludeDLReasoner(owlOntology, intPort);
+			DLReasoner = new KoncludeDLReasonerFileBased(owlOntology, intPort);
 			break;
 		case Argument.FACT:
 			DLReasoner = new FactDLReasoner(owlOntology);
