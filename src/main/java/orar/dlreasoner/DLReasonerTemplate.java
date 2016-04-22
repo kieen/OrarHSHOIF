@@ -81,24 +81,28 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 
 	@Override
 	public void computeEntailments() {
-
+		
 		this.reasoner = getOWLReasoner(owlOntology);
-
+//		logger.info("***DEBUG*** 1");
 		long startTime = System.currentTimeMillis();
 
 		this.reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS, InferenceType.OBJECT_PROPERTY_ASSERTIONS,
 				InferenceType.SAME_INDIVIDUAL);
+//		logger.info("***DEBUG*** 2");
 		if (!reasoner.isConsistent()) {
 			logger.error("Ontology inconsistent!");
 		}
+//		logger.info("***DEBUG*** 3");
+		logger.info("computing concept assertions...");
 		computeEntailedConceptAssertions();
+		logger.info("computing role assertions...");
 		computeEntailedRoleAssertions();
+		logger.info("computing sameas assertions...");
 		computeEntailedSameasAssertions();
-
-		long endTime = System.currentTimeMillis();
-
 		this.entailmentComputed = true;
 		dispose();
+		long endTime = System.currentTimeMillis();
+		logger.info("computing entailments...finished!");
 		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
 		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
 			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTime);
@@ -108,7 +112,7 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 	/**
 	 * compute entailed same individuals
 	 */
-	private void computeEntailedSameasAssertions() {
+	protected void computeEntailedSameasAssertions() {
 		Set<OWLNamedIndividual> allIndividuals = this.owlOntology.getIndividualsInSignature(true);
 		// logger.info("***DEBUG*** individuals in signatures:"+allIndividuals);
 		for (OWLNamedIndividual indiv : allIndividuals) {
@@ -122,7 +126,7 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 	/**
 	 * compute entailed role assertions
 	 */
-	private void computeEntailedRoleAssertions() {
+	protected void computeEntailedRoleAssertions() {
 		Set<OWLNamedIndividual> allIndividuals = this.owlOntology.getIndividualsInSignature(true);
 		Set<OWLObjectProperty> allRoles = this.owlOntology.getObjectPropertiesInSignature(true);
 		allRoles.remove(this.dataFactory.getOWLTopObjectProperty());

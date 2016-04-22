@@ -175,8 +175,8 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>orar.commandline.OrarCLI</mainClass>
-							<!-- <mainClass>orar.commandline.DLReasonerCLI</mainClass> -->
+						<!-- 	<mainClass>orar.commandline.OrarCLI</mainClass>  -->
+							<mainClass>orar.commandline.DLReasonerCLI</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>.</Class-Path>

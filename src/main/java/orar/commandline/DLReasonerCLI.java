@@ -105,9 +105,9 @@ public class DLReasonerCLI {
 			logger.info("Run DLReasoner:" + commandLine.getOptionValue(Argument.REASONER));
 
 			OWLOntology owlOntology = getOWLOntology(commandLine);
-			DLReasoner DLReasoner = getDLReasoner(commandLine, owlOntology);
+			DLReasoner dlReasoner = getDLReasoner(commandLine, owlOntology);
 
-			DLReasoner.computeEntailments();
+			dlReasoner.computeEntailments();
 
 			String reasonerName = commandLine.getOptionValue(Argument.REASONER);
 			logger.info("DLReasoner: " + reasonerName);
