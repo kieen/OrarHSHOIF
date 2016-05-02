@@ -63,7 +63,7 @@ public class TransitivityNormalizerWithHermit implements TransitivityNormalizer 
 			// this.inputOntology.getTBoxAxioms(true));
 			newOntologyManager.addAxioms(tboxOntology,
 					AxiomOfSpecificTypeGetter.getObjectPropertyAxiomsForComputingRoleHierarchy(this.inputOntology));
-			logger.info("Size of Tbox:" + tboxOntology.getAxiomCount());
+//			logger.info("Size of Tbox:" + tboxOntology.getAxiomCount());
 
 			return tboxOntology;
 		} catch (OWLOntologyCreationException e) {

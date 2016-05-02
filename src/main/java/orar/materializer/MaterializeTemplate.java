@@ -92,9 +92,9 @@ public abstract class MaterializeTemplate implements Materializer {
 		boolean updated = true;
 		logger.info("Starting the abstraction refinement loop...");
 
-//		// TODO:delete this set after debuggin
-//		HashSet<Object> typesLoop3 = new HashSet<>();
-//		HashSet<Object> typesLoop4 = new HashSet<>();
+		// // TODO:delete this set after debuggin
+		// HashSet<Object> typesLoop3 = new HashSet<>();
+		// HashSet<Object> typesLoop4 = new HashSet<>();
 
 		while (updated) {
 			currentLoop = this.currentLoop + 1;
@@ -114,14 +114,14 @@ public abstract class MaterializeTemplate implements Materializer {
 			Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals = this.typeComputor
 					.computeTypes(this.normalizedORAROntology);
 
-//			// TODO:delete after debugging
-//			if (this.currentLoop == 3) {
-//				typesLoop3.addAll(typeMap2Individuals.keySet());
-//			}
-//
-//			if (this.currentLoop == 4) {
-//				typesLoop4.addAll(typeMap2Individuals.keySet());
-//			}
+			// // TODO:delete after debugging
+			// if (this.currentLoop == 3) {
+			// typesLoop3.addAll(typeMap2Individuals.keySet());
+			// }
+			//
+			// if (this.currentLoop == 4) {
+			// typesLoop4.addAll(typeMap2Individuals.keySet());
+			// }
 
 			// logging
 			if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
@@ -234,13 +234,13 @@ public abstract class MaterializeTemplate implements Materializer {
 				/*
 				 * (7). Compute deductive closure
 				 */
-				logger.info("Computing deductive closure wrt new entailments ...");
+				logger.info("Computing the deductive closure wrt new entailments ...");
 				ruleEngine.addTodoRoleAsesrtions(newlyAddedRoleAssertions.getSetOfRoleAssertions());
 				ruleEngine.addTodoSameasAssertions(newlyAddedSameasAssertions);
 				ruleEngine.incrementalMaterialize();
 
 			}
-			logger.info("Finish loop: " + currentLoop);
+			logger.info("Finished loop: " + currentLoop);
 
 		}
 		// logging statistics
@@ -248,6 +248,7 @@ public abstract class MaterializeTemplate implements Materializer {
 			int numberOfRefinements = currentLoop - 1;
 			logger.info(StatisticVocabulary.NUMBER_OF_REFINEMENTS + numberOfRefinements);
 		}
+		// get reasoning time
 		long endTime = System.currentTimeMillis();
 		this.reasoningTimeInSeconds = (endTime - startTime) / 1000;
 		/*
@@ -267,7 +268,8 @@ public abstract class MaterializeTemplate implements Materializer {
 			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ROLEASSERTIONS + numberOfMaterializedRoleAssertions);
 			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ASSERTIONS + numberOfMaterializedAssertions);
 		}
-//		logger.info("Types in Loop3 is equal to Types in Loop4?"+ typesLoop3.equals(typesLoop4));
+		// logger.info("Types in Loop3 is equal to Types in Loop4?"+
+		// typesLoop3.equals(typesLoop4));
 	}
 
 	protected abstract List<OWLOntology> getAbstractions(

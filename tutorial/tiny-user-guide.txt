@@ -1,0 +1,27 @@
+Please follow the instruction below to compile and run Orar.
+
+1. Prerequisite: Apache Maven 3.0.4 and Java  1.7.0_21
+
+2. Create an all-in-one-jar file using the following Maven command (run from the project's folder):
+
+mvn package
+
+3. The resulting .jar file will be created in the folder "target", e.g. target/OrarHSHOIF-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+Optionally you can rename it to have a shorter name, e.g. Orar.jar. 
+From now on, we refers to the name Orar.jar instead of OrarHSHOIF-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+
+4. Now, you will be able to run Orar.jar. 
+Suppose we are now in the folder "tutorial" and we want to run Orar with the following options/input:
+   + use HermiT as an internal reasoner
+   + print out the statistic of the (materialized) ontology and the reasoning time
+   + the input TBox is: univ-bench-dl-ox.owl 
+   + the input ABoxes are: abox1.owl, abox2.owl, which are listed in the file aboxList.txt
+   
+java -jar ../target/Orar.jar -reasoner hermit -statistic -reasoningtime -tbox ./tbox.owl -abox ./aboxList.txt
+
+5. To run Orar with other options, e.g. with other reasoners, use the following command to see the detailed options.
+ 
+java -jar ../target/Orar.jar
+
+
+

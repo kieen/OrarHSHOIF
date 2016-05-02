@@ -1,0 +1,3 @@
+#A list of ABox files, one per line.
+abox1.owl
+abox2.owl

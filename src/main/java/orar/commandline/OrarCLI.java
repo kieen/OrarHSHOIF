@@ -43,7 +43,7 @@ public class OrarCLI {
 				"print total time of the system,e.g. loading time + materialization time");
 
 		Option statistic = new Option(Argument.STATISTIC, false,
-				"print statistic information, i.e. for experiment result of the paper");
+				"print statistic information of the (materialized) ontology");
 
 		/*
 		 * Argument options
@@ -61,8 +61,8 @@ public class OrarCLI {
 		StringBuilder reasonerDescription = new StringBuilder();
 		reasonerDescription.append("set the reasoner used in the system:");
 		reasonerDescription.append(
-				Argument.KONCLUDE + " or " + Argument.HERMIT + " or " + Argument.FACT + " or " + Argument.PELLET);
-		reasonerDescription.append(" If you choose konclude, then the path to Konclude reasoner must be provided");
+				Argument.KONCLUDE + ", " + Argument.HERMIT + ", " + Argument.FACT + ", " + Argument.PELLET+"\n");
+		reasonerDescription.append(" If you choose konclude, then the path to konclude reasoner must be provided");
 		Option reasoner = Option.builder(Argument.REASONER).required().desc(reasonerDescription.toString()).hasArg(true)
 				.build();
 
@@ -155,7 +155,7 @@ public class OrarCLI {
 	static private Materializer getHornReasoner(CommandLine commandLine, String reasonerName,
 			OrarOntology orarOntology) {
 		Materializer materializer=null;
-		logger.info("Info: DL Constructors in the validated ontology: " + orarOntology.getActualDLConstructors());
+//		logger.info("Info: Some DL Constructors in the validated ontology: " + orarOntology.getActualDLConstructors());
 
 		if (reasonerName.equals(Argument.HERMIT)) {
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {
