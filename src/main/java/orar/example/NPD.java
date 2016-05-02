@@ -1,4 +1,4 @@
-package orar.experiment;
+package orar.example;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -11,10 +11,10 @@ import orar.materializer.Materializer;
 import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Hermit;
 import orar.modeling.ontology.OrarOntology;
 
-public class Movie {
-	static String tboxFileName = "/Users/kien/benchmarks/movie/movieontology.owl";
-	static String aboxListFileName = "/Users/kien/benchmarks/movie/imdbABoxList.txt";
-	static Logger logger =Logger.getLogger(Movie.class);
+public class NPD {
+	static String tboxFileName = "/Users/kien/benchmarks/npd-pagoda/npd.owl";
+	static String aboxListFileName = "/Users/kien/benchmarks/npd-v2/aboxList.txt";
+	static Logger logger =Logger.getLogger(NPD.class);
 	
 
 	public static void main(String[] args) throws OWLOntologyCreationException {

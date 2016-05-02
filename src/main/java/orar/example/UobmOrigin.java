@@ -1,4 +1,4 @@
-package orar.experiment;
+package orar.example;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;

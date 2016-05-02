@@ -1,4 +1,4 @@
-package orar.experiment;
+package orar.example;
 
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -11,11 +11,11 @@ import orar.materializer.Materializer;
 import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Konclude;
 import orar.modeling.ontology.OrarOntology;
 
-public class SamTypesInDifferentLoops {
-	static Logger logger = Logger.getLogger(Gazetter.class);
+public class Coburn {
 
-//	static String combinedAboxAndTBox = "src/test/resources/main/sameTypesInDifferentLoop.owl";
-	static String combinedAboxAndTBox = "src/test/resources/main/sameTypesInDifferentLoop2.owl";
+	static Logger logger = Logger.getLogger(Coburn.class);
+
+	static String combinedAboxAndTBox = "/Users/kien/benchmarks/coburn/coburnSHOIF.owl";
 
 	public static void main(String[] args) throws OWLOntologyCreationException {
 		Configuration.getInstance().clearDebugLevels();
