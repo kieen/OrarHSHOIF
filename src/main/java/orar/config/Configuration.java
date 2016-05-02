@@ -28,13 +28,17 @@ public class Configuration {
 		 */
 		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/Konclude";
 		
-//		this.KONCLUDE_BINARY_PATH = "/Users/kien/konclude/Konclude15April";
-		
+
+		/*
+		 * MacOS
+		 */
 //		koncludeConfigFileName = "/Users/kien/konclude/konclude-load-config.xml";
-//		// koncludeConfigFileName="/data/kien/benchmark/software/konclude-load-config.xml";
 //		savedOntologyFileName = "/Users/kien/konclude/ontologyForKonclude.funcionalsyntax.owl";
 		
-		//samwise
+		
+		/*
+		 * samwise server. Use the following paths when running in samwise.
+		 */
 		koncludeConfigFileName = "/var/tmp/kien/iswc16benchmark/software/konclude-load-config.xml";
 		savedOntologyFileName = "/var/tmp/kien/iswc16benchmark/software/ontologyForKonclude.funcionalsyntax.owl";
 

@@ -332,7 +332,7 @@ public class KoncludeDLReasonerFileBased implements DLReasoner {
 		while (indIterator.hasNext()) {
 			anIndividual = indIterator.next();
 			count++;
-			if (count > 1000) {
+			if (count > 2) {
 				break;
 			}
 			for (OWLObjectProperty aRole : allRoles) {

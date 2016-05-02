@@ -122,29 +122,31 @@ public class DLReasonerCLI {
 	}
 
 	static private DLReasoner getDLReasoner(CommandLine commandLine, OWLOntology owlOntology) {
-		DLReasoner DLReasoner;
+		DLReasoner dlReasoner=null;
 		String reasonerName = commandLine.getOptionValue(Argument.REASONER);
-		switch (reasonerName) {
-		case Argument.HERMIT:
-			DLReasoner = new HermitDLReasoner(owlOntology);
-			break;
-		case Argument.KONCLUDE:
+
+		if (reasonerName.equals(Argument.HERMIT)) {
+			dlReasoner = new HermitDLReasoner(owlOntology);
+		}
+
+		if (reasonerName.equals(Argument.KONCLUDE)) {
 			String koncludePath = commandLine.getOptionValue(Argument.KONCLUDEPATH);
 			config.setKONCLUDE_BINARY_PATH(koncludePath);
 			String port = commandLine.getOptionValue(Argument.PORT);
 			int intPort = Integer.parseInt(port);
-			DLReasoner = new KoncludeDLReasonerFileBased(owlOntology, intPort);
-			break;
-		case Argument.FACT:
-			DLReasoner = new FactDLReasoner(owlOntology);
-			break;
-		case Argument.PELLET:
-			DLReasoner = new PelletDLReasoner(owlOntology);
-			break;
-		default:
-			DLReasoner = null;
+			dlReasoner = new KoncludeDLReasonerFileBased(owlOntology, intPort);
 		}
-		return DLReasoner;
+
+		if (reasonerName.equals(Argument.FACT)) {
+			dlReasoner = new FactDLReasoner(owlOntology);
+		}
+
+		if (reasonerName.equals(Argument.PELLET)) {
+			dlReasoner = new PelletDLReasoner(owlOntology);
+		}
+
+		return dlReasoner;
+
 	}
 
 	static private boolean argumentsAreValid(CommandLine commandLine) {

@@ -1,1 +1,0 @@
-java -jar ../target/OrarHSHOIF-0.0.1-SNAPSHOT-jar-with-dependencies.jar -reasoner hermit -statistic -tbox ./univ-bench-dl-ox.owl -abox ./aboxListOf2.txt

@@ -101,7 +101,8 @@
 		<dependency>
 			<groupId>net.sourceforge.owlapi</groupId>
 			<artifactId>jfact</artifactId>
-			<version>1.2.2</version>
+<!-- 			<version>1.2.2</version> -->
+			<version>5.0.0</version>
 		</dependency>
 		<!-- Pellet -->
 		<dependency>

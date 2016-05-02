@@ -8,6 +8,7 @@ import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.KoncludeDLReasoner;
+import orar.dlreasoner.KoncludeDLReasonerFileBased;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 
@@ -32,7 +33,7 @@ public class KoncludeCorburn {
 		// "Info: Concstructors in the validated ontology:" +
 		// normalizedOrarOntology.getActualDLConstructors());
 		// long startAbstraction = System.currentTimeMillis();
-		DLReasoner dlReasoner = new KoncludeDLReasoner(owlOntology);
+		DLReasoner dlReasoner = new KoncludeDLReasonerFileBased(owlOntology);
 		dlReasoner.computeEntailments();
 		System.out.println("Reasoning time:" + dlReasoner.getReasoningTime());
 

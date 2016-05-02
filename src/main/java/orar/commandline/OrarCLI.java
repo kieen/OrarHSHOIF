@@ -154,17 +154,19 @@ public class OrarCLI {
 
 	static private Materializer getHornReasoner(CommandLine commandLine, String reasonerName,
 			OrarOntology orarOntology) {
-		Materializer materializer;
+		Materializer materializer=null;
 		logger.info("Info: DL Constructors in the validated ontology: " + orarOntology.getActualDLConstructors());
-		switch (reasonerName) {
-		case Argument.HERMIT:
+
+		if (reasonerName.equals(Argument.HERMIT)) {
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {
 				materializer = new HornSHOIF_Materialization_Hermit(orarOntology);
 			} else {
 				materializer = new HornSHIF_Materialization_Hermit(orarOntology);
 			}
-			break;
-		case Argument.KONCLUDE:
+
+		}
+
+		if (reasonerName.equals(Argument.KONCLUDE)) {
 			String koncludePath = commandLine.getOptionValue(Argument.KONCLUDEPATH);
 			config.setKONCLUDE_BINARY_PATH(koncludePath);
 			String port = commandLine.getOptionValue(Argument.PORT);
@@ -174,25 +176,27 @@ public class OrarCLI {
 			} else {
 				materializer = new HornSHIF_Materialization_Konclude(orarOntology, intPort);
 			}
-			break;
-		case Argument.FACT:
+		}
+
+		if (reasonerName.equals(Argument.FACT)) {
+
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {
 				materializer = new HornSHOIF_Materialization_Fact(orarOntology);
 			} else {
 				materializer = new HornSHIF_Materialization_Fact(orarOntology);
 			}
-			break;
-		case Argument.PELLET:
+		}
+
+		if (reasonerName.equals(Argument.PELLET)) {
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {
 				materializer = new HornSHOIF_Materialization_Pellet(orarOntology);
 			} else {
 				materializer = new HornSHIF_Materialization_Pellet(orarOntology);
 			}
-			break;
-		default:
-			materializer = null;
 		}
+		
 		return materializer;
+
 	}
 
 	static private boolean argumentsAreValid(CommandLine commandLine) {
