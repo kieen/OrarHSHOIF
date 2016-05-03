@@ -1,4 +1,4 @@
-Please follow the instruction below to compile and run Orar.
+Follow the instruction below to compile and run Orar.
 
 1. Prerequisite: Apache Maven 3.0.4 and Java  1.7.0_21
 
