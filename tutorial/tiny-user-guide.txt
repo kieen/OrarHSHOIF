@@ -14,7 +14,7 @@ From now on, we refers to the name Orar.jar instead of OrarHSHOIF-0.0.1-SNAPSHOT
 Suppose we are now in the folder "tutorial" and we want to run Orar with the following options/input:
    + use HermiT as an internal reasoner
    + print out the statistic of the (materialized) ontology and the reasoning time
-   + the input TBox is: univ-bench-dl-ox.owl 
+   + the input TBox is: tbox.owl
    + the input ABoxes are: abox1.owl, abox2.owl, which are listed in the file aboxList.txt
    
 java -jar ../target/Orar.jar -reasoner hermit -statistic -reasoningtime -tbox ./tbox.owl -abox ./aboxList.txt
