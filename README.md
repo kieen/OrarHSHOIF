@@ -1,4 +1,4 @@
-**Ontology Reasoning via Abstraction Refinement with: Orar**
+**Orar: Ontology Reasoning via Abstraction Refinement**
 ------------------------------------------------------------
 Orar is a prototype reasoner for ontology materialization.  Its central technique allows for reducing materialization of an ontology with a large dataset/ABox to materialization of a smaller (compressed) *abstraction* of this ontology.  Currently Orar supports the Description Logic Horn SHOIF, which captures relevant features of RDFS and OWL 2 Web Ontology Language. 
 
