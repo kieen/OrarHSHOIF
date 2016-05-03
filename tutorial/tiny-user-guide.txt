@@ -8,7 +8,7 @@ mvn package
 
 3. The resulting .jar file will be created in the folder "target", e.g. target/OrarHSHOIF-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 Optionally you can rename it to have a shorter name, e.g. Orar.jar. 
-From now on, we refers to the name Orar.jar instead of OrarHSHOIF-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+From now on, we refer to Orar.jar instead of OrarHSHOIF-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 
 4. Now, you will be able to run Orar.jar. 
 Suppose we are now in the folder "tutorial" and we want to run Orar with the following options/input:
