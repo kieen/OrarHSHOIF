@@ -7,7 +7,6 @@ import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.dlreasoner.DLReasoner;
 import orar.dlreasoner.KoncludeDLReasoner;
-import orar.dlreasoner.KoncludeDLReasonerFileBased;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 
@@ -28,7 +27,8 @@ public class RunKoncludeDLReasoner {
 
 	public static void runWithSeperatedTBoxAndABoxes() {
 		OntologyReader ontologyReader = new HornSHOIF_OntologyReader();
-//		OWLOntology owlOntology = ontologyReader.getOWLAPIOntology(tboxFileName, aboxListFileName);
+		// OWLOntology owlOntology =
+		// ontologyReader.getOWLAPIOntology(tboxFileName, aboxListFileName);
 		OWLOntology owlOntology = ontologyReader.getOWLAPIOntology(combinedAboxAndTBox);
 		DLReasoner dlReasoner = new KoncludeDLReasoner(owlOntology);
 		dlReasoner.computeEntailments();

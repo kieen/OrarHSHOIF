@@ -9,7 +9,6 @@ import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
 import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Hermit;
-import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Konclude;
 import orar.modeling.ontology.OrarOntology;
 
 /**
@@ -20,7 +19,7 @@ import orar.modeling.ontology.OrarOntology;
  *
  */
 public class DemoSameTypesInDifferentLoops {
-	static Logger logger = Logger.getLogger(Gazetter.class);
+	static Logger logger = Logger.getLogger(DemoSameTypesInDifferentLoops.class);
 
 	// static String combinedAboxAndTBox =
 	// "src/test/resources/main/sameTypesInDifferentLoop.owl";
