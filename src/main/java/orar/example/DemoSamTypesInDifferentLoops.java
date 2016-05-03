@@ -11,10 +11,18 @@ import orar.materializer.Materializer;
 import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Konclude;
 import orar.modeling.ontology.OrarOntology;
 
-public class SamTypesInDifferentLoops {
+/**
+ * This example is to demonstrate that the types could remain the same in
+ * different loops, but the original ABox got updated.
+ * 
+ * @author kien
+ *
+ */
+public class DemoSamTypesInDifferentLoops {
 	static Logger logger = Logger.getLogger(Gazetter.class);
 
-//	static String combinedAboxAndTBox = "src/test/resources/main/sameTypesInDifferentLoop.owl";
+	// static String combinedAboxAndTBox =
+	// "src/test/resources/main/sameTypesInDifferentLoop.owl";
 	static String combinedAboxAndTBox = "src/test/resources/main/sameTypesInDifferentLoop2.owl";
 
 	public static void main(String[] args) throws OWLOntologyCreationException {

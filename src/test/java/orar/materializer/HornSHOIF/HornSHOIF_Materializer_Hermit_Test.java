@@ -186,7 +186,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		haveTheSameResults(ontologyPath);
 	}
 
-	@SuppressWarnings("Hermit failed to do reasoning over the abstraction: java.util.ConcurrentModificationException")
+	@SuppressWarnings("Bugs are from Hermit. It failed to do reasoning over the abstraction: java.util.ConcurrentModificationException")
 	@Test
 	public void testRoleAssertionByNominalConcept() {
 		Configuration.getInstance().addAllDebugInfos();
@@ -194,7 +194,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 
 		haveTheSameResults(ontologyPath);
 	}
-
+	@SuppressWarnings("Bugs are from Hermit. It failed to do reasoning over the abstraction: java.util.ConcurrentModificationException")
 	@Test
 	public void testRoleAssertionByNominalConcept2() {
 		Configuration.getInstance().addAllDebugInfos();
@@ -225,11 +225,11 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		haveTheSameResults(ontologyPath);
 	}
 
-	@Test
-	public void testUOBM_OXSmall4() {
-		String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
-		haveTheSameResults(ontologyPath);
-	}
+//	@Test
+//	public void testUOBM_OXSmall4() {
+//		String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
+//		haveTheSameResults(ontologyPath);
+//	}
 	// @Test
 	// public void testUOBM_OXSmall1() {
 	// String ontologyPath =

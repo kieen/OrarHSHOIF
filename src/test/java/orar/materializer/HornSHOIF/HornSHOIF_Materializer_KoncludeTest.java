@@ -200,6 +200,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		haveTheSameResults(ontologyPath);
 	}
 
+	@SuppressWarnings("Bugs are from Konclude reasoner; not from abstraction refinement. Konclude failed to do provide complete results.")
 	@Test
 	public void testRoleAssertionByTran2() {
 		Configuration.getInstance().addAllDebugInfos();
@@ -295,8 +296,9 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		Configuration.getInstance().clearLogInfoLevels();
 
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME, LogInfo.LOADING_TIME);
-		 Configuration.getInstance().addDebugLevels(
-		 DebugLevel.PRINT_MARKING_INDIVIDUALS, DebugLevel.ADDING_MARKING_AXIOMS);
+		// Configuration.getInstance().addDebugLevels(
+		// DebugLevel.PRINT_MARKING_INDIVIDUALS,
+		// DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
