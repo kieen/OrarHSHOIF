@@ -8,6 +8,7 @@ import orar.config.LogInfo;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
+import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Hermit;
 import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Konclude;
 import orar.modeling.ontology.OrarOntology;
 
@@ -40,7 +41,7 @@ public class DemoSamTypesInDifferentLoops {
 		logger.info(
 				"Info: Concstructors in the validated ontology:" + normalizedOrarOntology.getActualDLConstructors());
 		// long startAbstraction = System.currentTimeMillis();
-		Materializer materializer = new HornSHOIF_Materialization_Konclude(normalizedOrarOntology);
+		Materializer materializer = new HornSHOIF_Materialization_Hermit(normalizedOrarOntology);
 		materializer.materialize();
 
 	}
