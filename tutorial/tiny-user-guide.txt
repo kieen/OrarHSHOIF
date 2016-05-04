@@ -1,6 +1,9 @@
-Please follow the instruction below to compile and run Orar.
+Please follow the instruction below to compile and run Orar-0.1.
 
-1. Prerequisite: Apache Maven 3.0.4 and Java  1.7.0_21
+1. Prerequisite: 
+	+ Orar version 0.1, available at https://github.com/kieen/OrarHSHOIF/releases
+	+ Apache Maven 3.0.4 
+	+ Java  1.7.0_21
 
 2. Create an all-in-one-jar file using the following Maven command (run from the project's folder):
 
