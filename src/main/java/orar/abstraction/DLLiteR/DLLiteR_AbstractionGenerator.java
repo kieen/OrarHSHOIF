@@ -21,6 +21,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 import orar.abstraction.AbstractionGenerator;
+import orar.abstraction.RoleAssertionBetweenRepresentativesXGenerator;
 import orar.data.AbstractDataFactory;
 import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
@@ -84,6 +85,10 @@ public class DLLiteR_AbstractionGenerator implements AbstractionGenerator {
 				aBoxAssertions.addAll(generateAssertions(type));
 
 			}
+
+			RoleAssertionBetweenRepresentativesXGenerator roleGenerator = new RoleAssertionBetweenRepresentativesXGenerator(
+					this.orarOntology);
+			aBoxAssertions.addAll(roleGenerator.getRoleAssertionBetweenRepresentativesX());
 			manager.addAxioms(abstractOntology, aBoxAssertions);
 			manager.addAxioms(abstractOntology, orarOntology.getTBoxAxioms());
 			/*
@@ -122,40 +127,47 @@ public class DLLiteR_AbstractionGenerator implements AbstractionGenerator {
 		 */
 		abstractAssertions.addAll(getConceptAssertions(x, type));
 
-		/*
-		 * create succRole assertions for x, we dont need create preRole
-		 * assertions for x because predecessor of x will do the job. For
-		 * example R(x1,x) will be added when we create succRole assertions for
-		 * x1.
-		 */
-		abstractAssertions.addAll(getSuccessorRoleAssertions(x, type));
+		// /*
+		// * create succRole assertions for x, we dont need create preRole
+		// * assertions for x because predecessor of x will do the job. For
+		// * example R(x1,x) will be added when we create succRole assertions
+		// for
+		// * x1.
+		// */
+		// abstractAssertions.addAll(getSuccessorRoleAssertions(x, type));
 
 		return abstractAssertions;
 	}
 
-	private Set<OWLAxiom> getSuccessorRoleAssertions(OWLNamedIndividual x, IndividualType type) {
-		Set<OWLAxiom> generatedSucRoleAssertions = new HashSet<OWLAxiom>();
-
-		Set<OWLNamedIndividual> originalInddividuals_Of_X = this.typeMap2Individuals.get(type);
-
-		for (OWLNamedIndividual eachOriginalInd : originalInddividuals_Of_X) {
-			Map<OWLObjectProperty, Set<OWLNamedIndividual>> succRolesMap = this.orarOntology
-					.getSuccessorRoleAssertionsAsMap(eachOriginalInd);
-			Iterator<Entry<OWLObjectProperty, Set<OWLNamedIndividual>>> iterator = succRolesMap.entrySet().iterator();
-			while (iterator.hasNext()) {
-				Entry<OWLObjectProperty, Set<OWLNamedIndividual>> succRoleMap2Successors = iterator.next();
-				OWLObjectProperty succRole = succRoleMap2Successors.getKey();
-				for (OWLNamedIndividual succIndivs : succRoleMap2Successors.getValue()) {
-					OWLNamedIndividual xPrime = this.sharedMap.getMapIndividual2XAbstract().get(succIndivs);
-					OWLObjectPropertyAssertionAxiom x_succRole_Xprime = this.owlDataFactory
-							.getOWLObjectPropertyAssertionAxiom(succRole, x, xPrime);
-					generatedSucRoleAssertions.add(x_succRole_Xprime);
-				}
-			}
-		}
-
-		return generatedSucRoleAssertions;
-	}
+	// private Set<OWLAxiom> getSuccessorRoleAssertions(OWLNamedIndividual x,
+	// IndividualType type) {
+	// Set<OWLAxiom> generatedSucRoleAssertions = new HashSet<OWLAxiom>();
+	//
+	// Set<OWLNamedIndividual> originalInddividuals_Of_X =
+	// this.typeMap2Individuals.get(type);
+	//
+	// for (OWLNamedIndividual eachOriginalInd : originalInddividuals_Of_X) {
+	// Map<OWLObjectProperty, Set<OWLNamedIndividual>> succRolesMap =
+	// this.orarOntology
+	// .getSuccessorRoleAssertionsAsMap(eachOriginalInd);
+	// Iterator<Entry<OWLObjectProperty, Set<OWLNamedIndividual>>> iterator =
+	// succRolesMap.entrySet().iterator();
+	// while (iterator.hasNext()) {
+	// Entry<OWLObjectProperty, Set<OWLNamedIndividual>> succRoleMap2Successors
+	// = iterator.next();
+	// OWLObjectProperty succRole = succRoleMap2Successors.getKey();
+	// for (OWLNamedIndividual succIndivs : succRoleMap2Successors.getValue()) {
+	// OWLNamedIndividual xPrime =
+	// this.sharedMap.getMapIndividual2XAbstract().get(succIndivs);
+	// OWLObjectPropertyAssertionAxiom x_succRole_Xprime = this.owlDataFactory
+	// .getOWLObjectPropertyAssertionAxiom(succRole, x, xPrime);
+	// generatedSucRoleAssertions.add(x_succRole_Xprime);
+	// }
+	// }
+	// }
+	//
+	// return generatedSucRoleAssertions;
+	// }
 
 	/**
 	 * @param x
