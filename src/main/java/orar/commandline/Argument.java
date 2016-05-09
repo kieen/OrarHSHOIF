@@ -15,6 +15,7 @@ public class Argument {
 	static final String PORT = "port";
 	static final String KONCLUDEPATH = "koncludepath";
 	static final String SPLITTING = "splitting";
+	static final String DL = "dl", DLLITE_R= "dllite_r", HORN_SHOIF = "horn_shoif";
 
 	static final List<String> reasonerList = new ArrayList<String>(Arrays.asList(KONCLUDE, HERMIT, FACT, PELLET));
 

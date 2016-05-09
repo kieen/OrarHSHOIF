@@ -12,9 +12,14 @@ import org.apache.log4j.Logger;
 import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.dlfragmentvalidator.DLConstructor;
+import orar.io.ontologyreader.DLLiteR_OntologyReader;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
+import orar.materializer.DLLiteR.DLLiteR_Materializer_Fact;
+import orar.materializer.DLLiteR.DLLiteR_Materializer_Hermit;
+import orar.materializer.DLLiteR.DLLiteR_Materializer_Konclude;
+import orar.materializer.DLLiteR.DLLiteR_Materializer_Pellet;
 import orar.materializer.HornSHIF.HornSHIF_Materialization_Fact;
 import orar.materializer.HornSHIF.HornSHIF_Materialization_Hermit;
 import orar.materializer.HornSHIF.HornSHIF_Materialization_Konclude;
@@ -61,7 +66,7 @@ public class OrarCLI {
 		StringBuilder reasonerDescription = new StringBuilder();
 		reasonerDescription.append("set the reasoner used in the system:");
 		reasonerDescription.append(
-				Argument.KONCLUDE + ", " + Argument.HERMIT + ", " + Argument.FACT + ", " + Argument.PELLET+"\n");
+				Argument.KONCLUDE + ", " + Argument.HERMIT + ", " + Argument.FACT + ", " + Argument.PELLET + "\n");
 		reasonerDescription.append(" If you choose konclude, then the path to konclude reasoner must be provided");
 		Option reasoner = Option.builder(Argument.REASONER).required().desc(reasonerDescription.toString()).hasArg(true)
 				.build();
@@ -72,10 +77,9 @@ public class OrarCLI {
 		// Option dl = new Option(DL, true,
 		// "Description Logic fragment, e.g.horn or nonhorn");
 
-		// Option dl = Option.builder(Argument.DL).required()
-		// .desc("set the reasoner used in the system. If you choose konclude,
-		// then the path to Konclude reasoner must be provided")
-		// .hasArg(true).build();
+		Option dl = Option.builder(Argument.DL).required()
+				.desc("Description Logic fragment. Choose one of the following parameters: dllite_r, horn_shoif")
+				.hasArg(true).build();
 
 		Option split = new Option(Argument.SPLITTING, true,
 				"number of types per abstract ABox. Used as an optimization. ");
@@ -93,6 +97,7 @@ public class OrarCLI {
 		options.addOption(ontology);
 		options.addOption(reasoner);
 		options.addOption(konclude);
+		options.addOption(dl);
 		options.addOption(split);
 		options.addOption(port);
 
@@ -131,7 +136,7 @@ public class OrarCLI {
 			formatter.printHelp("orar", options);
 			System.out.println("Example run:");
 			System.out.println(
-					"java -jar -Xmx8G orar.jar -reasoner hermit -statistic -tbox ./tbox/univ-bench-dl-ox.owl -abox ./aboxListOf2.txt");
+					"java -jar -Xmx8G orar.jar -dl horn_shoif -reasoner hermit -statistic -tbox ./tbox/univ-bench-dl-ox.owl -abox ./aboxListOf2.txt");
 		}
 	}
 
@@ -146,16 +151,66 @@ public class OrarCLI {
 	}
 
 	static private Materializer getMaterializer(CommandLine commandLine, OrarOntology orarOntology) {
-		Materializer materializer;
+
 		String reasoner = commandLine.getOptionValue(Argument.REASONER);
-		materializer = getHornReasoner(commandLine, reasoner, orarOntology);
-		return materializer;
+		String dlFragment = commandLine.getOptionValue(Argument.DL);
+
+		if (dlFragment.equals(Argument.DLLITE_R)) {
+			return getMaterializer_DLLiteR(commandLine, reasoner, orarOntology);
+
+		}
+
+		if (dlFragment.equals(Argument.HORN_SHOIF)) {
+			return getMaterializer_HornSHOIF(commandLine, reasoner, orarOntology);
+
+		}
+		logger.error("Invalid value of the argument: -dl");
+		return null;
 	}
 
-	static private Materializer getHornReasoner(CommandLine commandLine, String reasonerName,
+	static private Materializer getMaterializer_DLLiteR(CommandLine commandLine, String reasonerName,
 			OrarOntology orarOntology) {
-		Materializer materializer=null;
-//		logger.info("Info: Some DL Constructors in the validated ontology: " + orarOntology.getActualDLConstructors());
+		Materializer materializer = null;
+		// logger.info("Info: Some DL Constructors in the validated ontology: "
+		// + orarOntology.getActualDLConstructors());
+
+		if (reasonerName.equals(Argument.HERMIT)) {
+
+			materializer = new DLLiteR_Materializer_Hermit(orarOntology);
+
+		}
+
+		if (reasonerName.equals(Argument.KONCLUDE)) {
+			String koncludePath = commandLine.getOptionValue(Argument.KONCLUDEPATH);
+			config.setKONCLUDE_BINARY_PATH(koncludePath);
+			String port = commandLine.getOptionValue(Argument.PORT);
+			int intPort = Integer.parseInt(port);
+
+			materializer = new DLLiteR_Materializer_Konclude(orarOntology, intPort);
+
+		}
+
+		if (reasonerName.equals(Argument.FACT)) {
+
+			materializer = new DLLiteR_Materializer_Fact(orarOntology);
+
+		}
+
+		if (reasonerName.equals(Argument.PELLET)) {
+
+			materializer = new DLLiteR_Materializer_Pellet(orarOntology);
+
+		}
+
+		return materializer;
+
+	}
+
+	static private Materializer getMaterializer_HornSHOIF(CommandLine commandLine, String reasonerName,
+			OrarOntology orarOntology) {
+		Materializer materializer = null;
+		// logger.info("Info: Some DL Constructors in the validated ontology: "
+		// + orarOntology.getActualDLConstructors());
 
 		if (reasonerName.equals(Argument.HERMIT)) {
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {
@@ -194,7 +249,7 @@ public class OrarCLI {
 				materializer = new HornSHIF_Materialization_Pellet(orarOntology);
 			}
 		}
-		
+
 		return materializer;
 
 	}
@@ -264,10 +319,25 @@ public class OrarCLI {
 		}
 	}
 
+	static private OntologyReader getOntologyReader(CommandLine commandLine) {
+		String dlFragment = commandLine.getOptionValue(Argument.DL);
+
+		if (dlFragment.equals(Argument.DLLITE_R)) {
+			return new DLLiteR_OntologyReader();
+		}
+
+		if (dlFragment.equals(Argument.HORN_SHOIF)) {
+			return new HornSHOIF_OntologyReader();
+		}
+
+		logger.error("invalid value of the argument: -dl");
+		return null;
+
+	}
+
 	static private OrarOntology getOrarOntology(CommandLine commandLine) {
 		OrarOntology orarOntology;
-
-		OntologyReader ontReader = new HornSHOIF_OntologyReader();
+		OntologyReader ontReader = getOntologyReader(commandLine);
 
 		if (commandLine.hasOption(Argument.ONTOLOGY)) {
 			String owlFilePath = commandLine.getOptionValue(Argument.ONTOLOGY);
