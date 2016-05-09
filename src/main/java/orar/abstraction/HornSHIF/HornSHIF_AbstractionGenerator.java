@@ -34,7 +34,7 @@ public class HornSHIF_AbstractionGenerator extends AbstractionGeneratorTemplate 
 		/*
 		 * if sucRoles contains some functional roles
 		 */
-		if (intersectionNotEmpty(sucRoles, this.sharedData.getFunctionalRoles())) {
+		if (intersectionNotEmpty(sucRoles, this.metaDataOfOntology.getFunctionalRoles())) {
 			this.sharedMap.getxAbstractHavingFunctionalRole().add(xIndividual);
 		}
 
@@ -42,7 +42,7 @@ public class HornSHIF_AbstractionGenerator extends AbstractionGeneratorTemplate 
 
 	@Override
 	protected void markZHavingInverseFunctionalRole(OWLNamedIndividual zIndividual, OWLObjectProperty role) {
-		if (this.sharedData.getInverseFunctionalRoles().contains(role)) {
+		if (this.metaDataOfOntology.getInverseFunctionalRoles().contains(role)) {
 			this.sharedMap.getzAbstractHavingInverseFunctionalRole().add(zIndividual);
 		}
 

@@ -125,6 +125,29 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 	protected abstract OWLReasoner getOWLReasoner(OWLOntology ontology);
 
 	@Override
+	public void computeConceptAssertions() {
+		/*
+		 * get the reasoner
+		 */
+		this.reasoner = getOWLReasoner(owlOntology);
+		/*
+		 * compute entailments
+		 */
+		long startTime = System.currentTimeMillis();
+		this.reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS);
+		if (!reasoner.isConsistent()) {
+			logger.error("Ontology inconsistent!");
+		}
+		logger.info("Computing concept assertions.... ");
+		computeEntailedConceptAssertions();
+
+		long endTime = System.currentTimeMillis();
+		this.entailmentComputed = true;
+		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
+		dispose();
+	}
+
+	@Override
 	public void computeEntailments() {
 		/*
 		 * add axioms to mark singleton concepts

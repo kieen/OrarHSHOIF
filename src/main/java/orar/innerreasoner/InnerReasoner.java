@@ -51,9 +51,14 @@ public interface InnerReasoner {
 	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getSameAsMap();
 
 	/**
-	 * compute entailments
+	 * compute entailments: concept, role, and equality assertions.
 	 */
 	public void computeEntailments();
+
+	/**
+	 * compute concept assertions.
+	 */
+	public void computeConceptAssertions();
 
 	/**
 	 * @return reasoning time

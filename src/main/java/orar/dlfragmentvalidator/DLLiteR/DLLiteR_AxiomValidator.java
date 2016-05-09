@@ -1,4 +1,4 @@
-package orar.dlfragmentvalidator.HornALCHOIF;
+package orar.dlfragmentvalidator.DLLiteR;
 
 import java.util.HashSet;
 import java.util.List;
@@ -56,12 +56,7 @@ import orar.dlfragmentvalidator.AxiomValidator;
 import orar.dlfragmentvalidator.DLConstructor;
 import orar.dlfragmentvalidator.ValidatorDataFactory;
 
-/**
- * 
- * @author kien
- *
- */
-public class HornALCHOIF_AxiomValidator implements AxiomValidator {
+public class DLLiteR_AxiomValidator implements AxiomValidator {
 	/*
 	 * store violated axioms that are of interest like disjunction, role chain,
 	 * transitivity
@@ -72,8 +67,8 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 													// axioms
 	protected final Set<DLConstructor> constructorsInInputOntology;
 	protected final Set<DLConstructor> constructorsInValidatedOntology;
-	protected final HornALCHOIF_SubClass_Validator subClassValidator;
-	protected final HornALCHOIF_SuperClass_Validator superClassValidator;
+	protected final DLLiteR_SubClass_Validator subClassValidator;
+	protected final DLLiteR_SuperClass_Validator superClassValidator;
 	protected final OWLDataFactory owlDataFact;
 	protected final ValidatorDataFactory validatorDataFactory;
 	/*
@@ -83,12 +78,12 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 	 */
 	private Set<OWLAxiom> generatedAxioms;
 
-	public HornALCHOIF_AxiomValidator() {
+	public DLLiteR_AxiomValidator() {
 		this.violatedAxioms = new HashSet<OWLAxiom>();
 		this.constructorsInInputOntology = new HashSet<DLConstructor>();
 		this.constructorsInValidatedOntology = new HashSet<DLConstructor>();
-		this.subClassValidator = new HornALCHOIF_SubClass_Validator();
-		this.superClassValidator = new HornALCHOIF_SuperClass_Validator();
+		this.subClassValidator = new DLLiteR_SubClass_Validator();
+		this.superClassValidator = new DLLiteR_SuperClass_Validator();
 		this.generatedAxioms = new HashSet<OWLAxiom>();
 		this.owlDataFact = OWLManager.getOWLDataFactory();
 		this.validatorDataFactory = ValidatorDataFactory.getInstance();
@@ -202,7 +197,8 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLObjectPropertyDomainAxiom axiom) {
-
+		this.constructorsInInputOntology.add(DLConstructor.DOMAIN);
+		this.constructorsInValidatedOntology.add(DLConstructor.DOMAIN);
 		return axiom;
 	}
 
@@ -238,7 +234,8 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLObjectPropertyRangeAxiom axiom) {
-
+		this.constructorsInInputOntology.add(DLConstructor.RANGE);
+		this.constructorsInValidatedOntology.add(DLConstructor.RANGE);
 		return axiom;
 	}
 
@@ -259,7 +256,8 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 	@Override
 	public OWLAxiom visit(OWLFunctionalObjectPropertyAxiom axiom) {
 		this.constructorsInInputOntology.add(DLConstructor.FUNCTIONALITY);
-		return axiom;
+		this.violatedAxioms.add(axiom);
+		return null;
 	}
 
 	@Override
@@ -269,7 +267,7 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLDisjointUnionAxiom axiom) {
-		this.constructorsInInputOntology.add(DLConstructor.NonHorn_DISJUNCTION);
+		this.violatedAxioms.add(axiom);
 		return null;
 	}
 
@@ -387,13 +385,15 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLInverseFunctionalObjectPropertyAxiom axiom) {
-		return axiom;
+		this.constructorsInInputOntology.add(DLConstructor.FUNCTIONALITY);
+		this.violatedAxioms.add(axiom);
+		return null;
 	}
 
 	@Override
 	public OWLAxiom visit(OWLSameIndividualAxiom axiom) {
-		// TODO: get nominals
-		return axiom;
+
+		return null;
 	}
 
 	@Override
@@ -437,5 +437,4 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 		constructors.addAll(this.superClassValidator.getDlConstructorsInValidatedOntology());
 		return constructors;
 	}
-
 }

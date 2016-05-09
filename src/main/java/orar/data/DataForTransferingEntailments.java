@@ -9,6 +9,7 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 import orar.abstraction.PairOfSubjectAndObject;
+import orar.type.IndividualType;
 
 /**
  * Data using to transfer entailments from the abstraction to the original ABox.
@@ -20,6 +21,8 @@ import orar.abstraction.PairOfSubjectAndObject;
 public class DataForTransferingEntailments {
 	private static DataForTransferingEntailments instance;
 
+	
+	private final Map<OWLNamedIndividual, OWLNamedIndividual> mapIndividual2XAbstract;
 	/*
 	 * Maps: x/y/z --> original individuals. x,y,z are abstract individuals for
 	 * combined-type.
@@ -65,6 +68,8 @@ public class DataForTransferingEntailments {
 
 		this.xAbstractHavingFunctionalRole = new HashSet<OWLNamedIndividual>();
 		this.zAbstractHavingInverseFunctionalRole = new HashSet<OWLNamedIndividual>();
+
+		this.mapIndividual2XAbstract= new HashMap<OWLNamedIndividual, OWLNamedIndividual>();
 
 	}
 
@@ -114,9 +119,17 @@ public class DataForTransferingEntailments {
 		return zAbstractHavingInverseFunctionalRole;
 	}
 
+	
+
+	public Map<OWLNamedIndividual, OWLNamedIndividual> getMapIndividual2XAbstract() {
+		return mapIndividual2XAbstract;
+	}
+
 	/**
 	 * @param abstractInd
-	 * @return a set of original individuals for which the abstractInd represents.<b> Note </b> that changing in this set will affect the mapping.
+	 * @return a set of original individuals for which the abstractInd
+	 *         represents.<b> Note </b> that changing in this set will affect
+	 *         the mapping.
 	 */
 	public Set<OWLNamedIndividual> getOriginalIndividuals(OWLNamedIndividual abstractInd) {
 		Set<OWLNamedIndividual> originalInds = new HashSet<OWLNamedIndividual>();
@@ -157,5 +170,7 @@ public class DataForTransferingEntailments {
 
 		this.xAbstractHavingFunctionalRole.clear();
 		this.zAbstractHavingInverseFunctionalRole.clear();
+
+		this.mapIndividual2XAbstract.clear();
 	}
 }

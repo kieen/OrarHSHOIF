@@ -10,7 +10,6 @@ public class HornSHOIF_AxiomValidator extends HornALCHOIF_AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLTransitiveObjectPropertyAxiom axiom) {
-
 		this.constructorsInInputOntology.add(DLConstructor.TRANSITIVITY);
 		this.constructorsInValidatedOntology.add(DLConstructor.TRANSITIVITY);
 		return axiom;

@@ -16,7 +16,8 @@ import orar.type.IndividualType;
 import orar.util.MapOperator;
 
 /**
- * 
+ * Computing types for all individuals, taking equivalent individuals into
+ * account.
  * 
  * @author kien
  *
@@ -63,11 +64,20 @@ public class BasicTypeComputor implements TypeComputor {
 			// Map type to a set of individuals
 
 			MapOperator.addValuesToMap(typeMap2Individuals, type, sameIndsOfCurrentIndividual);
+			// Map individual to its type
+			mapIndividual2Type(sameIndsOfCurrentIndividual, type);
 
 		}
 
 		return typeMap2Individuals;
 
+	}
+
+	protected void mapIndividual2Type(Set<OWLNamedIndividual> individuals, IndividualType type) {
+		// Do nothing. This is needed only when we need to connect
+		// representative individuals in case of computing an
+		// over-approximation,
+		// e.g. x1--R-->x2.
 	}
 
 	/**

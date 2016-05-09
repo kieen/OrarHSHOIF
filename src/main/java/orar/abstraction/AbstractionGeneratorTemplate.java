@@ -35,7 +35,7 @@ import orar.type.IndividualType;
 public abstract class AbstractionGeneratorTemplate implements AbstractionGenerator {
 	private final Logger logger =Logger.getLogger(AbstractionGeneratorTemplate.class);
 	protected final DataForTransferingEntailments sharedMap;
-	protected final MetaDataOfOntology sharedData;
+	protected final MetaDataOfOntology metaDataOfOntology;
 
 	protected final OWLOntologyManager manager;
 	protected final OWLDataFactory owlDataFactory;
@@ -50,7 +50,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 	public AbstractionGeneratorTemplate(OrarOntology orarOntology,
 			Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
 		this.sharedMap = DataForTransferingEntailments.getInstance();
-		this.sharedData = MetaDataOfOntology.getInstance();
+		this.metaDataOfOntology = MetaDataOfOntology.getInstance();
 		this.manager = OWLManager.createOWLOntologyManager();
 		this.owlDataFactory = OWLManager.getOWLDataFactory();
 		this.abstractDataFactory = AbstractDataFactory.getInstance();
@@ -216,7 +216,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 			/*
 			 * map: (z,x) --> preRole if preRole is inverse functional
 			 */
-			if (this.sharedData.getInverseFunctionalRoles().contains(preRole)) {
+			if (this.metaDataOfOntology.getInverseFunctionalRoles().contains(preRole)) {
 				PairOfSubjectAndObject zxPair = new PairOfSubjectAndObject(z, x);
 
 				this.sharedMap.getMap_ZX_2_Role().put(zxPair, preRole);
@@ -254,7 +254,7 @@ public abstract class AbstractionGeneratorTemplate implements AbstractionGenerat
 			/*
 			 * map: (x,y) --> succRole if succRole is functional
 			 */
-			if (this.sharedData.getFunctionalRoles().contains(succRole)) {
+			if (this.metaDataOfOntology.getFunctionalRoles().contains(succRole)) {
 				PairOfSubjectAndObject xyPair = new PairOfSubjectAndObject(x, y);
 
 				this.sharedMap.getMap_XY_2_Role().put(xyPair, succRole);
