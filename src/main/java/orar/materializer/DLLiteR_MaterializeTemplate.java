@@ -58,7 +58,7 @@ public abstract class DLLiteR_MaterializeTemplate implements Materializer {
 	// other fields for the algorithm
 	protected final TypeComputor typeComputor;
 	protected Set<OWLOntology> abstractOntologies;
-	// protected final RuleEngine ruleEngine;
+	 protected final RuleEngine ruleEngine;
 
 	public DLLiteR_MaterializeTemplate(OrarOntology normalizedOrarOntology) {
 		// input & output
@@ -72,7 +72,7 @@ public abstract class DLLiteR_MaterializeTemplate implements Materializer {
 
 		// other fields
 		this.abstractOntologies = new HashSet<OWLOntology>();
-		// this.ruleEngine = new SemiNaiveRuleEngine(normalizedOrarOntology);
+		 this.ruleEngine = new SemiNaiveRuleEngine(normalizedOrarOntology);
 		this.typeComputor = new BasicTypeComputor();
 	}
 
@@ -83,6 +83,21 @@ public abstract class DLLiteR_MaterializeTemplate implements Materializer {
 		this.dataForTransferringEntailments.clear();
 		AbstractDataFactory.getInstance().clear();
 		BasicIndividualTypeFactory_UsingWeakHashMap.getInstance().clear();
+		
+		/*
+		 * (1). Get meta info of the ontology, e.g. role hierarchy, entailed
+		 * func/tran roles
+		 */
+		logger.info("Performing role reasoning ...");
+		doRoleReasoning();
+
+		/*
+		 * (2). Compute deductive closure of equality, trans, functionality, and
+		 * role subsumsion.
+		 */
+		logger.info("First time computing deductive closure...");
+		ruleEngine.materialize();
+		
 		/*
 		 * (3). Compute types
 		 */

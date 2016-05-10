@@ -294,7 +294,7 @@ public class DLLiteR_Materializer_HermitTest {
 
 		Assert.assertTrue(checker.isConceptAssertionComplete());
 		// Assert.assertTrue(checker.isSameasComplete());
-		// Assert.assertTrue(checker.isRoleAssertionComplete());
+		 Assert.assertTrue(checker.isRoleAssertionComplete());
 
 	}
 
@@ -338,7 +338,7 @@ public class DLLiteR_Materializer_HermitTest {
 		checker.computeEntailments();
 
 		Assert.assertTrue(checker.isConceptAssertionComplete());
-		// Assert.assertTrue(checker.isRoleAssertionComplete());
+		 Assert.assertTrue(checker.isRoleAssertionComplete());
 		// Assert.assertTrue(checker.isSameasComplete());
 
 	}
