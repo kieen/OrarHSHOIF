@@ -17,6 +17,7 @@ import orar.abstraction.AbstractionGenerator;
 import orar.abstraction.BasicTypeComputor;
 import orar.abstraction.TypeComputor;
 import orar.abstraction.DLLiteR.DLLiteR_AbstractionGenerator;
+import orar.abstraction.HornSHIF.HornSHIF_AbstractionGenerator;
 import orar.abstraction.HornSHOIF.HornSHOIF_AbstractionGenerator;
 import orar.config.Configuration;
 import orar.config.DebugLevel;
@@ -215,7 +216,7 @@ public abstract class DLLiteR_MaterializeTemplate implements Materializer {
 	}
 
 	protected List<OWLOntology> getAbstractions(Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
-		AbstractionGenerator abstractionGenerator = new DLLiteR_AbstractionGenerator(normalizedORAROntology,
+		AbstractionGenerator abstractionGenerator = new HornSHIF_AbstractionGenerator(normalizedORAROntology,
 				typeMap2Individuals);
 		List<OWLOntology> abstractions = new ArrayList<OWLOntology>();
 		abstractions.add(abstractionGenerator.getAbstractOntology());

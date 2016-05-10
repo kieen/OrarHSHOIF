@@ -18,7 +18,8 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <owl:Ontology rdf:about="file:/Users/kien/git/ORAR-HSHOIF/src/test/resources/uobm-origin/abox/1-ub-dl-univ0.owl">
-        <owl:imports rdf:resource="http://uob.iodt.ibm.com/univ-bench-dl.owl"/>
+        <owl:imports rdf:resource="file:/Users/kien/git/ORAR-HSHOIF/src/test/resources/uobm-origin/tbox/uobmtbox_origin.owl"/>
+        
     </owl:Ontology>
     
 

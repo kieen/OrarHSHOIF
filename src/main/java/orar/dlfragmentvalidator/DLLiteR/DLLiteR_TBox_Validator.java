@@ -14,6 +14,6 @@ public class DLLiteR_TBox_Validator extends TBoxValidator {
 	@Override
 	public void initAxiomValidator() {
 		this.axiomValidator = new DLLiteR_AxiomValidator();
-		this.dlfrangment = "hornALCHOIF";
+		this.dlfrangment = "DLLiteR";
 	}
 }

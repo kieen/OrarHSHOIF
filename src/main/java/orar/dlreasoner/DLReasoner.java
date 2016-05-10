@@ -37,6 +37,11 @@ public interface DLReasoner {
 	 * compute all entailments
 	 */
 	public void computeEntailments();
+	
+	/**
+	 * compute all entailments
+	 */
+	public void computeConceptAssertions();
 
 	/**
 	 * @return reasoning time in seconds

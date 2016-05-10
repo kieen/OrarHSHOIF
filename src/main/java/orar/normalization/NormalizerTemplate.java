@@ -286,6 +286,8 @@ public abstract class NormalizerTemplate implements Normalizer {
 			OWLOntologyID newID = new OWLOntologyID(IRI.create("http://www.uniulm.ki/ontology/normalizedalchoi"));
 
 			this.normalizedOntology = OWLManager.createOWLOntologyManager().createOntology(newID);
+			// add declarations
+			manager.addAxioms(normalizedOntology, inputOntology.getAxioms(AxiomType.DECLARATION));
 			// add TBOx
 			manager.addAxioms(normalizedOntology, normalizedSubClassAxioms);
 			manager.addAxioms(normalizedOntology, tboxAxiomsByNormalizingNominals);

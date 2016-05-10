@@ -1,6 +1,10 @@
 package orar.materializer.DLLiteR;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
+import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import junit.framework.Assert;
@@ -22,6 +26,7 @@ import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
 import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Hermit;
 import orar.modeling.ontology.OrarOntology;
+import orar.util.PrintingHelper;
 
 public class DLLiteR_Materializer_HermitTest {
 	@Test
@@ -193,6 +198,7 @@ public class DLLiteR_Materializer_HermitTest {
 
 		haveTheSameResults(ontologyPath);
 	}
+
 	@SuppressWarnings("Bugs are from Hermit. It failed to do reasoning over the abstraction: java.util.ConcurrentModificationException")
 	@Test
 	public void testRoleAssertionByNominalConcept2() {
@@ -224,11 +230,11 @@ public class DLLiteR_Materializer_HermitTest {
 		haveTheSameResults(ontologyPath);
 	}
 
-//	@Test
-//	public void testUOBM_OXSmall4() {
-//		String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
-//		haveTheSameResults(ontologyPath);
-//	}
+	@Test
+	public void testUOBM_OXSmall4() {
+		String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
+		haveTheSameResults(ontologyPath);
+	}
 	// @Test
 	// public void testUOBM_OXSmall1() {
 	// String ontologyPath =
@@ -255,12 +261,19 @@ public class DLLiteR_Materializer_HermitTest {
 		MetaDataOfOntology.getInstance().clear();
 		DataForTransferingEntailments.getInstance().clear();
 
-		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME);
+		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME,
+				LogInfo.COMPARED_RESULT_INFO);
 		Configuration.getInstance().addDebugLevels(DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new DLLiteR_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(tbox, aboxList);
-
+		int numberOfAssertions = normalizedOrarOntology.getNumberOfInputConceptAssertions()
+				+ normalizedOrarOntology.getNumberOfInputRoleAssertions();
+		System.out.println(
+				"DEBUG***Number of assertions in OrarOntology: " + numberOfAssertions);
+		HashSet<OWLClass> orarConceptNames = new HashSet<>(normalizedOrarOntology.getConceptNamesInSignature());
+		System.out.println("DEBUG*** Number of concept names:"+normalizedOrarOntology.getConceptNamesInSignature().size());
+		
 		Materializer materializer = new DLLiteR_Materializer_Hermit(normalizedOrarOntology);
 
 		/*
@@ -268,15 +281,20 @@ public class DLLiteR_Materializer_HermitTest {
 		 */
 		System.out.println("Loading ontology for a DL Reasoner....");
 		OWLOntology owlOntology = ontoReader.getOWLAPIOntology(tbox, aboxList);
-
+		System.out.println("Number of assertions in OwlapiOntology: " + owlOntology.getABoxAxioms(true).size());
+		System.out.println("DEBUG*** Number of concept names:"+owlOntology.getClassesInSignature(true).size());
+		Set<OWLClass> owlapiOntoConceptNames = owlOntology.getClassesInSignature(true);
+		owlapiOntoConceptNames.removeAll(orarConceptNames);
+		System.out.println("DEBUG*** concept names in owlapiontology but not in orarontology:");
+		PrintingHelper.printSet(owlapiOntoConceptNames);
 		DLReasoner koncludeRealizer = new HermitDLReasoner(owlOntology);
 
 		CompletenessChecker checker = new CompletenessCheckerHorn(materializer, koncludeRealizer);
 		checker.computeEntailments();
 
 		Assert.assertTrue(checker.isConceptAssertionComplete());
-//		Assert.assertTrue(checker.isSameasComplete());
-//		Assert.assertTrue(checker.isRoleAssertionComplete());
+		// Assert.assertTrue(checker.isSameasComplete());
+		// Assert.assertTrue(checker.isRoleAssertionComplete());
 
 	}
 
@@ -295,11 +313,10 @@ public class DLLiteR_Materializer_HermitTest {
 
 		Configuration.getInstance().getDebuglevels().clear();
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC);
-		// Configuration.getInstance().addLoginfoLevels(LogInfo.ABSTRACTION_INFO,
-		// LogInfo.INPUTONTOLOGY_INFO,
-		// LogInfo.COMPARED_RESULT_INFO, LogInfo.STATISTIC);
-//		Configuration.getInstance().addDebugLevels(DebugLevel.PRINT_MARKING_INDIVIDUALS,
-//				DebugLevel.ADDING_MARKING_AXIOMS, DebugLevel.REASONING_ABSTRACTONTOLOGY);
+		Configuration.getInstance().addLoginfoLevels(LogInfo.COMPARED_RESULT_INFO);
+		// Configuration.getInstance().addDebugLevels(DebugLevel.PRINT_MARKING_INDIVIDUALS,
+		// DebugLevel.ADDING_MARKING_AXIOMS,
+		// DebugLevel.REASONING_ABSTRACTONTOLOGY);
 
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new DLLiteR_OntologyReader();
@@ -321,8 +338,8 @@ public class DLLiteR_Materializer_HermitTest {
 		checker.computeEntailments();
 
 		Assert.assertTrue(checker.isConceptAssertionComplete());
-//		Assert.assertTrue(checker.isRoleAssertionComplete());
-//		Assert.assertTrue(checker.isSameasComplete());
+		// Assert.assertTrue(checker.isRoleAssertionComplete());
+		// Assert.assertTrue(checker.isSameasComplete());
 
 	}
 }

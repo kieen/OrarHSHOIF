@@ -60,7 +60,7 @@ public class OntologyStatistic {
 		
 	}
 	public static void printOWLOntologyInfo(OWLOntology owlOntology) {
-		logger.info("===Ontology===");
+//		logger.info("===Ontology===");
 		int tboxsize = owlOntology.getTBoxAxioms(true).size();
 		int rboxSize = owlOntology.getRBoxAxioms(true).size();
 		int tboxAndRboxSize = tboxsize + rboxSize;

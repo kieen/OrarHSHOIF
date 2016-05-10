@@ -287,7 +287,7 @@ public class KoncludeDLReasonerFileBased implements DLReasoner {
 			stdout.reset();
 		}
 		logger.info("computing role assertions just for just some individuals....");
-//		askRoleAssertionForJustOneIndividual();
+		// askRoleAssertionForJustOneIndividual();
 		askRoleAssertionForJustSomeIndividuals();
 		logger.info("computing samease assertions just for one individuals....");
 		askOneQueryOfSameas();
@@ -321,6 +321,7 @@ public class KoncludeDLReasonerFileBased implements DLReasoner {
 			this.reasoner.getSameIndividuals(anIndividual);
 		}
 	}
+
 	private void askRoleAssertionForJustSomeIndividuals() {
 		Set<OWLObjectProperty> allRoles = this.ontology.getObjectPropertiesInSignature(true);
 		allRoles.remove(OWLManager.getOWLDataFactory().getOWLTopObjectProperty());
@@ -347,6 +348,7 @@ public class KoncludeDLReasonerFileBased implements DLReasoner {
 		}
 
 	}
+
 	private void askRoleAssertionForJustOneIndividual() {
 		Set<OWLObjectProperty> allRoles = ontology.getObjectPropertiesInSignature(true);
 		allRoles.remove(OWLManager.getOWLDataFactory().getOWLTopObjectProperty());
@@ -393,6 +395,50 @@ public class KoncludeDLReasonerFileBased implements DLReasoner {
 	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getEntailedSameasAssertions() {
 
 		return this.sameasAssertionAsMap;
+	}
+
+	@Override
+	public void computeConceptAssertions() {
+		startKoncludeServer();
+		logger.info("Computing concept assertions...");
+		long startTime = System.currentTimeMillis();
+		initReasoner();
+		/*
+		 * Compute concept assertions
+		 */
+		if (!reasoner.isConsistent()) {
+			logger.error("Ontology inconsistent!");
+		}
+
+		/*
+		 * Computing concept assertions. To limit number of call via OWLLink,
+		 * instead of asking entailed concepts for each individual, we ask for
+		 * instances of each concept name.
+		 */
+		Set<OWLClass> conceptNames = ontology.getClassesInSignature(true);
+		conceptNames.remove(OWLManager.getOWLDataFactory().getOWLThing());
+
+		/*
+		 * 
+		 */
+		logger.info("computing all concept assertions");
+		for (OWLClass concept : conceptNames) {
+			Set<OWLNamedIndividual> instances = reasoner.getInstances(concept, false).getFlattened();
+			for (OWLNamedIndividual ind : instances) {
+				OWLClassAssertionAxiom entailedAssertion = this.owlDataFactory.getOWLClassAssertionAxiom(concept, ind);
+				this.conceptAssertions.add(entailedAssertion);
+			}
+			stdout.reset();
+		}
+
+		long endTime = System.currentTimeMillis();
+		this.reasoningTimeInSecond = (endTime - startTime) / 1000;
+		reasoner.dispose();
+		stopKoncludeServer();
+		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
+			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTimeInSecond);
+		}
+
 	}
 
 }

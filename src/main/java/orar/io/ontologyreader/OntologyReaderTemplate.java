@@ -19,6 +19,7 @@ import orar.normalization.transitivity.TransitivityNormalizer;
 import orar.normalization.transitivity.TransitivityNormalizerWithHermit;
 import orar.util.OntologyInfo;
 import orar.util.OntologyStatistic;
+import orar.util.PrintingHelper;
 
 public abstract class OntologyReaderTemplate implements OntologyReader {
 	protected Normalizer normalizer;
@@ -48,13 +49,13 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		OrarOntology internalOntology = converter.getInternalOntology();
 		internalOntology.setActualDLConstructors(profileValidator.getDLConstructorsInInputOntology());
 
-//		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
-//			logger.info("Information of the input ontology.");
-//			logger.info("Ontology file:" + ontologyFileName);
-//
-//			OntologyStatistic.printInputOntologyInfo(internalOntology);
-//
-//		}
+		// if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+		// logger.info("Information of the input ontology.");
+		// logger.info("Ontology file:" + ontologyFileName);
+		//
+		// OntologyStatistic.printInputOntologyInfo(internalOntology);
+		//
+		// }
 
 		long endParsing = System.currentTimeMillis();
 		long parsingTimeInSecond = (endParsing - startParsing) / 1000;
@@ -142,6 +143,15 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		profileValidator = getOntologyValidator(inputOntology);
 		profileValidator.validateOWLOntology();
 		OWLOntology ontologyInTargetDLFragment = profileValidator.getOWLOntologyInTheTargetedDLFragment();
+		if (config.getDebuglevels().contains(DebugLevel.DL_FRAGMENT_VALIDATING)) {
+			logger.info("***DEBUG*** validated orar ontology:");
+			logger.info("***DEBUG***TBox axioms:");
+			PrintingHelper.printSet(ontologyInTargetDLFragment.getTBoxAxioms(true));
+			logger.info("***DEBUG***concept names in signature:");
+			PrintingHelper
+					.printSet(ontologyInTargetDLFragment.getClassesInSignature(true));
+
+		}
 		manager.removeOntology(inputOntology);
 		return ontologyInTargetDLFragment;
 	}
@@ -153,9 +163,16 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 	private OWLOntology getOntologyInTheNormalForm(OWLOntology ontologyInTargetDLFragment) {
 		normalizer = getNormalizer(ontologyInTargetDLFragment);
 		OWLOntology ontologyInNormalForm = normalizer.getNormalizedOntology();
-		// logger.info("Number of class assertions in Normalized Ontology:"
-		// + ontologyInNormalForm.getAxioms(AxiomType.CLASS_ASSERTION,
-		// true).size());
+		
+		if (config.getDebuglevels().contains(DebugLevel.DL_FRAGMENT_VALIDATING)) {
+			logger.info("***DEBUG*** normalized validated orar ontology:");
+			logger.info("***DEBUG***TBox axioms:");
+			PrintingHelper.printSet(ontologyInNormalForm.getTBoxAxioms(true));
+			logger.info("***DEBUG***concept names in signature:");
+			PrintingHelper
+					.printSet(ontologyInNormalForm.getClassesInSignature(true));
+
+		}
 		manager.removeOntology(ontologyInTargetDLFragment);
 		return ontologyInNormalForm;
 	}
@@ -198,7 +215,15 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		 */
 		OWLOntology ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity = getNormalizedOWLAPIOntology(
 				tboxFileName);
+		if (config.getDebuglevels().contains(DebugLevel.DL_FRAGMENT_VALIDATING)) {
+			logger.info("***DEBUG***normalized validated orar ontology:");
+			logger.info("***DEBUG***TBox axioms:");
+			PrintingHelper.printSet(ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity.getTBoxAxioms(true));
+			logger.info("***DEBUG***concept names in signature:");
+			PrintingHelper
+					.printSet(ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity.getClassesInSignature(true));
 
+		}
 		/*
 		 * Read aboxes in stream mannner
 		 */
@@ -207,10 +232,12 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 
 		OrarOntology internalOntology = streamReader.getOntology();
 		internalOntology.setActualDLConstructors(profileValidator.getDLConstructorsInValidatedOntology());
-//		if (config.getDebuglevels().contains(DebugLevel.DL_FRAGMENT_VALIDATING)){
-//			logger.info("***DEBUG*** actual DL constructors:"+ internalOntology.getActualDLConstructors());
-//		}
-		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {	
+		// if
+		// (config.getDebuglevels().contains(DebugLevel.DL_FRAGMENT_VALIDATING)){
+		// logger.info("***DEBUG*** actual DL constructors:"+
+		// internalOntology.getActualDLConstructors());
+		// }
+		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
 			logger.info("ABoxList file:" + aboxListFileName);
 			logger.info("ABox statistic:");
 			OntologyStatistic.printInputABoxOrarOntologyInfo(internalOntology);
@@ -284,9 +311,11 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 
 			OWLOntology owlOntology = streamReader.getOWLAPIOntology();
 			if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+				logger.info("===Information of the validated ontology===");
 				logger.info("TBox file: " + tboxFile);
 				logger.info("ABoxList file: " + aboxListFile);
 				OntologyStatistic.printOWLOntologyInfo(owlOntology);
+				logger.info("===========================================");
 			}
 
 			long endParsing = System.currentTimeMillis();
