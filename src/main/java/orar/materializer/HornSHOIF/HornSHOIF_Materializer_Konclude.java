@@ -6,15 +6,15 @@ import orar.innerreasoner.InnerReasoner;
 import orar.innerreasoner.HornSHOIF.Konclude_HornSHOIF_InnerReasoner;
 import orar.modeling.ontology.OrarOntology;
 
-public class HornSHOIF_Materialization_Konclude extends HornSHOIF_Materializer {
+public class HornSHOIF_Materializer_Konclude extends HornSHOIF_Materializer {
 	private int port = 8080;
 
-	public HornSHOIF_Materialization_Konclude(OrarOntology normalizedOrarOntology) {
+	public HornSHOIF_Materializer_Konclude(OrarOntology normalizedOrarOntology) {
 		super(normalizedOrarOntology);
 
 	}
 
-	public HornSHOIF_Materialization_Konclude(OrarOntology normalizedOrarOntology, int port) {
+	public HornSHOIF_Materializer_Konclude(OrarOntology normalizedOrarOntology, int port) {
 		super(normalizedOrarOntology);
 		this.port = port;
 	}

@@ -47,7 +47,7 @@ public class HornSHIF_Materializer_HermitTest {
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
 
-		Materializer materializer = new HornSHIF_Materialization_Hermit(normalizedOrarOntology);
+		Materializer materializer = new HornSHIF_Materializer_Hermit(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology

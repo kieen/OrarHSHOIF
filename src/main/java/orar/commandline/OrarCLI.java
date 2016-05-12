@@ -20,14 +20,14 @@ import orar.materializer.DLLiteR.DLLiteR_Materializer_Fact;
 import orar.materializer.DLLiteR.DLLiteR_Materializer_Hermit;
 import orar.materializer.DLLiteR.DLLiteR_Materializer_Konclude;
 import orar.materializer.DLLiteR.DLLiteR_Materializer_Pellet;
-import orar.materializer.HornSHIF.HornSHIF_Materialization_Fact;
-import orar.materializer.HornSHIF.HornSHIF_Materialization_Hermit;
-import orar.materializer.HornSHIF.HornSHIF_Materialization_Konclude;
-import orar.materializer.HornSHIF.HornSHIF_Materialization_Pellet;
-import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Fact;
-import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Hermit;
-import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Konclude;
-import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Pellet;
+import orar.materializer.HornSHIF.HornSHIF_Materializer_Fact;
+import orar.materializer.HornSHIF.HornSHIF_Materializer_Hermit;
+import orar.materializer.HornSHIF.HornSHIF_Materializer_Konclude;
+import orar.materializer.HornSHIF.HornSHIF_Materializer_Pellet;
+import orar.materializer.HornSHOIF.HornSHOIF_Materializer_Fact;
+import orar.materializer.HornSHOIF.HornSHOIF_Materializer_Hermit;
+import orar.materializer.HornSHOIF.HornSHOIF_Materializer_Konclude;
+import orar.materializer.HornSHOIF.HornSHOIF_Materializer_Pellet;
 import orar.modeling.ontology.OrarOntology;
 
 public class OrarCLI {
@@ -214,9 +214,9 @@ public class OrarCLI {
 
 		if (reasonerName.equals(Argument.HERMIT)) {
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {
-				materializer = new HornSHOIF_Materialization_Hermit(orarOntology);
+				materializer = new HornSHOIF_Materializer_Hermit(orarOntology);
 			} else {
-				materializer = new HornSHIF_Materialization_Hermit(orarOntology);
+				materializer = new HornSHIF_Materializer_Hermit(orarOntology);
 			}
 
 		}
@@ -227,26 +227,26 @@ public class OrarCLI {
 			String port = commandLine.getOptionValue(Argument.PORT);
 			int intPort = Integer.parseInt(port);
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {
-				materializer = new HornSHOIF_Materialization_Konclude(orarOntology, intPort);
+				materializer = new HornSHOIF_Materializer_Konclude(orarOntology, intPort);
 			} else {
-				materializer = new HornSHIF_Materialization_Konclude(orarOntology, intPort);
+				materializer = new HornSHIF_Materializer_Konclude(orarOntology, intPort);
 			}
 		}
 
 		if (reasonerName.equals(Argument.FACT)) {
 
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {
-				materializer = new HornSHOIF_Materialization_Fact(orarOntology);
+				materializer = new HornSHOIF_Materializer_Fact(orarOntology);
 			} else {
-				materializer = new HornSHIF_Materialization_Fact(orarOntology);
+				materializer = new HornSHIF_Materializer_Fact(orarOntology);
 			}
 		}
 
 		if (reasonerName.equals(Argument.PELLET)) {
 			if (orarOntology.getActualDLConstructors().contains(DLConstructor.NOMINAL)) {
-				materializer = new HornSHOIF_Materialization_Pellet(orarOntology);
+				materializer = new HornSHOIF_Materializer_Pellet(orarOntology);
 			} else {
-				materializer = new HornSHIF_Materialization_Pellet(orarOntology);
+				materializer = new HornSHIF_Materializer_Pellet(orarOntology);
 			}
 		}
 

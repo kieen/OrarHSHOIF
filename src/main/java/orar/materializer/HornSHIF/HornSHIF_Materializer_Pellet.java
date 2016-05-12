@@ -6,9 +6,9 @@ import orar.innerreasoner.InnerReasoner;
 import orar.innerreasoner.HornSHIF.Pellet_HornSHIF_InnerReasoner;
 import orar.modeling.ontology.OrarOntology;
 
-public class HornSHIF_Materialization_Pellet extends HornSHIF_Materializer {
+public class HornSHIF_Materializer_Pellet extends HornSHIF_Materializer {
 
-	public HornSHIF_Materialization_Pellet(OrarOntology normalizedOrarOntology) {
+	public HornSHIF_Materializer_Pellet(OrarOntology normalizedOrarOntology) {
 		super(normalizedOrarOntology);
 
 	}

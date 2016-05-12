@@ -262,7 +262,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(tbox, aboxList);
 
-		Materializer materializer = new HornSHOIF_Materialization_Konclude(normalizedOrarOntology);
+		Materializer materializer = new HornSHOIF_Materializer_Konclude(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology
@@ -303,7 +303,7 @@ public class HornSHOIF_Materializer_KoncludeTest {
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
 
-		Materializer materializer = new HornSHOIF_Materialization_Konclude(normalizedOrarOntology);
+		Materializer materializer = new HornSHOIF_Materializer_Konclude(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology

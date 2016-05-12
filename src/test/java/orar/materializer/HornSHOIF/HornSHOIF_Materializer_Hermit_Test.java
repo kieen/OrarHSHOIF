@@ -262,7 +262,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(tbox, aboxList);
 
-		Materializer materializer = new HornSHOIF_Materialization_Hermit(normalizedOrarOntology);
+		Materializer materializer = new HornSHOIF_Materializer_Hermit(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology
@@ -306,7 +306,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
 
-		Materializer materializer = new HornSHOIF_Materialization_Hermit(normalizedOrarOntology);
+		Materializer materializer = new HornSHOIF_Materializer_Hermit(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology

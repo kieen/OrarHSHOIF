@@ -41,14 +41,14 @@ import orar.type.BasicIndividualTypeFactory_UsingWeakHashMap;
 import orar.type.IndividualType;
 import orar.util.PrintingHelper;
 
-public abstract class DLLiteR_MaterializeTemplate implements Materializer {
+public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 	// input & output
 	protected final OrarOntology normalizedORAROntology;
 
 	private long reasoningTimeInSeconds;
 	protected final Configuration config;
 	// logging
-	private static final Logger logger = Logger.getLogger(DLLiteR_MaterializeTemplate.class);
+	private static final Logger logger = Logger.getLogger(DLLiteR_MaterializerTemplate.class);
 	// shared data
 	protected final DataForTransferingEntailments dataForTransferringEntailments;
 	protected final MetaDataOfOntology metaDataOfOntology;
@@ -60,7 +60,7 @@ public abstract class DLLiteR_MaterializeTemplate implements Materializer {
 	protected Set<OWLOntology> abstractOntologies;
 	 protected final RuleEngine ruleEngine;
 
-	public DLLiteR_MaterializeTemplate(OrarOntology normalizedOrarOntology) {
+	public DLLiteR_MaterializerTemplate(OrarOntology normalizedOrarOntology) {
 		// input & output
 		this.normalizedORAROntology = normalizedOrarOntology;
 
@@ -233,6 +233,8 @@ public abstract class DLLiteR_MaterializeTemplate implements Materializer {
 	protected List<OWLOntology> getAbstractions(Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
 		AbstractionGenerator abstractionGenerator = new HornSHIF_AbstractionGenerator(normalizedORAROntology,
 				typeMap2Individuals);
+//		AbstractionGenerator abstractionGenerator = new DLLiteR_AbstractionGenerator(normalizedORAROntology,
+//				typeMap2Individuals);
 		List<OWLOntology> abstractions = new ArrayList<OWLOntology>();
 		abstractions.add(abstractionGenerator.getAbstractOntology());
 		return abstractions;

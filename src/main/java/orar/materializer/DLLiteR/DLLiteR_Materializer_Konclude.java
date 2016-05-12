@@ -4,10 +4,10 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import orar.innerreasoner.InnerReasoner;
 import orar.innerreasoner.HornSHIF.Konclude_HornSHIF_InnerReasoner;
-import orar.materializer.DLLiteR_MaterializeTemplate;
+import orar.materializer.DLLiteR_MaterializerTemplate;
 import orar.modeling.ontology.OrarOntology;
 
-public class DLLiteR_Materializer_Konclude extends DLLiteR_MaterializeTemplate {
+public class DLLiteR_Materializer_Konclude extends DLLiteR_MaterializerTemplate {
 
 	private int port = 8080;
 

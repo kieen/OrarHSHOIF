@@ -6,9 +6,9 @@ import orar.innerreasoner.InnerReasoner;
 import orar.innerreasoner.HornSHIF.Hermit_HornSHIF_InnerReasoner;
 import orar.modeling.ontology.OrarOntology;
 
-public class HornSHIF_Materialization_Hermit extends HornSHIF_Materializer {
+public class HornSHIF_Materializer_Hermit extends HornSHIF_Materializer {
 
-	public HornSHIF_Materialization_Hermit(OrarOntology normalizedOrarOntology) {
+	public HornSHIF_Materializer_Hermit(OrarOntology normalizedOrarOntology) {
 		super(normalizedOrarOntology);
 
 	}

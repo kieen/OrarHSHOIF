@@ -11,6 +11,7 @@ import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLDisjointClassesAxiom;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -158,4 +159,14 @@ public class OntologyInfo {
 		}
 
 	}
+
+	public static void printDisjointAxioms(OWLOntology ontology) {
+		Set<OWLDisjointClassesAxiom> axioms = ontology.getAxioms(AxiomType.DISJOINT_CLASSES);
+		logger.info("disjoint axioms:");
+		for (OWLAxiom ax : axioms) {
+			logger.info(ax);
+		}
+
+	}
+	
 }

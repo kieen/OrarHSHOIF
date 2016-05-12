@@ -24,7 +24,7 @@ import orar.io.ontologyreader.DLLiteR_OntologyReader;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
-import orar.materializer.HornSHOIF.HornSHOIF_Materialization_Hermit;
+import orar.materializer.HornSHOIF.HornSHOIF_Materializer_Hermit;
 import orar.modeling.ontology.OrarOntology;
 import orar.util.PrintingHelper;
 

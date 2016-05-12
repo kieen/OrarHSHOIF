@@ -35,14 +35,14 @@ import orar.type.BasicIndividualTypeFactory_UsingWeakHashMap;
 import orar.type.IndividualType;
 import orar.util.PrintingHelper;
 
-public abstract class MaterializeTemplate implements Materializer {
+public abstract class MaterializerTemplate implements Materializer {
 	// input & output
 	protected final OrarOntology normalizedORAROntology;
 	private int currentLoop;
 	private long reasoningTimeInSeconds;
 	protected final Configuration config;
 	// logging
-	private static final Logger logger = Logger.getLogger(MaterializeTemplate.class);
+	private static final Logger logger = Logger.getLogger(MaterializerTemplate.class);
 	// shared data
 	protected final DataForTransferingEntailments dataForTransferringEntailments;
 	protected final MetaDataOfOntology metaDataOfOntology;
@@ -54,7 +54,7 @@ public abstract class MaterializeTemplate implements Materializer {
 	protected Set<OWLOntology> abstractOntologies;
 	protected final RuleEngine ruleEngine;
 
-	public MaterializeTemplate(OrarOntology normalizedOrarOntology) {
+	public MaterializerTemplate(OrarOntology normalizedOrarOntology) {
 		// input & output
 		this.normalizedORAROntology = normalizedOrarOntology;
 		this.currentLoop = 0;

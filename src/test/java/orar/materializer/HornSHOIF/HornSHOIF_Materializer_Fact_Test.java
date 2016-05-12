@@ -23,7 +23,7 @@ import orar.materializer.Materializer;
 import orar.modeling.ontology.OrarOntology;
 import orar.util.PrintingHelper;
 
-public class HornSHOIF_Materializer_Fact {
+public class HornSHOIF_Materializer_Fact_Test {
 
 	/**
 	 * No new entailments
@@ -253,7 +253,7 @@ public class HornSHOIF_Materializer_Fact {
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
 
-		Materializer materializer = new HornSHOIF_Materialization_Fact(normalizedOrarOntology);
+		Materializer materializer = new HornSHOIF_Materializer_Fact(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology

@@ -49,7 +49,7 @@ public class HornSHIF_Materializer_KoncludeTest {
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyPath);
 
-		Materializer materializer = new HornSHIF_Materialization_Konclude(normalizedOrarOntology);
+		Materializer materializer = new HornSHIF_Materializer_Konclude(normalizedOrarOntology);
 
 		/*
 		 * get result directly from Konclude reasoning over the input ontology
