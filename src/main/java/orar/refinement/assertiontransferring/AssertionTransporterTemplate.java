@@ -52,14 +52,14 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 
 	@Override
 	public void updateOriginalABox() {
-		addConceptAssertions();// not change
-		addRoleAssertions();// not change
-		addSameasAssertions();// varies
+		transferConceptAssertions();// not change
+		transferRoleAssertions();// not change
+		transferSameasAssertions();// varies
 	}
 
-	protected abstract void addSameasAssertions();
+	protected abstract void transferSameasAssertions();
 
-	private void addRoleAssertions() {
+	private void transferRoleAssertions() {
 		transferRoleAssertionsForLoopConcepts();// not change
 		tranferRoleAssertionsBetweenUX();// varies
 		transferRoleAssertionsForXYHavingFunctionalRoles();// not change
@@ -185,7 +185,7 @@ public abstract class AssertionTransporterTemplate implements AssertionTransport
 	 * add concept assertions based on concept assertions of representatives
 	 * (X,Y,Z) for combined-types.
 	 */
-	private void addConceptAssertions() {
+	protected void transferConceptAssertions() {
 		Iterator<Entry<OWLNamedIndividual, Set<OWLClass>>> iterator = this.abstractConceptAssertionsAsMap.entrySet()
 				.iterator();
 		while (iterator.hasNext()) {

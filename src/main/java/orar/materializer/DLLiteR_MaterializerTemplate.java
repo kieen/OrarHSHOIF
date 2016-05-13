@@ -16,9 +16,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import orar.abstraction.AbstractionGenerator;
 import orar.abstraction.BasicTypeComputor;
 import orar.abstraction.TypeComputor;
-import orar.abstraction.DLLiteR.DLLiteR_AbstractionGenerator;
 import orar.abstraction.HornSHIF.HornSHIF_AbstractionGenerator;
-import orar.abstraction.HornSHOIF.HornSHOIF_AbstractionGenerator;
 import orar.config.Configuration;
 import orar.config.DebugLevel;
 import orar.config.LogInfo;
@@ -28,11 +26,8 @@ import orar.data.DataForTransferingEntailments;
 import orar.data.MetaDataOfOntology;
 import orar.innerreasoner.InnerReasoner;
 import orar.modeling.ontology.OrarOntology;
-import orar.refinement.abstractroleassertion.AbstractRoleAssertionBox;
-import orar.refinement.abstractroleassertion.RoleAssertionList;
 import orar.refinement.assertiontransferring.AssertionTransporter;
-import orar.refinement.assertiontransferring.HornSHIF.HornSHIF_AssertionTransporter;
-import orar.refinement.assertiontransferring.HornSHOIF.HornSHOIF_AssertionTransporter;
+import orar.refinement.assertiontransferring.DLLiteR.DLLite_AssertionTransporter;
 import orar.rolereasoning.HermitRoleReasoner;
 import orar.rolereasoning.RoleReasoner;
 import orar.ruleengine.RuleEngine;
@@ -58,7 +53,7 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 	// other fields for the algorithm
 	protected final TypeComputor typeComputor;
 	protected Set<OWLOntology> abstractOntologies;
-	 protected final RuleEngine ruleEngine;
+	protected final RuleEngine ruleEngine;
 
 	public DLLiteR_MaterializerTemplate(OrarOntology normalizedOrarOntology) {
 		// input & output
@@ -72,7 +67,7 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 
 		// other fields
 		this.abstractOntologies = new HashSet<OWLOntology>();
-		 this.ruleEngine = new SemiNaiveRuleEngine(normalizedOrarOntology);
+		this.ruleEngine = new SemiNaiveRuleEngine(normalizedOrarOntology);
 		this.typeComputor = new BasicTypeComputor();
 	}
 
@@ -83,7 +78,7 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 		this.dataForTransferringEntailments.clear();
 		AbstractDataFactory.getInstance().clear();
 		BasicIndividualTypeFactory_UsingWeakHashMap.getInstance().clear();
-		
+
 		/*
 		 * (1). Get meta info of the ontology, e.g. role hierarchy, entailed
 		 * func/tran roles
@@ -97,7 +92,7 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 		 */
 		logger.info("First time computing deductive closure...");
 		ruleEngine.materialize();
-		
+
 		/*
 		 * (3). Compute types
 		 */
@@ -171,8 +166,6 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 		 */
 		logger.info("Materializing the abstractions ...");
 		Map<OWLNamedIndividual, Set<OWLClass>> entailedAbstractConceptAssertions = new HashMap<OWLNamedIndividual, Set<OWLClass>>();
-		AbstractRoleAssertionBox entailedAbstractRoleAssertion = new AbstractRoleAssertionBox();
-		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>();
 
 		for (OWLOntology abstraction : abstractions) {
 			if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
@@ -190,9 +183,6 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 			entailedAbstractConceptAssertions.putAll(innerReasoner.getEntailedConceptAssertionsAsMap());
 
 			if (config.getDebuglevels().contains(DebugLevel.REASONING_ABSTRACTONTOLOGY)) {
-				logger.info("***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed Role assertions by abstract ontoogy:");
-				PrintingHelper.printSet(entailedAbstractRoleAssertion.getSetOfRoleAssertions());
-
 				logger.info("***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed Concept assertions by abstract ontoogy:");
 				PrintingHelper.printMap(entailedAbstractConceptAssertions);
 			}
@@ -202,8 +192,7 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 		 * (6). Transfer assertions to the original ABox
 		 */
 		logger.info("Transferring the entailments ...");
-		AssertionTransporter assertionTransporter = getAssertionTransporter(entailedAbstractConceptAssertions,
-				entailedAbstractRoleAssertion, entailedSameasMap);
+		AssertionTransporter assertionTransporter = getAssertionTransporter(entailedAbstractConceptAssertions);
 		assertionTransporter.updateOriginalABox();
 
 		// get reasoning time
@@ -233,19 +222,18 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 	protected List<OWLOntology> getAbstractions(Map<IndividualType, Set<OWLNamedIndividual>> typeMap2Individuals) {
 		AbstractionGenerator abstractionGenerator = new HornSHIF_AbstractionGenerator(normalizedORAROntology,
 				typeMap2Individuals);
-//		AbstractionGenerator abstractionGenerator = new DLLiteR_AbstractionGenerator(normalizedORAROntology,
-//				typeMap2Individuals);
+		// AbstractionGenerator abstractionGenerator = new
+		// DLLiteR_AbstractionGenerator(normalizedORAROntology,
+		// typeMap2Individuals);
 		List<OWLOntology> abstractions = new ArrayList<OWLOntology>();
 		abstractions.add(abstractionGenerator.getAbstractOntology());
 		return abstractions;
 	}
 
 	protected AssertionTransporter getAssertionTransporter(
-			Map<OWLNamedIndividual, Set<OWLClass>> entailedAbstractConceptAssertions,
-			AbstractRoleAssertionBox entailedAbstractRoleAssertion,
-			Map<OWLNamedIndividual, Set<OWLNamedIndividual>> entailedSameasMap) {
-		AssertionTransporter assertionTransporter = new HornSHIF_AssertionTransporter(normalizedORAROntology,
-				entailedAbstractConceptAssertions, entailedAbstractRoleAssertion);
+			Map<OWLNamedIndividual, Set<OWLClass>> entailedAbstractConceptAssertions) {
+		AssertionTransporter assertionTransporter = new DLLite_AssertionTransporter(normalizedORAROntology,
+				entailedAbstractConceptAssertions);
 		return assertionTransporter;
 	}
 

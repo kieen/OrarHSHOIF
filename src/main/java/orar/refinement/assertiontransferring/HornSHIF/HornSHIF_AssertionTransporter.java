@@ -23,7 +23,7 @@ public class HornSHIF_AssertionTransporter extends AssertionTransporterTemplate 
 	}
 
 	@Override
-	protected void addSameasAssertions() {
+	protected void transferSameasAssertions() {
 		// nothing to do.
 	}
 

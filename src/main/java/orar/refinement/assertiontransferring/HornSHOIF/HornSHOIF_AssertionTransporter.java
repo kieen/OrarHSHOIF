@@ -32,7 +32,7 @@ public class HornSHOIF_AssertionTransporter extends AssertionTransporterTemplate
 	}
 
 	@Override
-	protected void addSameasAssertions() {
+	protected void transferSameasAssertions() {
 		Iterator<Entry<OWLNamedIndividual, Set<OWLNamedIndividual>>> iterator = this.abstractSameasMap.entrySet()
 				.iterator();
 		while (iterator.hasNext()) {
