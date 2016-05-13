@@ -1,22 +1,17 @@
-package orar.innerexplanation;
+package orar.consistencychecking;
 
 import java.util.Set;
 
-import org.semanticweb.owl.explanation.api.Explanation;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
-/**
- * Check consistency and compute explanations for inconsistent ontologies
- * 
- * @author kien
- *
- */
-public interface InnerConsistencyChecker {
+public interface ConsistencyChecker {
 
 	/**
 	 * @return true if the consider ontology is consistent, false otherwise
 	 */
 	public boolean isConsistent();
+
+	public long getReasoningTimeInSeconds();
 
 	/**
 	 * @param maxNumberOfExplanations
@@ -24,5 +19,10 @@ public interface InnerConsistencyChecker {
 	 * @return a set of explanations for inconsistency of the ontology; empty
 	 *         set if the ontology is consistent.
 	 */
-	public Set<Explanation<OWLAxiom>> getExplanations(int maxNumberOfExplanations);
+	public Set<Set<OWLAxiom>> getExplanations(int maxNumberOfExplanations);
+
+	/**
+	 * Release all resource used by the abstraction-refinement-reasoner
+	 */
+	public void dispose();
 }

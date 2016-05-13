@@ -1,4 +1,4 @@
-package orar.innerexplanation;
+package orar.innerconsistencychecking;
 
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.model.OWLOntology;

@@ -1,9 +1,8 @@
-package orar.innerexplanation;
+package orar.innerconsistencychecking;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owl.explanation.api.Explanation;
 import org.semanticweb.owl.explanation.api.ExplanationGenerator;
 import org.semanticweb.owl.explanation.impl.blackbox.checker.InconsistentOntologyExplanationGeneratorFactory;
@@ -16,16 +15,18 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 
 public abstract class InnerConsistencyCheckerTemplate implements InnerConsistencyChecker {
 	protected final OWLOntology owlOntology;
-	private final Set<Explanation<OWLAxiom>> explanations;
+	private final Set<Set<OWLAxiom>> explanations;
 	// private OWLReasonerFactory reasonerFactory;
 	private final long timeoutInSeconds;
 	private OWLDataFactory dataFactory;
+	private long reasoningTimeInSeconds;
 
 	public InnerConsistencyCheckerTemplate(OWLOntology owlOntology, long timeoutInSeconds) {
 		this.owlOntology = owlOntology;
 		this.explanations = new HashSet<>();
 		this.timeoutInSeconds = timeoutInSeconds;
 		this.dataFactory = OWLManager.getOWLDataFactory();
+		this.reasoningTimeInSeconds = -1;
 	}
 
 	protected abstract OWLReasoner getReasoner();
@@ -35,12 +36,17 @@ public abstract class InnerConsistencyCheckerTemplate implements InnerConsistenc
 	@Override
 	public boolean isConsistent() {
 		OWLReasoner owlReasoner = getReasoner();
-		return owlReasoner.isConsistent();
+		long startTime = System.currentTimeMillis();
+
+		boolean consistent = owlReasoner.isConsistent();
+		long endTime = System.currentTimeMillis();
+		this.reasoningTimeInSeconds = (endTime - startTime) / 1000;
+		return consistent;
 
 	}
 
 	@Override
-	public Set<Explanation<OWLAxiom>> getExplanations(int maxNumberOfExplanations) {
+	public Set<Set<OWLAxiom>> getExplanations(int maxNumberOfExplanations) {
 		computeExplanation(maxNumberOfExplanations);
 		return this.explanations;
 	}
@@ -75,7 +81,16 @@ public abstract class InnerConsistencyCheckerTemplate implements InnerConsistenc
 		 * Get our explanations.
 		 */
 
-		this.explanations.addAll(explGenerator.getExplanations(entailment, maxNumberOfExplanations));
+		Set<Explanation<OWLAxiom>> owlapiExplanations = explGenerator.getExplanations(entailment,
+				maxNumberOfExplanations);
+		for (Explanation<OWLAxiom> eachExplanation : owlapiExplanations) {
+			HashSet<OWLAxiom> setOfAxioms = new HashSet<>(eachExplanation.getAxioms());
+			setOfAxioms.remove(entailment);
+			this.explanations.add(setOfAxioms);
+		}
 	}
 
+	public long getReasoningTimeInSeconds() {
+		return this.reasoningTimeInSeconds;
+	}
 }
