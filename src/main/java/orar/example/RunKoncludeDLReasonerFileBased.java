@@ -14,8 +14,8 @@ public class RunKoncludeDLReasonerFileBased {
 
 	// static String combinedAboxAndTBox =
 	// "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-tiny.owl";
-	static String combinedAboxAndTBox = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small6.owl";
-
+//	static String combinedAboxAndTBox = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small6.owl";
+	static String combinedAboxAndTBox = "/Users/kien/benchmarks/coburn/coburnSHOIF.owl";
 	public static void main(String[] args) throws OWLOntologyCreationException {
 		Configuration.getInstance().clearDebugLevels();
 		Configuration.getInstance().clearLogInfoLevels();

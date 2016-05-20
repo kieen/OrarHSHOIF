@@ -1,4 +1,4 @@
-package orar.dlfragmentvalidator.DLLiteR;
+package orar.dlfragmentvalidator.DLLiteH;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,15 +26,15 @@ import org.semanticweb.owlapi.model.OWLObjectUnionOf;
 
 import orar.dlfragmentvalidator.DLConstructor;
 
-public class DLLiteR_SuperClass_Validator implements OWLClassExpressionVisitorEx<OWLClassExpression> {
+public class DLLiteH_SuperClass_Validator implements OWLClassExpressionVisitorEx<OWLClassExpression> {
 
-	private final DLLiteR_SubClass_Validator subClassValidator;
+	private final DLLiteH_SubClass_Validator subClassValidator;
 	private final Set<DLConstructor> dlConstructorsInInputOntology;
 	private final Set<DLConstructor> dlConstructorsInValidatedOntology;
 
-	public DLLiteR_SuperClass_Validator() {
+	public DLLiteH_SuperClass_Validator() {
 
-		subClassValidator = new DLLiteR_SubClass_Validator();
+		subClassValidator = new DLLiteH_SubClass_Validator();
 		this.dlConstructorsInInputOntology = new HashSet<DLConstructor>();
 		this.dlConstructorsInValidatedOntology = new HashSet<DLConstructor>();
 	}

@@ -233,7 +233,7 @@ public class HornALCHOIF_AxiomValidator implements AxiomValidator {
 	@Override
 	public OWLAxiom visit(OWLDisjointObjectPropertiesAxiom axiom) {
 
-		return axiom;
+		return null;
 	}
 
 	@Override

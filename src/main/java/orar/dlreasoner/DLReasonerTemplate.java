@@ -81,17 +81,17 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 
 	@Override
 	public void computeConceptAssertions() {
+		long startTime = System.currentTimeMillis();
+		logger.info("computing concept assertions...");
 		this.reasoner = getOWLReasoner(owlOntology);
 //		logger.info("***DEBUG*** 1");
-		long startTime = System.currentTimeMillis();
-
 		this.reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS);
 //		logger.info("***DEBUG*** 2");
 		if (!reasoner.isConsistent()) {
 			logger.error("Ontology inconsistent!");
 		}
 //		logger.info("***DEBUG*** 3");
-		logger.info("computing concept assertions...");
+		
 		computeEntailedConceptAssertions();
 		
 		this.entailmentComputed = true;

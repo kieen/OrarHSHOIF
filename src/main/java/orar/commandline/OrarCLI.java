@@ -12,14 +12,14 @@ import org.apache.log4j.Logger;
 import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.dlfragmentvalidator.DLConstructor;
-import orar.io.ontologyreader.DLLiteR_OntologyReader;
+import orar.io.ontologyreader.DLLiteH_OntologyReader;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
-import orar.materializer.DLLiteR.DLLiteR_Materializer_Fact;
-import orar.materializer.DLLiteR.DLLiteR_Materializer_Hermit;
-import orar.materializer.DLLiteR.DLLiteR_Materializer_Konclude;
-import orar.materializer.DLLiteR.DLLiteR_Materializer_Pellet;
+import orar.materializer.DLLite.DLLite_Materializer_Fact;
+import orar.materializer.DLLite.DLLite_Materializer_Hermit;
+import orar.materializer.DLLite.DLLite_Materializer_Konclude;
+import orar.materializer.DLLite.DLLite_Materializer_Pellet;
 import orar.materializer.HornSHIF.HornSHIF_Materializer_Fact;
 import orar.materializer.HornSHIF.HornSHIF_Materializer_Hermit;
 import orar.materializer.HornSHIF.HornSHIF_Materializer_Konclude;
@@ -176,7 +176,7 @@ public class OrarCLI {
 
 		if (reasonerName.equals(Argument.HERMIT)) {
 
-			materializer = new DLLiteR_Materializer_Hermit(orarOntology);
+			materializer = new DLLite_Materializer_Hermit(orarOntology);
 
 		}
 
@@ -186,19 +186,19 @@ public class OrarCLI {
 			String port = commandLine.getOptionValue(Argument.PORT);
 			int intPort = Integer.parseInt(port);
 
-			materializer = new DLLiteR_Materializer_Konclude(orarOntology, intPort);
+			materializer = new DLLite_Materializer_Konclude(orarOntology, intPort);
 
 		}
 
 		if (reasonerName.equals(Argument.FACT)) {
 
-			materializer = new DLLiteR_Materializer_Fact(orarOntology);
+			materializer = new DLLite_Materializer_Fact(orarOntology);
 
 		}
 
 		if (reasonerName.equals(Argument.PELLET)) {
 
-			materializer = new DLLiteR_Materializer_Pellet(orarOntology);
+			materializer = new DLLite_Materializer_Pellet(orarOntology);
 
 		}
 
@@ -323,7 +323,7 @@ public class OrarCLI {
 		String dlFragment = commandLine.getOptionValue(Argument.DL);
 
 		if (dlFragment.equals(Argument.DLLITE_R)) {
-			return new DLLiteR_OntologyReader();
+			return new DLLiteH_OntologyReader();
 		}
 
 		if (dlFragment.equals(Argument.HORN_SHOIF)) {

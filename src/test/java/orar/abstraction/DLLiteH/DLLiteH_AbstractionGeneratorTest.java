@@ -1,4 +1,4 @@
-package orar.abstraction.DLLiteR;
+package orar.abstraction.DLLiteH;
 
 import java.util.Map;
 import java.util.Set;
@@ -10,13 +10,14 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import orar.abstraction.AbstractionGenerator;
 import orar.abstraction.BasicTypeComputor;
 import orar.abstraction.TypeComputor;
-import orar.io.ontologyreader.DLLiteR_OntologyReader;
+import orar.abstraction.DLLiteH.DLLiteR_AbstractionGenerator;
+import orar.io.ontologyreader.DLLiteH_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.modeling.ontology.OrarOntology;
 import orar.type.IndividualType;
 import orar.util.PrintingHelper;
 
-public class DLLiteR_AbstractionGeneratorTest {
+public class DLLiteH_AbstractionGeneratorTest {
 
 	@Test
 	public void test1() {
@@ -38,7 +39,7 @@ public class DLLiteR_AbstractionGeneratorTest {
 	}
 
 	private OWLOntology getAbstraction(String ontologyPath) {
-		OntologyReader ontologyReader = new DLLiteR_OntologyReader();
+		OntologyReader ontologyReader = new DLLiteH_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontologyReader.getNormalizedOrarOntology(ontologyPath);
 
 		TypeComputor typeComputor = new BasicTypeComputor();

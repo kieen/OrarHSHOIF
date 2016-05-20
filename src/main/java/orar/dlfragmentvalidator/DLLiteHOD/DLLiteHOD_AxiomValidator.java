@@ -1,4 +1,4 @@
-package orar.dlfragmentvalidator.DLLiteR;
+package orar.dlfragmentvalidator.DLLiteHOD;
 
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +56,7 @@ import orar.dlfragmentvalidator.AxiomValidator;
 import orar.dlfragmentvalidator.DLConstructor;
 import orar.dlfragmentvalidator.ValidatorDataFactory;
 
-public class DLLiteR_AxiomValidator implements AxiomValidator {
+public class DLLiteHOD_AxiomValidator implements AxiomValidator {
 	/*
 	 * store violated axioms that are of interest like disjunction, role chain,
 	 * transitivity
@@ -67,8 +67,8 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 													// axioms
 	protected final Set<DLConstructor> constructorsInInputOntology;
 	protected final Set<DLConstructor> constructorsInValidatedOntology;
-	protected final DLLiteR_SubClass_Validator subClassValidator;
-	protected final DLLiteR_SuperClass_Validator superClassValidator;
+
+	protected final DLLiteHOD_Class_Validator classValidator;
 	protected final OWLDataFactory owlDataFact;
 	protected final ValidatorDataFactory validatorDataFactory;
 	/*
@@ -78,12 +78,12 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 	 */
 	private Set<OWLAxiom> generatedAxioms;
 
-	public DLLiteR_AxiomValidator() {
+	public DLLiteHOD_AxiomValidator() {
 		this.violatedAxioms = new HashSet<OWLAxiom>();
 		this.constructorsInInputOntology = new HashSet<DLConstructor>();
 		this.constructorsInValidatedOntology = new HashSet<DLConstructor>();
-		this.subClassValidator = new DLLiteR_SubClass_Validator();
-		this.superClassValidator = new DLLiteR_SuperClass_Validator();
+		this.classValidator = new DLLiteHOD_Class_Validator();
+
 		this.generatedAxioms = new HashSet<OWLAxiom>();
 		this.owlDataFact = OWLManager.getOWLDataFactory();
 		this.validatorDataFactory = ValidatorDataFactory.getInstance();
@@ -93,8 +93,8 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 	public Set<DLConstructor> getDLConstructorsInInputOntology() {
 		Set<DLConstructor> constructors = new HashSet<DLConstructor>();
 		constructors.addAll(this.constructorsInInputOntology);
-		constructors.addAll(this.subClassValidator.getDlConstructorsInInputOntology());
-		constructors.addAll(this.superClassValidator.getDlConstructorsInInputOntology());
+		constructors.addAll(this.classValidator.getDlConstructorsInInputOntology());
+
 		return constructors;
 	}
 
@@ -135,8 +135,8 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 	public OWLAxiom visit(OWLSubClassOfAxiom axiom) {
 		OWLClassExpression subClass = axiom.getSubClass();
 		OWLClassExpression superClass = axiom.getSuperClass();
-		OWLClassExpression profiledSupClass = subClass.accept(this.subClassValidator);
-		OWLClassExpression profiledSuperClass = superClass.accept(this.superClassValidator);
+		OWLClassExpression profiledSupClass = subClass.accept(this.classValidator);
+		OWLClassExpression profiledSuperClass = superClass.accept(this.classValidator);
 		if (profiledSupClass == null || profiledSuperClass == null) {
 			this.violatedAxioms.add(axiom);
 			return null;
@@ -146,18 +146,7 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLNegativeObjectPropertyAssertionAxiom axiom) {
-		/*
-		 * normalize to atomic role assertion
-		 */
-		OWLObjectPropertyExpression role = axiom.getProperty();
-		OWLIndividual subject = axiom.getSubject();
-		OWLIndividual object = axiom.getObject();
-		OWLObjectProperty atomicRole = ValidatorDataFactory.getInstance().getFreshProperty();
-		OWLDisjointObjectPropertiesAxiom newAxiom = owlDataFact.getOWLDisjointObjectPropertiesAxiom(atomicRole, role);
-		this.generatedAxioms.add(newAxiom);
-		OWLObjectPropertyAssertionAxiom atomicRoleAsertion = owlDataFact.getOWLObjectPropertyAssertionAxiom(atomicRole,
-				subject, object);
-		return atomicRoleAsertion;
+		return null;
 	}
 
 	@Override
@@ -177,7 +166,7 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 		Set<OWLClassExpression> allConcepts = axiom.getClassExpressions();
 		boolean violated = false;
 		for (OWLClassExpression concept : allConcepts) {
-			if (concept.accept(subClassValidator) == null) {
+			if (concept.accept(classValidator) == null) {
 				violated = true;
 				break;
 			}
@@ -217,7 +206,7 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 	@Override
 	public OWLAxiom visit(OWLDifferentIndividualsAxiom axiom) {
 
-		return axiom;
+		return null;
 	}
 
 	@Override
@@ -229,7 +218,7 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 	@Override
 	public OWLAxiom visit(OWLDisjointObjectPropertiesAxiom axiom) {
 
-		return axiom;
+		return null;
 	}
 
 	@Override
@@ -267,8 +256,7 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLDisjointUnionAxiom axiom) {
-		this.violatedAxioms.add(axiom);
-		return null;
+		return axiom;
 	}
 
 	@Override
@@ -335,8 +323,8 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 				/*
 				 * Check if A subclassof B is Horn
 				 */
-				OWLClassExpression leftSizeAsSubClass = leftSize.accept(subClassValidator);
-				OWLClassExpression rightSizeAsSuperClass = rightSize.accept(superClassValidator);
+				OWLClassExpression leftSizeAsSubClass = leftSize.accept(classValidator);
+				OWLClassExpression rightSizeAsSuperClass = rightSize.accept(classValidator);
 				if (leftSizeAsSubClass != null && rightSizeAsSuperClass != null) {
 					OWLSubClassOfAxiom subClassOfAxiom1 = owlDataFact.getOWLSubClassOfAxiom(leftSizeAsSubClass,
 							rightSizeAsSuperClass);
@@ -347,8 +335,8 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 				/*
 				 * Check if B subClassOf A is Horn
 				 */
-				OWLClassExpression rightSizeAsSubClass = rightSize.accept(subClassValidator);
-				OWLClassExpression leftSizeAsSuperClass = leftSize.accept(superClassValidator);
+				OWLClassExpression rightSizeAsSubClass = rightSize.accept(classValidator);
+				OWLClassExpression leftSizeAsSuperClass = leftSize.accept(classValidator);
 				if (rightSizeAsSubClass != null && leftSizeAsSuperClass != null) {
 					OWLSubClassOfAxiom subClassOfAxiom2 = owlDataFact.getOWLSubClassOfAxiom(rightSizeAsSubClass,
 							leftSizeAsSuperClass);
@@ -433,8 +421,7 @@ public class DLLiteR_AxiomValidator implements AxiomValidator {
 	public Set<DLConstructor> getDLConstructorsInValidatedOntology() {
 		Set<DLConstructor> constructors = new HashSet<DLConstructor>();
 		constructors.addAll(this.constructorsInValidatedOntology);
-		constructors.addAll(this.subClassValidator.getDlConstructorsInValidatedOntology());
-		constructors.addAll(this.superClassValidator.getDlConstructorsInValidatedOntology());
+		constructors.addAll(this.classValidator.getDlConstructorsInValidatedOntology());
 		return constructors;
 	}
 }

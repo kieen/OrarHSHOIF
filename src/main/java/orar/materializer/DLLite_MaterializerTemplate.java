@@ -36,14 +36,14 @@ import orar.type.BasicIndividualTypeFactory_UsingWeakHashMap;
 import orar.type.IndividualType;
 import orar.util.PrintingHelper;
 
-public abstract class DLLiteR_MaterializerTemplate implements Materializer {
+public abstract class DLLite_MaterializerTemplate implements Materializer {
 	// input & output
 	protected final OrarOntology normalizedORAROntology;
 
 	private long reasoningTimeInSeconds;
 	protected final Configuration config;
 	// logging
-	private static final Logger logger = Logger.getLogger(DLLiteR_MaterializerTemplate.class);
+	private static final Logger logger = Logger.getLogger(DLLite_MaterializerTemplate.class);
 	// shared data
 	protected final DataForTransferingEntailments dataForTransferringEntailments;
 	protected final MetaDataOfOntology metaDataOfOntology;
@@ -55,7 +55,7 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 	protected Set<OWLOntology> abstractOntologies;
 	protected final RuleEngine ruleEngine;
 
-	public DLLiteR_MaterializerTemplate(OrarOntology normalizedOrarOntology) {
+	public DLLite_MaterializerTemplate(OrarOntology normalizedOrarOntology) {
 		// input & output
 		this.normalizedORAROntology = normalizedOrarOntology;
 
@@ -79,19 +79,19 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 		AbstractDataFactory.getInstance().clear();
 		BasicIndividualTypeFactory_UsingWeakHashMap.getInstance().clear();
 
-		/*
-		 * (1). Get meta info of the ontology, e.g. role hierarchy, entailed
-		 * func/tran roles
-		 */
-		logger.info("Performing role reasoning ...");
-		doRoleReasoning();
-
-		/*
-		 * (2). Compute deductive closure of equality, trans, functionality, and
-		 * role subsumsion.
-		 */
-		logger.info("First time computing deductive closure...");
-		ruleEngine.materialize();
+//		/*
+//		 * (1). Get meta info of the ontology, e.g. role hierarchy, entailed
+//		 * func/tran roles
+//		 */
+//		logger.info("Performing role reasoning ...");
+//		doRoleReasoning();
+//
+//		/*
+//		 * (2). Compute deductive closure of equality, trans, functionality, and
+//		 * role subsumsion.
+//		 */
+//		logger.info("First time computing deductive closure...");
+//		ruleEngine.materialize();
 
 		/*
 		 * (3). Compute types
@@ -164,6 +164,7 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 		/*
 		 * (5). Materialize abstractions
 		 */
+		
 		logger.info("Materializing the abstractions ...");
 		Map<OWLNamedIndividual, Set<OWLClass>> entailedAbstractConceptAssertions = new HashMap<OWLNamedIndividual, Set<OWLClass>>();
 
@@ -176,9 +177,6 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 			logger.info("Info:Size of the (splitted) abstract ontology: " + abstraction.getAxiomCount());
 			InnerReasoner innerReasoner = getInnerReasoner(abstraction);
 			innerReasoner.computeConceptAssertions();
-			// we can use putAll since individuals in different abstractsion
-			// are
-			// disjointed.
 
 			entailedAbstractConceptAssertions.putAll(innerReasoner.getEntailedConceptAssertionsAsMap());
 
@@ -186,8 +184,9 @@ public abstract class DLLiteR_MaterializerTemplate implements Materializer {
 				logger.info("***DEBUG REASONING_ABSTRACTONTOLOGY *** entailed Concept assertions by abstract ontoogy:");
 				PrintingHelper.printMap(entailedAbstractConceptAssertions);
 			}
-
+			logger.info(StatisticVocabulary.TIME_REASONING_ON_ABSTRACTION_ONTOLOGY+innerReasoner.getReasoningTime());
 		}
+		
 		/*
 		 * (6). Transfer assertions to the original ABox
 		 */

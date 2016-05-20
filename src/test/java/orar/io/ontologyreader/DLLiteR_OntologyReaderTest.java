@@ -34,13 +34,13 @@ public class DLLiteR_OntologyReaderTest {
 				LogInfo.COMPARED_RESULT_INFO);
 		Configuration.getInstance().addDebugLevels(DebugLevel.DL_FRAGMENT_VALIDATING);
 		System.out.println("Loading ontology for abstraction materializer....");
-		OntologyReader ontoReader = new DLLiteR_OntologyReader();
+		OntologyReader ontoReader = new DLLiteH_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(ontologyTbox, aboxList);
 		int numberOfAssertions = normalizedOrarOntology.getNumberOfInputConceptAssertions()
 				+ normalizedOrarOntology.getNumberOfInputRoleAssertions();
 		System.out.println("DEBUG***Number of assertions in OrarOntology: " + numberOfAssertions);
-		 HashSet<OWLClass> orarConceptNames = new HashSet<>(normalizedOrarOntology.getConceptNamesInSignature());
-		 HashSet<OWLObjectProperty> orarRoleNames = new HashSet<>(normalizedOrarOntology.getRoleNamesInSignature());
+		 HashSet<OWLClass> orarConceptNames = new HashSet<OWLClass>(normalizedOrarOntology.getConceptNamesInSignature());
+		 HashSet<OWLObjectProperty> orarRoleNames = new HashSet<OWLObjectProperty>(normalizedOrarOntology.getRoleNamesInSignature());
 		 System.out.println(
 				"DEBUG*** Number of concept names:" + normalizedOrarOntology.getConceptNamesInSignature().size());
 		System.out.println("Orar concept names:");

@@ -23,7 +23,7 @@ public abstract class InnerConsistencyCheckerTemplate implements InnerConsistenc
 
 	public InnerConsistencyCheckerTemplate(OWLOntology owlOntology, long timeoutInSeconds) {
 		this.owlOntology = owlOntology;
-		this.explanations = new HashSet<>();
+		this.explanations = new HashSet<Set<OWLAxiom>>();
 		this.timeoutInSeconds = timeoutInSeconds;
 		this.dataFactory = OWLManager.getOWLDataFactory();
 		this.reasoningTimeInSeconds = -1;
@@ -84,7 +84,7 @@ public abstract class InnerConsistencyCheckerTemplate implements InnerConsistenc
 		Set<Explanation<OWLAxiom>> owlapiExplanations = explGenerator.getExplanations(entailment,
 				maxNumberOfExplanations);
 		for (Explanation<OWLAxiom> eachExplanation : owlapiExplanations) {
-			HashSet<OWLAxiom> setOfAxioms = new HashSet<>(eachExplanation.getAxioms());
+			HashSet<OWLAxiom> setOfAxioms = new HashSet<OWLAxiom>(eachExplanation.getAxioms());
 			setOfAxioms.remove(entailment);
 			this.explanations.add(setOfAxioms);
 		}

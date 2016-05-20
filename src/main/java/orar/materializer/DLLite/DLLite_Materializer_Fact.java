@@ -1,15 +1,15 @@
-package orar.materializer.DLLiteR;
+package orar.materializer.DLLite;
 
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import orar.innerreasoner.InnerReasoner;
 import orar.innerreasoner.HornSHIF.Fact_HornSHIF_InnerReasoner;
-import orar.materializer.DLLiteR_MaterializerTemplate;
+import orar.materializer.DLLite_MaterializerTemplate;
 import orar.modeling.ontology.OrarOntology;
 
-public class DLLiteR_Materializer_Fact extends DLLiteR_MaterializerTemplate {
+public class DLLite_Materializer_Fact extends DLLite_MaterializerTemplate {
 
-	public DLLiteR_Materializer_Fact(OrarOntology normalizedOrarOntology) {
+	public DLLite_Materializer_Fact(OrarOntology normalizedOrarOntology) {
 		super(normalizedOrarOntology);
 
 	}

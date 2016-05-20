@@ -122,6 +122,6 @@ public class DLLite_AssertionTransporter implements AssertionTransporter {
 
 	@Override
 	public Set<Set<OWLNamedIndividual>> getNewlyAddedSameasAssertions() {
-		return new HashSet<>();
+		return new HashSet<Set<OWLNamedIndividual>>();
 	}
 }

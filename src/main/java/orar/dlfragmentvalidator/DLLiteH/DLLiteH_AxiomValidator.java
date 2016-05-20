@@ -1,4 +1,4 @@
-package orar.dlfragmentvalidator.ALCHOIF;
+package orar.dlfragmentvalidator.DLLiteH;
 
 import java.util.HashSet;
 import java.util.List;
@@ -56,12 +56,7 @@ import orar.dlfragmentvalidator.AxiomValidator;
 import orar.dlfragmentvalidator.DLConstructor;
 import orar.dlfragmentvalidator.ValidatorDataFactory;
 
-/**
- * 
- * @author kien
- *
- */
-public class ALCHOIF_AxiomValidator implements AxiomValidator {
+public class DLLiteH_AxiomValidator implements AxiomValidator {
 	/*
 	 * store violated axioms that are of interest like disjunction, role chain,
 	 * transitivity
@@ -70,10 +65,10 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 													// map between type of axiom
 													// and
 													// axioms
-	protected final Set<DLConstructor> dlConstructorsInInputOntology;
-	protected final Set<DLConstructor> dlConstructorsInValidatedOntology;
-	protected final ALCHOIF_SubClass_Validator subClassValidator;
-	protected final ALCHOIF_SuperClass_Validator superClassValidator;
+	protected final Set<DLConstructor> constructorsInInputOntology;
+	protected final Set<DLConstructor> constructorsInValidatedOntology;
+	protected final DLLiteH_SubClass_Validator subClassValidator;
+	protected final DLLiteH_SuperClass_Validator superClassValidator;
 	protected final OWLDataFactory owlDataFact;
 	protected final ValidatorDataFactory validatorDataFactory;
 	/*
@@ -81,14 +76,14 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 	 * D, where C subClassof D is not in the profile but D subClassOf C is in
 	 * the profile.
 	 */
-	protected Set<OWLAxiom> generatedAxioms;
+	private Set<OWLAxiom> generatedAxioms;
 
-	public ALCHOIF_AxiomValidator() {
+	public DLLiteH_AxiomValidator() {
 		this.violatedAxioms = new HashSet<OWLAxiom>();
-		this.dlConstructorsInInputOntology = new HashSet<DLConstructor>();
-		this.dlConstructorsInValidatedOntology = new HashSet<DLConstructor>();
-		this.subClassValidator = new ALCHOIF_SubClass_Validator();
-		this.superClassValidator = new ALCHOIF_SuperClass_Validator();
+		this.constructorsInInputOntology = new HashSet<DLConstructor>();
+		this.constructorsInValidatedOntology = new HashSet<DLConstructor>();
+		this.subClassValidator = new DLLiteH_SubClass_Validator();
+		this.superClassValidator = new DLLiteH_SuperClass_Validator();
 		this.generatedAxioms = new HashSet<OWLAxiom>();
 		this.owlDataFact = OWLManager.getOWLDataFactory();
 		this.validatorDataFactory = ValidatorDataFactory.getInstance();
@@ -97,9 +92,9 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 	@Override
 	public Set<DLConstructor> getDLConstructorsInInputOntology() {
 		Set<DLConstructor> constructors = new HashSet<DLConstructor>();
-		constructors.addAll(this.dlConstructorsInInputOntology);
+		constructors.addAll(this.constructorsInInputOntology);
 		constructors.addAll(this.subClassValidator.getDlConstructorsInInputOntology());
-		constructors.addAll(this.superClassValidator.getDlConstructors());
+		constructors.addAll(this.superClassValidator.getDlConstructorsInInputOntology());
 		return constructors;
 	}
 
@@ -172,7 +167,7 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLReflexiveObjectPropertyAxiom axiom) {
-		this.dlConstructorsInInputOntology.add(DLConstructor.REFLEXSIVEROLE);
+		this.constructorsInInputOntology.add(DLConstructor.REFLEXSIVEROLE);
 		this.violatedAxioms.add(axiom);
 		return null;
 	}
@@ -202,7 +197,8 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLObjectPropertyDomainAxiom axiom) {
-
+		this.constructorsInInputOntology.add(DLConstructor.DOMAIN);
+		this.constructorsInValidatedOntology.add(DLConstructor.DOMAIN);
 		return axiom;
 	}
 
@@ -233,12 +229,13 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 	@Override
 	public OWLAxiom visit(OWLDisjointObjectPropertiesAxiom axiom) {
 
-		return null;
+		return axiom;
 	}
 
 	@Override
 	public OWLAxiom visit(OWLObjectPropertyRangeAxiom axiom) {
-
+		this.constructorsInInputOntology.add(DLConstructor.RANGE);
+		this.constructorsInValidatedOntology.add(DLConstructor.RANGE);
 		return axiom;
 	}
 
@@ -258,9 +255,9 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLFunctionalObjectPropertyAxiom axiom) {
-		this.dlConstructorsInInputOntology.add(DLConstructor.FUNCTIONALITY);
-		this.dlConstructorsInValidatedOntology.add(DLConstructor.FUNCTIONALITY);
-		return axiom;
+		this.constructorsInInputOntology.add(DLConstructor.FUNCTIONALITY);
+		this.violatedAxioms.add(axiom);
+		return null;
 	}
 
 	@Override
@@ -270,7 +267,8 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLDisjointUnionAxiom axiom) {
-		return axiom;
+		this.violatedAxioms.add(axiom);
+		return null;
 	}
 
 	@Override
@@ -370,7 +368,7 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 	@Override
 	public OWLAxiom visit(OWLTransitiveObjectPropertyAxiom axiom) {
 		this.violatedAxioms.add(axiom);
-		this.dlConstructorsInInputOntology.add(DLConstructor.TRANSITIVITY);
+		this.constructorsInInputOntology.add(DLConstructor.TRANSITIVITY);
 		return null;
 	}
 
@@ -387,13 +385,15 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 
 	@Override
 	public OWLAxiom visit(OWLInverseFunctionalObjectPropertyAxiom axiom) {
-		return axiom;
+		this.constructorsInInputOntology.add(DLConstructor.FUNCTIONALITY);
+		this.violatedAxioms.add(axiom);
+		return null;
 	}
 
 	@Override
 	public OWLAxiom visit(OWLSameIndividualAxiom axiom) {
-		// TODO: get nominals
-		return axiom;
+
+		return null;
 	}
 
 	@Override
@@ -423,15 +423,18 @@ public class ALCHOIF_AxiomValidator implements AxiomValidator {
 		return null;
 	}
 
+	@Override
 	public int getNumberOfCardinalityAxioms() {
-		return subClassValidator.getNumberOfCardinalityAxioms() + superClassValidator.getNumberOfCardinalityAxioms();
+
+		return -1; // FIX ME
 	}
 
 	@Override
 	public Set<DLConstructor> getDLConstructorsInValidatedOntology() {
-		Set<DLConstructor> dlConstrutor= new HashSet<DLConstructor>();
-		dlConstrutor.addAll(this.dlConstructorsInValidatedOntology);
-		//TODO:
-		return this.dlConstructorsInValidatedOntology;
+		Set<DLConstructor> constructors = new HashSet<DLConstructor>();
+		constructors.addAll(this.constructorsInValidatedOntology);
+		constructors.addAll(this.subClassValidator.getDlConstructorsInValidatedOntology());
+		constructors.addAll(this.superClassValidator.getDlConstructorsInValidatedOntology());
+		return constructors;
 	}
 }

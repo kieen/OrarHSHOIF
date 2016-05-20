@@ -1,8 +1,9 @@
-package orar.dlfragmentvalidator.DLLiteR;
+package orar.dlfragmentvalidator.DLLiteHOD;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -29,15 +30,15 @@ import org.semanticweb.owlapi.model.OWLObjectUnionOf;
 import orar.dlfragmentvalidator.DLConstructor;
 import orar.dlfragmentvalidator.ValidatorDataFactory;
 
-public class DLLiteR_SubClass_Validator implements OWLClassExpressionVisitorEx<OWLClassExpression> {
+public class DLLiteHOD_Class_Validator implements OWLClassExpressionVisitorEx<OWLClassExpression> {
 	protected final OWLDataFactory owlDataFactory;
 	protected final ValidatorDataFactory profilingFactory;
 	private final Set<DLConstructor> dlConstructorsInInputOntology;
 	private final Set<DLConstructor> dlConstructorsInValidatedOntology;
 
-	// private Logger logger
-	// =Logger.getLogger(HornALCHOIF_SubClass_Validator.class);
-	public DLLiteR_SubClass_Validator() {
+	private Logger logger = Logger.getLogger(DLLiteHOD_Class_Validator.class);
+
+	public DLLiteHOD_Class_Validator() {
 		owlDataFactory = OWLManager.getOWLDataFactory();
 		profilingFactory = ValidatorDataFactory.getInstance();
 		this.dlConstructorsInInputOntology = new HashSet<DLConstructor>();
@@ -82,26 +83,27 @@ public class DLLiteR_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 	public OWLClassExpression visit(OWLObjectUnionOf ce) {
 		this.dlConstructorsInInputOntology.add(DLConstructor.Horn_DISJUNCTION);
 		Set<OWLClassExpression> operands = ce.getOperands();
-		boolean violated = false;
+
+		Set<OWLClassExpression> validatedOperands = new HashSet<OWLClassExpression>();
 		for (OWLClassExpression operand : operands) {
 			OWLClassExpression profiledOperand = operand.accept(this);
-			if (profiledOperand == null) {
-				violated = true;
-				break;
-			}
+			validatedOperands.add(profiledOperand);
 		}
 
-		if (!violated) {
-			this.dlConstructorsInValidatedOntology.add(DLConstructor.Horn_DISJUNCTION);
-			return ce;
-		}
+		this.dlConstructorsInValidatedOntology.add(DLConstructor.Horn_DISJUNCTION);
+		return this.owlDataFactory.getOWLObjectUnionOf(validatedOperands);
 
-		return null;
 	}
 
 	@Override
 	public OWLClassExpression visit(OWLObjectComplementOf ce) {
 		this.dlConstructorsInInputOntology.add(DLConstructor.NonHorn_DISJUNCTION);
+		OWLClassExpression classEx = ce.getComplementNNF();
+
+		OWLClassExpression normalizedClassEx = classEx.accept(this);
+		if (normalizedClassEx != null) {
+			return owlDataFactory.getOWLObjectComplementOf(normalizedClassEx);
+		}
 		return null;
 	}
 
@@ -133,6 +135,12 @@ public class DLLiteR_SubClass_Validator implements OWLClassExpressionVisitorEx<O
 	@Override
 	public OWLClassExpression visit(OWLObjectMinCardinality ce) {
 		this.dlConstructorsInInputOntology.add(DLConstructor.MIN_CARDINALITY);
+		if (ce.getCardinality() == 1) {
+			OWLClassExpression filler = ce.getFiller();
+			if (filler.isOWLNothing()) {
+				return ce;
+			}
+		}
 		return null;
 
 	}
