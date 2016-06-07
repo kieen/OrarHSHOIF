@@ -64,4 +64,8 @@ public interface InnerReasoner {
 	 * @return reasoning time
 	 */
 	public long getReasoningTime();
+	
+	public long getOverheadTimeToSetupReasoner();
+	
+	public boolean isOntologyConsistent();
 }

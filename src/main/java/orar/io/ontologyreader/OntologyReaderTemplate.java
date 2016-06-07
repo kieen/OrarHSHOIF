@@ -44,7 +44,7 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		/*
 		 * Convert to AromaOntology
 		 */
-		OntologyConverter converter = new OntologyConverter(normalizedOWLAPIOntology);
+		OWLAPI2OrarConverter converter = new OWLAPI2OrarConverter(normalizedOWLAPIOntology);
 
 		OrarOntology internalOntology = converter.getInternalOntology();
 		internalOntology.setActualDLConstructors(profileValidator.getDLConstructorsInInputOntology());
@@ -124,13 +124,13 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		OWLOntology inputOntology;
 		inputOntology = manager.loadOntologyFromOntologyDocument(new File(owlOntologyFileName));
 
-		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
-			logger.info("Information of the input ontology.");
-			logger.info("Ontology file:" + owlOntologyFileName);
-
-			OntologyStatistic.printOWLOntologyInfo(inputOntology);
-
-		}
+		// if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+		// logger.info("Information of the input ontology.");
+		// logger.info("Ontology file:" + owlOntologyFileName);
+		//
+		// OntologyStatistic.printOWLOntologyInfo(inputOntology);
+		//
+		// }
 
 		return inputOntology;
 	}
@@ -148,8 +148,7 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 			logger.info("***DEBUG***TBox axioms:");
 			PrintingHelper.printSet(ontologyInTargetDLFragment.getTBoxAxioms(true));
 			logger.info("***DEBUG***concept names in signature:");
-			PrintingHelper
-					.printSet(ontologyInTargetDLFragment.getClassesInSignature(true));
+			PrintingHelper.printSet(ontologyInTargetDLFragment.getClassesInSignature(true));
 
 		}
 		manager.removeOntology(inputOntology);
@@ -163,14 +162,13 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 	private OWLOntology getOntologyInTheNormalForm(OWLOntology ontologyInTargetDLFragment) {
 		normalizer = getNormalizer(ontologyInTargetDLFragment);
 		OWLOntology ontologyInNormalForm = normalizer.getNormalizedOntology();
-		
+
 		if (config.getDebuglevels().contains(DebugLevel.DL_FRAGMENT_VALIDATING)) {
 			logger.info("***DEBUG*** normalized validated orar ontology:");
 			logger.info("***DEBUG***TBox axioms:");
 			PrintingHelper.printSet(ontologyInNormalForm.getTBoxAxioms(true));
 			logger.info("***DEBUG***concept names in signature:");
-			PrintingHelper
-					.printSet(ontologyInNormalForm.getClassesInSignature(true));
+			PrintingHelper.printSet(ontologyInNormalForm.getClassesInSignature(true));
 
 		}
 		manager.removeOntology(ontologyInTargetDLFragment);
@@ -215,6 +213,13 @@ public abstract class OntologyReaderTemplate implements OntologyReader {
 		 */
 		OWLOntology ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity = getNormalizedOWLAPIOntology(
 				tboxFileName);
+		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+			logger.info("Information of the validated normalized ontology.");
+			logger.info("Extracted from ontology input file:" + tboxFileName);
+
+			OntologyStatistic.printOWLOntologyInfo(ontologyInNormalFormAndAddedAuxiliaryAxiomsForTransitivity);
+
+		}
 		if (config.getDebuglevels().contains(DebugLevel.DL_FRAGMENT_VALIDATING)) {
 			logger.info("***DEBUG***normalized validated orar ontology:");
 			logger.info("***DEBUG***TBox axioms:");

@@ -121,6 +121,7 @@ public class Konclude_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTempl
 
 	@Override
 	protected OWLReasoner getOWLReasoner(OWLOntology ontology) {
+//		long startTimeSettingUpKonclude = System.currentTimeMillis();
 		startKoncludeServer();
 		try {
 			URL url = new URL("http://localhost:" + portNumber);
@@ -128,6 +129,8 @@ public class Konclude_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTempl
 			OWLlinkReasonerConfiguration reasonerConfiguration = new OWLlinkReasonerConfiguration(url);
 			logger.info("Connected to Konclude server at: " + url.toString());
 			OWLlinkHTTPXMLReasonerFactory factory = new OWLlinkHTTPXMLReasonerFactory();
+//			long endTimeSettingUpKonclude = System.currentTimeMillis();
+//			this.overheadTimeToSetupReasoner = (endTimeSettingUpKonclude - startTimeSettingUpKonclude) / 1000;
 			return factory.createNonBufferingReasoner(ontology, reasonerConfiguration);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -141,4 +144,10 @@ public class Konclude_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTempl
 		reasoner.dispose();
 		stopKoncludeServer();
 	}
+
+//	@Override
+//	public long getOverheadTimeToSetupReasoner() {
+//
+//		return this.overheadTimeToSetupReasoner;
+//	}
 }

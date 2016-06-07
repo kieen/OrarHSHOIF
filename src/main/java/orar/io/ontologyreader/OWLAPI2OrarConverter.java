@@ -25,15 +25,15 @@ import orar.modeling.ontology.OrarOntology;
  * @author kien
  *
  */
-public class OntologyConverter {
-	private static final Logger logger = Logger.getLogger(OntologyConverter.class);
+public class OWLAPI2OrarConverter {
+	private static final Logger logger = Logger.getLogger(OWLAPI2OrarConverter.class);
 	private OWLOntology owlOntology;
 
 	private OrarOntology internalOntology;
 
 	boolean done = false;
 
-	public OntologyConverter(OWLOntology owlOntology) {
+	public OWLAPI2OrarConverter(OWLOntology owlOntology) {
 		this.owlOntology = owlOntology;
 		this.internalOntology = new MapbasedOrarOntology();
 

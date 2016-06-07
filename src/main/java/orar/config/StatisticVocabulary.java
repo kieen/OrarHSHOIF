@@ -28,6 +28,9 @@ public class StatisticVocabulary {
 	public static String NUMBER_OF_MATERIALIZED_CONCEPTASSERTIONS = "Statistic: Number_of_materialized_concept_assertions = ";
 	public static String NUMBER_OF_MATERIALIZED_ROLEASSERTIONS = "Statistic: Number_of_materialized_role_assertions = ";
 	public static String NUMBER_OF_MATERIALIZED_ASSERTIONS = "Statistic: Number_of_materialized_concept_and_role_assertions = ";
+	public static String ONTOLOGY_CONSISTENCY = "Statistic: ontology consistency = ";
+	public static String CONSISTENT = "CONSISTENT";
+	public static String INCONSISTENT = "INCONSISTENT";
 	/*
 	 * types
 	 */

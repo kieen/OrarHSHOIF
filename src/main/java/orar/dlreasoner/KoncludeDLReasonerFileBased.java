@@ -34,6 +34,7 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.owllink.OWLlinkHTTPXMLReasoner;
 import org.semanticweb.owlapi.owllink.OWLlinkHTTPXMLReasonerFactory;
 import org.semanticweb.owlapi.owllink.OWLlinkReasonerConfiguration;
+import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
 import orar.config.Configuration;
@@ -421,15 +422,22 @@ public class KoncludeDLReasonerFileBased implements DLReasoner {
 		/*
 		 * 
 		 */
-		logger.info("computing all concept assertions");
-		for (OWLClass concept : conceptNames) {
-			Set<OWLNamedIndividual> instances = reasoner.getInstances(concept, false).getFlattened();
-			for (OWLNamedIndividual ind : instances) {
-				OWLClassAssertionAxiom entailedAssertion = this.owlDataFactory.getOWLClassAssertionAxiom(concept, ind);
-				this.conceptAssertions.add(entailedAssertion);
-			}
-			stdout.reset();
-		}
+		logger.info("realizing...");
+		reasoner.realise();
+		reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS);
+		// logger.info("getting instances for each concept ...");
+		//
+		// for (OWLClass concept : conceptNames) {
+		// reasoner.getInstances(concept, false).getFlattened();
+		//// Set<OWLNamedIndividual> instances = reasoner.getInstances(concept,
+		// false).getFlattened();
+		//// for (OWLNamedIndividual ind : instances) {
+		//// OWLClassAssertionAxiom entailedAssertion =
+		// this.owlDataFactory.getOWLClassAssertionAxiom(concept, ind);
+		//// this.conceptAssertions.add(entailedAssertion);
+		//// }
+		//// stdout.reset();
+		// }
 
 		long endTime = System.currentTimeMillis();
 		this.reasoningTimeInSecond = (endTime - startTime) / 1000;
@@ -438,6 +446,61 @@ public class KoncludeDLReasonerFileBased implements DLReasoner {
 		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
 			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTimeInSecond);
 		}
+
+	}
+
+	@Override
+	public void classifiesOntology() {
+		logger.info("staring Konclude server...");
+		startKoncludeServer();
+		logger.info("initializing the reasoner...");
+		long startTime = System.currentTimeMillis();
+		initReasoner();
+		/*
+		 * Compute concept assertions
+		 */
+		if (!reasoner.isConsistent()) {
+			logger.error("Ontology inconsistent!");
+		}
+
+		/*
+		 * 
+		 */
+		logger.info("classifying the ontology...");
+
+		reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);
+
+		long endTime = System.currentTimeMillis();
+		this.reasoningTimeInSecond = (endTime - startTime) / 1000;
+		reasoner.dispose();
+		stopKoncludeServer();
+		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
+			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTimeInSecond);
+		}
+
+	}
+
+	@Override
+	public boolean isOntologyConsistent() {
+		logger.info("staring Konclude server...");
+		startKoncludeServer();
+		logger.info("initializing the reasoner...");
+		long startTime = System.currentTimeMillis();
+		initReasoner();
+		logger.info("checking consistency of the ontology...");
+		if (!reasoner.isConsistent()) {
+			return false;
+		}
+		logger.info("done!");
+
+		long endTime = System.currentTimeMillis();
+		this.reasoningTimeInSecond = (endTime - startTime) / 1000;
+		reasoner.dispose();
+		stopKoncludeServer();
+		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
+			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTimeInSecond);
+		}
+		return true;
 
 	}
 

@@ -48,4 +48,9 @@ public abstract class HornSHOIF_Materializer extends MaterializerTemplate {
 	@Override
 	protected abstract InnerReasoner getInnerReasoner(OWLOntology abstraction);
 
+	public boolean isOntologyConsistent() {
+		return true;
+		// TODO:FIX ME. 
+		// does not support this for Horn SHOIF yet.
+	}
 }

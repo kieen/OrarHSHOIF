@@ -22,4 +22,6 @@ public interface Materializer {
 	public OrarOntology getOrarOntology();
 
 	public long getReasoningTimeInSeconds();
+	
+	public boolean isOntologyConsistent();
 }

@@ -81,42 +81,46 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 
 	@Override
 	public void computeConceptAssertions() {
-		long startTime = System.currentTimeMillis();
 		logger.info("computing concept assertions...");
+		long startTime = System.currentTimeMillis();
+		logger.info("getting the reasoner...");
 		this.reasoner = getOWLReasoner(owlOntology);
-//		logger.info("***DEBUG*** 1");
+		// logger.info("***DEBUG*** 1");
+		logger.info("precomputing class assertions...");
 		this.reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS);
-//		logger.info("***DEBUG*** 2");
+
+		// logger.info("***DEBUG*** 2");
 		if (!reasoner.isConsistent()) {
 			logger.error("Ontology inconsistent!");
 		}
-//		logger.info("***DEBUG*** 3");
-		
-		computeEntailedConceptAssertions();
-		
+		// logger.info("***DEBUG*** 3");
+
+		// computeEntailedConceptAssertions();
+
 		this.entailmentComputed = true;
-		dispose();
 		long endTime = System.currentTimeMillis();
-		
+		dispose();
+
 		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
 		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
 			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTime);
 		}
 	}
+
 	@Override
 	public void computeEntailments() {
-		
+
 		this.reasoner = getOWLReasoner(owlOntology);
-//		logger.info("***DEBUG*** 1");
+		// logger.info("***DEBUG*** 1");
 		long startTime = System.currentTimeMillis();
 
 		this.reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS, InferenceType.OBJECT_PROPERTY_ASSERTIONS,
 				InferenceType.SAME_INDIVIDUAL);
-//		logger.info("***DEBUG*** 2");
+		// logger.info("***DEBUG*** 2");
 		if (!reasoner.isConsistent()) {
 			logger.error("Ontology inconsistent!");
 		}
-//		logger.info("***DEBUG*** 3");
+		// logger.info("***DEBUG*** 3");
 		logger.info("computing concept assertions...");
 		computeEntailedConceptAssertions();
 		logger.info("computing role assertions...");
@@ -179,20 +183,66 @@ public abstract class DLReasonerTemplate implements DLReasoner {
 				OWLClassAssertionAxiom newConceptAssertion = this.dataFactory.getOWLClassAssertionAxiom(eachConceptName,
 						eachInstance);
 				this.conceptAssertions.add(newConceptAssertion);
-				
+
 			}
 
 		}
 	}
 
-//	private void owlapi(){
-//		this.reasoner.getSuperObjectProperties(pe, direct)
-//	}
-	
+	// private void owlapi(){
+	// this.reasoner.getSuperObjectProperties(pe, direct)
+	// }
+
 	/**
 	 * release resource from the reasoner. Stop Konclude server (in case of
 	 * using Konclude via OWLLink)
 	 */
 	protected abstract void dispose();
 
+	public void classifiesOntology() {
+		logger.info("start classifying the ontology...");
+		long startTime = System.currentTimeMillis();
+		logger.info("getting the reasoner...");
+		this.reasoner = getOWLReasoner(owlOntology);
+		// logger.info("***DEBUG*** 2");
+		if (!reasoner.isConsistent()) {
+			logger.error("Ontology inconsistent!");
+		}
+		// logger.info("***DEBUG*** 1");
+		logger.info("precomputing class hierarchy...");
+		this.reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);
+		logger.info("done!");
+		// logger.info("***DEBUG*** 3");
+
+		// computeEntailedConceptAssertions();
+
+		this.entailmentComputed = true;
+		long endTime = System.currentTimeMillis();
+		dispose();
+
+		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
+		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
+			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTime);
+		}
+	}
+
+	public boolean isOntologyConsistent() {
+		long startTime = System.currentTimeMillis();
+		logger.info("Getting the reasoner...");
+		this.reasoner = getOWLReasoner(owlOntology);
+		logger.info("Checking consistency...");
+		if (!reasoner.isConsistent()) {
+			return false;
+		}
+		logger.info("Done! Checking consistency");
+		this.entailmentComputed = true;
+		long endTime = System.currentTimeMillis();
+
+		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
+		if (this.config.getLogInfos().contains(LogInfo.REASONING_TIME)) {
+			logger.info(StatisticVocabulary.TIME_REASONING_USING_DLREASONER + this.reasoningTime);
+		}
+		dispose();
+		return true;
+	}
 }

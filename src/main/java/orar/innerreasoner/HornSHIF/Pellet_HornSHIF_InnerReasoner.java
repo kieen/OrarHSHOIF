@@ -23,4 +23,9 @@ public class Pellet_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTemplat
 		reasoner.dispose();
 
 	}
+
+	@Override
+	public long getOverheadTimeToSetupReasoner() {
+		return 0;
+	}
 }

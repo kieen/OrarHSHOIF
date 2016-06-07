@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.dlfragmentvalidator.DLConstructor;
+import orar.io.ontologyreader.DLLiteHOD_OntologyReader;
 import orar.io.ontologyreader.DLLiteH_OntologyReader;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
@@ -78,12 +79,14 @@ public class OrarCLI {
 		// "Description Logic fragment, e.g.horn or nonhorn");
 
 		Option dl = Option.builder(Argument.DL).required()
-				.desc("Description Logic fragment. Choose one of the following parameters: dllite_r, horn_shoif")
+				.desc("Description Logic fragment. Choose one of the following parameters: dllite_hod, horn_shoif")
 				.hasArg(true).build();
 
 		Option split = new Option(Argument.SPLITTING, true,
 				"number of types per abstract ABox. Used as an optimization. ");
-
+		Option task = Option.builder(Argument.TASK).required()
+				.desc("Reasoning task. Choose one of the following parameters: consistency, materialization")
+				.hasArg(true).build();
 		/*
 		 * add options
 		 */
@@ -100,6 +103,7 @@ public class OrarCLI {
 		options.addOption(dl);
 		options.addOption(split);
 		options.addOption(port);
+		options.addOption(task);
 
 		// create the parser
 		CommandLineParser parser = new DefaultParser();
@@ -136,17 +140,27 @@ public class OrarCLI {
 			formatter.printHelp("orar", options);
 			System.out.println("Example run:");
 			System.out.println(
-					"java -jar -Xmx8G orar.jar -dl horn_shoif -reasoner hermit -statistic -tbox ./tbox/univ-bench-dl-ox.owl -abox ./aboxListOf2.txt");
+					"java -jar -Xmx8G orar.jar -task materialization -dl horn_shoif -reasoner hermit -statistic -tbox ./tbox/univ-bench-dl-ox.owl -abox ./aboxListOf2.txt");
 		}
 	}
 
 	private static long runMaterializer(Materializer materializer, CommandLine commandLine) {
-
+		String reasoningTask = commandLine.getOptionValue(Argument.TASK);
 		String reasonerName = commandLine.getOptionValue(Argument.REASONER);
 		logger.info("Runnig Abstraction Refinement Using :" + reasonerName + " ...");
-		materializer.materialize();
+		if (reasoningTask.equals(Argument.CONSISTENCY)) {
+			// materializer.materialize();
+			boolean consistent = materializer.isOntologyConsistent();
+			logger.info("The ontology is consistent? " + consistent);
 
-		return materializer.getReasoningTimeInSeconds();
+			return materializer.getReasoningTimeInSeconds();
+		} else if (reasoningTask.equals(Argument.MATERIALIZATION)) {
+			materializer.materialize();
+			return materializer.getReasoningTimeInSeconds();
+		} else {
+			logger.error("Wrong argument for the <task> option!");
+			return -1;
+		}
 
 	}
 
@@ -155,8 +169,8 @@ public class OrarCLI {
 		String reasoner = commandLine.getOptionValue(Argument.REASONER);
 		String dlFragment = commandLine.getOptionValue(Argument.DL);
 
-		if (dlFragment.equals(Argument.DLLITE_R)) {
-			return getMaterializer_DLLiteR(commandLine, reasoner, orarOntology);
+		if (dlFragment.equals(Argument.DLLITE_HOD)) {
+			return getMaterializer_DLLite(commandLine, reasoner, orarOntology);
 
 		}
 
@@ -168,7 +182,7 @@ public class OrarCLI {
 		return null;
 	}
 
-	static private Materializer getMaterializer_DLLiteR(CommandLine commandLine, String reasonerName,
+	static private Materializer getMaterializer_DLLite(CommandLine commandLine, String reasonerName,
 			OrarOntology orarOntology) {
 		Materializer materializer = null;
 		// logger.info("Info: Some DL Constructors in the validated ontology: "
@@ -324,6 +338,10 @@ public class OrarCLI {
 
 		if (dlFragment.equals(Argument.DLLITE_R)) {
 			return new DLLiteH_OntologyReader();
+		}
+
+		if (dlFragment.equals(Argument.DLLITE_HOD)) {
+			return new DLLiteHOD_OntologyReader();
 		}
 
 		if (dlFragment.equals(Argument.HORN_SHOIF)) {

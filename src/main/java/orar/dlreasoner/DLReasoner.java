@@ -47,4 +47,7 @@ public interface DLReasoner {
 	 * @return reasoning time in seconds
 	 */
 	public long getReasoningTime();
+	
+	public void classifiesOntology();
+	public boolean isOntologyConsistent();
 }

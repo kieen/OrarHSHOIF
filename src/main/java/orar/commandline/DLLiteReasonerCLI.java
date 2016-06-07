@@ -17,6 +17,7 @@ import orar.dlreasoner.FactDLReasoner;
 import orar.dlreasoner.HermitDLReasoner;
 import orar.dlreasoner.KoncludeDLReasonerFileBased;
 import orar.dlreasoner.PelletDLReasoner;
+import orar.io.ontologyreader.DLLiteHOD_OntologyReader;
 import orar.io.ontologyreader.DLLiteH_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 
@@ -107,7 +108,9 @@ public class DLLiteReasonerCLI {
 			OWLOntology owlOntology = getOWLOntology(commandLine);
 			DLReasoner dlReasoner = getDLReasoner(commandLine, owlOntology);
 
-			dlReasoner.computeConceptAssertions();
+//			dlReasoner.computeConceptAssertions();
+			boolean isOntologyConsistent = dlReasoner.isOntologyConsistent();
+			logger.info("Is the ontology consistent:"+ isOntologyConsistent);
 
 			String reasonerName = commandLine.getOptionValue(Argument.REASONER);
 			logger.info("DLReasoner: " + reasonerName);
@@ -203,7 +206,7 @@ public class DLLiteReasonerCLI {
 	static private OWLOntology getOWLOntology(CommandLine commandLine) {
 		OWLOntology owlOntology;
 
-		OntologyReader ontReader = new DLLiteH_OntologyReader();
+		OntologyReader ontReader = new DLLiteHOD_OntologyReader();
 
 		if (commandLine.hasOption(Argument.ONTOLOGY)) {
 			String owlFilePath = commandLine.getOptionValue(Argument.ONTOLOGY);

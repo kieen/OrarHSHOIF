@@ -190,7 +190,7 @@ public class StreamOntologyReaderTest {
 		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 
 		OWLOntology mixedOntology = manager.loadOntologyFromOntologyDocument(new File(allInOneOntologyName));
-		OntologyConverter converter = new OntologyConverter(mixedOntology);
+		OWLAPI2OrarConverter converter = new OWLAPI2OrarConverter(mixedOntology);
 		OrarOntology ontologyByOWLAPI = converter.getInternalOntology();
 
 		long owlapiEnd = System.currentTimeMillis();

@@ -27,4 +27,9 @@ public class Fact_HornSHIF_InnerReasoner extends HornSHIF_InnerReasonerTemplate 
 
 	}
 
+	@Override
+	public long getOverheadTimeToSetupReasoner() {
+		return 0;
+	}
+
 }

@@ -27,4 +27,10 @@ public class Fact_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTemplat
 
 	}
 
+	@Override
+	public long getOverheadTimeToSetupReasoner() {
+	
+		return 0;
+	}
+
 }

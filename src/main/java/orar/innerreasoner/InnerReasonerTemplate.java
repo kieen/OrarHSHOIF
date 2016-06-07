@@ -32,6 +32,7 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 	protected final Map<OWLNamedIndividual, Set<OWLNamedIndividual>> sameAsMap;
 	protected final AbstractRoleAssertionBox roleAssertionList;
 	protected long reasoningTime;
+	protected long overheadTimeToSetupReasoner;
 	/*
 	 * Config
 	 */
@@ -129,16 +130,20 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		/*
 		 * get the reasoner
 		 */
+		long starTimeOverhead=System.currentTimeMillis();
 		this.reasoner = getOWLReasoner(owlOntology);
+		long endTimeOverhead=System.currentTimeMillis();
+		this.overheadTimeToSetupReasoner=(endTimeOverhead-starTimeOverhead)/1000;
+		
 		/*
 		 * compute entailments
 		 */
+		logger.info("Computing concept assertions.... ");
 		long startTime = System.currentTimeMillis();
 		this.reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS);
 		if (!reasoner.isConsistent()) {
 			logger.error("Ontology inconsistent!");
 		}
-		logger.info("Computing concept assertions.... ");
 		computeEntailedConceptAssertions();
 
 		long endTime = System.currentTimeMillis();
@@ -162,17 +167,20 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 		/*
 		 * get the reasoner
 		 */
+		long starTimeOverhead=System.currentTimeMillis();
 		this.reasoner = getOWLReasoner(owlOntology);
+		long endTimeOverhead=System.currentTimeMillis();
+		this.overheadTimeToSetupReasoner=(endTimeOverhead-starTimeOverhead)/1000;
 		/*
 		 * compute entailments
 		 */
+		logger.info("Computing concept assertions.... ");
 		long startTime = System.currentTimeMillis();
 		this.reasoner.precomputeInferences(InferenceType.CLASS_ASSERTIONS, InferenceType.OBJECT_PROPERTY_ASSERTIONS,
 				InferenceType.SAME_INDIVIDUAL);
 		if (!reasoner.isConsistent()) {
 			logger.error("Ontology inconsistent!");
 		}
-		logger.info("Computing concept assertions.... ");
 		computeEntailedConceptAssertions();
 		logger.info("Computing role assertions.... ");
 		computeEntailedRoleAssertions();
@@ -378,6 +386,36 @@ public abstract class InnerReasonerTemplate implements InnerReasoner {
 	public long getReasoningTime() {
 		return this.reasoningTime;
 	}
+	//
+	@Override
+	public long getOverheadTimeToSetupReasoner() {
+		return this.overheadTimeToSetupReasoner;
+	}
 
 	protected abstract void dispose();
+	
+	public boolean isOntologyConsistent(){
+		/*
+		 * get the reasoner
+		 */
+		long starTimeOverhead=System.currentTimeMillis();
+		this.reasoner = getOWLReasoner(owlOntology);
+		long endTimeOverhead=System.currentTimeMillis();
+		this.overheadTimeToSetupReasoner=(endTimeOverhead-starTimeOverhead)/1000;
+		
+		/*
+		 * compute entailments
+		 */
+		logger.info("Checking consistency.... ");
+		long startTime = System.currentTimeMillis();
+		if (!reasoner.isConsistent()) {
+			return false;
+		}
+		
+		long endTime = System.currentTimeMillis();
+		this.entailmentComputed = true;
+		this.reasoningTime = (endTime - startTime) / 1000; // get seconds
+		dispose();
+		return true;
+	}
 }

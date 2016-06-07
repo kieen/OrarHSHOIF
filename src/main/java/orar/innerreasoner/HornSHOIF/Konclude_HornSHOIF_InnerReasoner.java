@@ -181,6 +181,7 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 
 		this.axiomsAdder.addAxiomsToGetRoleAssertionOfNominals();
 
+//		long startTimeSettingUpKonclude = System.currentTimeMillis();
 		/*
 		 * start Konclude server
 		 */
@@ -194,6 +195,8 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 			OWLlinkReasonerConfiguration reasonerConfiguration = new OWLlinkReasonerConfiguration(url);
 			logger.info("Connected to Konclude server at: " + url.toString());
 			OWLlinkHTTPXMLReasonerFactory factory = new OWLlinkHTTPXMLReasonerFactory();
+//			long endTimeSettingUpKonclude = System.currentTimeMillis();
+//			this.overheadTimeToSetupReasoner = (endTimeSettingUpKonclude - startTimeSettingUpKonclude) / 1000;
 			return factory.createNonBufferingReasoner(ontology, reasonerConfiguration);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -357,7 +360,8 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 		// this.abstractDataFactory.getUAbstractIndividuals();
 		// logger.info("***DEBUG***number of u
 		// individuals:"+this.abstractDataFactory.getUAbstractIndividuals().size());
-		Set<OWLNamedIndividual> instancesOfSingletonConcepts = new HashSet<OWLNamedIndividual>(this.instancesOfSingletonConcepts);
+		Set<OWLNamedIndividual> instancesOfSingletonConcepts = new HashSet<OWLNamedIndividual>(
+				this.instancesOfSingletonConcepts);
 		instancesOfSingletonConcepts.retainAll(this.abstractDataFactory.getUAbstractIndividuals());
 		// logger.info("***DEBUG***number of u individuals in the ontology:"+
 		// allIndividualsFromConceptType.size());
@@ -385,5 +389,11 @@ public class Konclude_HornSHOIF_InnerReasoner extends HornSHOIF_InnerReasonerTem
 		reasoner.dispose();
 		stopKoncludeServer();
 	}
+
+//	@Override
+//	public long getOverheadTimeToSetupReasoner() {
+//
+//		return this.overheadTimeToSetupReasoner;
+//	}
 
 }

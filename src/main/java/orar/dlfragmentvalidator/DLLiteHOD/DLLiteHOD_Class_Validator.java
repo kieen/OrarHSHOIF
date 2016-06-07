@@ -87,10 +87,14 @@ public class DLLiteHOD_Class_Validator implements OWLClassExpressionVisitorEx<OW
 		Set<OWLClassExpression> validatedOperands = new HashSet<OWLClassExpression>();
 		for (OWLClassExpression operand : operands) {
 			OWLClassExpression profiledOperand = operand.accept(this);
-			validatedOperands.add(profiledOperand);
+			if (profiledOperand != null) {
+				validatedOperands.add(profiledOperand);
+			}
 		}
 
 		this.dlConstructorsInValidatedOntology.add(DLConstructor.Horn_DISJUNCTION);
+		if (validatedOperands.isEmpty())
+			return null;
 		return this.owlDataFactory.getOWLObjectUnionOf(validatedOperands);
 
 	}
