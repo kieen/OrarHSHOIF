@@ -1,0 +1,5 @@
+Orar-0.2 supports the following reasoning tasks:
+	+ For Horn SHOIF ontologies: full materialization
+	+ For DLLite with disjunction and nominals: concept materialization, consistency checking. 
+
+We recommend to use executable .jar files and accompanied tutorials get via the given links in the README file.
