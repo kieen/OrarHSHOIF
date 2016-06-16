@@ -101,15 +101,6 @@ if you are in the tutorial folder.
      mvn -f pom2.xml package
      
 2.2. Run Orar.jar
-     *Orar verion 0.2 supports realization/concept-materialization and consistency checking tasks for DL-Lite-HOD, 
- an extension of DL-Lite_core with disjunctions and nominals. 
- -This version has been tested with Java 1.7 on MacOS 10.10. 
- -Currently Orar can parse ABox files in RDF/XML, N3, or Turtle format; and TBox file in any format 
- supported by OWLAPI, e.g. RDF/XML, OWL/XML.
- -Orar uses OWLAPI parsing style. That is, when parsing the ABoxes it recognizes only assertions of 
- atomic concepts and roles that are defined in the TBox.
- -Orar also accepts an input TBox not in DL-Lite-HOD. In this case, the violated axioms will be ignored, 
-  and, therefore, the derived assertions returned by Orar might differ from the entailed assertions of the input ontology.
 
 *There is a sample ontology and binary file for Konclude (MacOS/Linux) in the folder "tutorial".  
  Please follow the instructions below for using Orar to materialize that ontology.
