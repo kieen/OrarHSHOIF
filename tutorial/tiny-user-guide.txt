@@ -24,19 +24,19 @@ Please contact us (kientrantrung@gmail.com) if you experience any problem!
 =========================================
 |1. Compile and run Orar for Horn SHOIF.|
 =========================================
-This version support the full materialization task of Horn SHOIF ontologies.
+This version supports the full materialization task of Horn SHOIF ontologies.
 1.1 Prerequisite: 
-	+ Orar sourcecode available at https://github.com/kieen/OrarHSHOIF. 
-	  Obtained via git command or "Clone or download" tab in the website.
-	  After download unzip the sourcecode, you will have in your machine a folder named "OrarHSHOIF-master"
-	+ OWLLink library file: owllink-bin.jar, 
+	+ Orar sourcecode: available at https://github.com/kieen/OrarHSHOIF. 
+	  Obtained via git commands or "Clone or download" tab in the website.
+	  After download and unzip the sourcecode, you will have in your machine a folder named "OrarHSHOIF-master"
+	+ OWLLink library: owllink-bin.jar, 
 	  downloadable from http://owllink-owlapi.sourceforge.net/download.html
 	+ Apache Maven 3 
 	+ Java  1.7
 	+ Internet connection to download online libraries from Maven repositories.
     
 1.2 Since OWLLink is currently not available in the online Maven repository. We need to 
-    install the OWLLink library to the local Maven repository.
+    install the OWLLink library to the local Maven repository in your machine.
     
     Go to the folder containing the owllink-bin.jar file and use the following command to install 
     owllink-bin.jar to your local Maven repository. 
@@ -44,7 +44,7 @@ This version support the full materialization task of Horn SHOIF ontologies.
     mvn install:install-file -Dfile=owllink-bin.jar -DgroupId=derivo -DartifactId=owllinkapi -Dversion=1.2.2 -Dpackaging=jar -DgeneratePom=true 
     
 1.3. Suppose you are in the folder "OrarHSHOIF-master".
-   To create an all-in-one-jar file using the following Maven command:
+   To create an all-in-one-jar file, use the following Maven command:
 
    mvn package
 
@@ -56,7 +56,7 @@ From now on, we refer to the name Orar.jar instead of OrarHSHOIF-0.0.1-SNAPSHOT-
 
 *There is a sample ontology in the folder "tutorial".  
  Suppose Orar.jar is stored the parent folder of "tutorial".
- If you want to use Konclude as an internal reasoner for the abstraction, download suitable binary file for Konclude (MacOS/Linux) 
+ If you want to use Konclude as an internal reasoner for the abstraction, download the suitable binary file for Konclude (MacOS/Linux) 
  (http://www.derivo.de/en/products/konclude/download.html)  and place in the folder tutorial. 
  I refer to KoncludeMac and KoncludeLinux as the respective MacOS and Linux versions of Konclude.
  Please follow the instructions below for using Orar to materialize that ontology.
