@@ -55,6 +55,7 @@ From now on, we refer to the name Orar.jar instead of OrarHSHOIF-0.0.1-SNAPSHOT-
 1.5. Now, you will be able to run Orar.jar. 
 
 *There is a sample ontology and binary file for Konclude (MacOS/Linux) in the folder "tutorial".  
+ Suppose Orar.jar is stored the parent folder of "tutorial". 
  Please follow the instructions below for using Orar to materialize that ontology.
 
 *Use case 1: run Orar with the following options/input:
@@ -103,6 +104,7 @@ if you are in the tutorial folder.
 2.2. Run Orar.jar
 
 *There is a sample ontology and binary file for Konclude (MacOS/Linux) in the folder "tutorial".  
+ Suppose Orar.jar is stored the parent folder of "tutorial".
  Please follow the instructions below for using Orar to materialize that ontology.
 
 *Use case 1: run Orar with the following options/input:
