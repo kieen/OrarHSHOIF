@@ -1,14 +1,30 @@
-Orar-0.2 supports the following reasoning tasks:
-	+ For Horn SHOIF ontologies: full materialization
-	+ For DLLite with disjunction and nominals: concept materialization, consistency checking. 
-
 We recommend to use executable .jar files and accompanied tutorials get via the given links in the README.md file.
 
 If you want to compile from the source code, please follow the instructions below to compile and run Orar.
+We have two versions with slightly different command line interfaces. We keep them both for the comparability
+with our previous releases but they are soon to be unified.
+
+
+Currently Orar can parse ABox files in RDF/XML, N3, or Turtle format; and TBox file in any format 
+supported by OWLAPI, e.g. RDF/XML, OWL/XML.
+
+
+Orar uses OWLAPI parsing style. That is, when parsing the ABoxes it recognizes only assertions of 
+atomic concepts and roles that are defined in the TBox.
+
+
+Orar also accepts an input TBox in any DL fragment. Violated axioms will be ignored, and in this case, 
+the derived assertions returned by Orar might differ from the entailed assertions of the input ontology.
+  
+
+This version has been tested with Java 1.7 on MacOS 10.10. 
 Please contact us (kientrantrung@gmail.com) if you experience any problem!
+
+
 =========================================
 |1. Compile and run Orar for Horn SHOIF.|
 =========================================
+This version support the full materialization task of Horn SHOIF ontologies.
 1.1 Prerequisite: 
 	+ Orar sourcecode available at https://github.com/kieen/OrarHSHOIF. 
 	  Obtained via git command or "Clone or download" tab in the website.
