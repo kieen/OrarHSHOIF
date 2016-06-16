@@ -10,15 +10,16 @@
 ]>
 
 
-<rdf:RDF xmlns="file:/Users/kien/git/ORAR-HSHOIF/src/test/resources/uobm-origin/abox/1-ub-dl-univ0.owl#"
-     xml:base="file:/Users/kien/git/ORAR-HSHOIF/src/test/resources/uobm-origin/abox/1-ub-dl-univ0.owl"
+<rdf:RDF xmlns="http://uob.iodt.ibm.com/univ-bench-dl.owl#"
+        xml:base="http://uob.iodt.ibm.com/univ-bench-dl.owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:benchmark-dl="http://uob.iodt.ibm.com/univ-bench-dl.owl#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    <owl:Ontology rdf:about="file:/Users/kien/git/ORAR-HSHOIF/src/test/resources/uobm-origin/abox/1-ub-dl-univ0.owl">
-        <owl:imports rdf:resource="http://uob.iodt.ibm.com/univ-bench-dl.owl"/>
+    <owl:Ontology rdf:about="http://uob.iodt.ibm.com/univ-bench-dl/abox1.owl">
+      <owl:imports rdf:resource="file:/Users/kien/Downloads/Orar01/tutorial/tbox.owl"/> 
     </owl:Ontology>
     
 

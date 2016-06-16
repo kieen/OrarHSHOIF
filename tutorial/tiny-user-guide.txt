@@ -2,4 +2,138 @@ Orar-0.2 supports the following reasoning tasks:
 	+ For Horn SHOIF ontologies: full materialization
 	+ For DLLite with disjunction and nominals: concept materialization, consistency checking. 
 
-We recommend to use executable .jar files and accompanied tutorials get via the given links in the README file.
+We recommend to use executable .jar files and accompanied tutorials get via the given links in the README.md file.
+
+If you want to compile from the source code, please follow the instructions below to compile and run Orar.
+Please contact us (kientrantrung@gmail.com) if you experience any problem!
+=========================================
+|1. Compile and run Orar for Horn SHOIF.|
+=========================================
+1.1 Prerequisite: 
+	+ Orar sourcecode available at https://github.com/kieen/OrarHSHOIF. 
+	  Obtained via git command or "Clone or download" tab in the website.
+	  After download unzip the sourcecode, you will have in your machine a folder named "OrarHSHOIF-master"
+	+ OWLLink library file: owllink-bin.jar, 
+	  downloadable from http://owllink-owlapi.sourceforge.net/download.html
+	+ Apache Maven 3 
+	+ Java  1.7
+    
+1.2 Since OWLLink is currently not available in the online Maven repository. We need to 
+    install the OWLLink library to the local Maven repository.
+    
+    Go to the folder containing the owllink-bin.jar file and use the following command to install 
+    owllink-bin.jar to your local Maven repository. 
+    
+    mvn install:install-file -Dfile=owllink-bin.jar -DgroupId=derivo -DartifactId=owllinkapi -Dversion=1.2.2 -Dpackaging=jar -DgeneratePom=true 
+    
+1.3. Suppose you are in the folder "OrarHSHOIF-master".
+   To create an all-in-one-jar file using the following Maven command:
+
+   mvn package
+
+1.4. The resulting .jar file will be created in the folder "target", e.g. target/OrarHSHOIF-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+Optionally you can rename it to have a shorter name, e.g. Orar.jar. 
+From now on, we refer to the name Orar.jar instead of OrarHSHOIF-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+
+1.5. Now, you will be able to run Orar.jar. 
+
+*There is a sample ontology and binary file for Konclude (MacOS/Linux) in the folder "tutorial".  
+ Please follow the instructions below for using Orar to materialize that ontology.
+
+*Use case 1: run Orar with the following options/input:
+   + use HermiT as an internal reasoner to materialize the abstractions
+   + compute the full materialization of the ontology
+   + print out the statistic of the (materialized) ontology 
+   + print out the reasoning time
+   + the input TBox is: tbox.owl
+   + the input ABoxes are: abox1.owl, abox2.owl (in RDF/XML format), which are indicated in the file aboxList.txt
+   + print out all entailed atomic assertions (in OWL/XML format) to a file, e.g. materializedABox.owl
+ Suppose we are now in the folder "tutorial". 
+ We now use the following command to run Orar.jar with the above options and input:
+   
+ java -jar ../Orar.jar -reasoner hermit -statistic -reasoningtime -tbox ./tbox.owl -abox ./aboxList.txt -outputabox ./materializedABox.owl
+
+
+*Use case 2: run Orar with the following options/input:
+   + use Konclude as an internal reasoner to materialize the abstractions
+   + compute the full materialization of the ontology
+   + print out the statistic of the (materialized) ontology
+   + print out the loading time 
+   + print out the reasoning time
+   + the input TBox is: tbox.owl
+   + the input ABoxes are: abox1.owl, abox2.owl (in RDF/XML format), which are indicated in the file aboxList.txt
+ Suppose we are now in the folder "tutorial". 
+ We now use the following command to run Orar.jar with the above options and input. 
+   
+ java -jar ../Orar.jar -reasoner konclude -koncludepath ./KoncludeMac -port 9090 -statistic -reasoningtime -loadtime -tbox ./tbox.owl -abox ./aboxList.txt
+
+ (Note that you have to replace KoncludeMac by KoncludeLinux if you are running on a Linux-based machine, e.g. Ubuntu)
+
+*To run Orar with other options, use the following command to see the detailed options.
+  java -jar Orar.jar -help
+or 
+ java -jar ../Orar.jar -help
+if you are in the tutorial folder.
+ 
+=====================================================================================================
+|2. Compile and run Orar for DL-Lite-HOD, an extension of DL-Lite-core with nominals and disjunctions.|
+=====================================================================================================
+2.1. Create an executable jar file.
+     Follow exactly the steps to compile Orar for Horn SHOIF but use the following command to create the jar file:
+
+     mvn -f pom2.xml package
+     
+2.2. Run Orar.jar
+     *Orar verion 0.2 supports realization/concept-materialization and consistency checking tasks for DL-Lite-HOD, 
+ an extension of DL-Lite_core with disjunctions and nominals. 
+ -This version has been tested with Java 1.7 on MacOS 10.10. 
+ -Currently Orar can parse ABox files in RDF/XML, N3, or Turtle format; and TBox file in any format 
+ supported by OWLAPI, e.g. RDF/XML, OWL/XML.
+ -Orar uses OWLAPI parsing style. That is, when parsing the ABoxes it recognizes only assertions of 
+ atomic concepts and roles that are defined in the TBox.
+ -Orar also accepts an input TBox not in DL-Lite-HOD. In this case, the violated axioms will be ignored, 
+  and, therefore, the derived assertions returned by Orar might differ from the entailed assertions of the input ontology.
+
+*There is a sample ontology and binary file for Konclude (MacOS/Linux) in the folder "tutorial".  
+ Please follow the instructions below for using Orar to materialize that ontology.
+
+*Use case 1: run Orar with the following options/input:
+   + compute the concept materialization of the ontology
+   + run Orar with DLLite ontologies
+   + use HermiT as an internal reasoner for the abstraction
+   + print out the statistic of the (materialized) ontology and the reasoning time
+   + the input TBox is: tbox.owl
+   + the input ABoxes are: abox1.owl, abox2.owl, which are indicated in the file aboxList.txt
+   
+  Suppose we are now in the folder "tutorial". 
+  We now use the following command to run Orar.jar with the above options and input:
+   
+  java -jar ../Orar.jar -task materialization -dl dllite_hod -reasoner hermit -statistic -reasoningtime -tbox ./tbox.owl -abox ./aboxList.txt
+
+*Use case 2: run Orar with the following options/input:
+   + check consistency of the ontology
+   + run Orar with DLLite ontologies
+   + use HermiT as an internal reasoner for the abstraction 
+   + print out the statistic of the (materialized) ontology and the reasoning time
+   + the input TBox is: tbox.owl
+   + the input ABoxes are: abox1.owl, abox2.owl, which are indicated in the file aboxList.txt
+  
+  Suppose we are now in the folder "tutorial". 
+  We now use the following command to run Orar.jar with the above options and input:
+   
+  java -jar ../Orar.jar -task consistency -dl dllite_hod -reasoner hermit -statistic -reasoningtime -tbox ./tbox.owl -abox ./aboxList.txt
+
+
+*Use case 3: run Orar with the same options/input as in use case 1 but use Konclude as the inner reasoner for the abstraction.
+ Suppose we are now in the folder "tutorial". We use the following command.
+   
+ java -jar ../Orar.jar -task materialization -dl dllite_hod -reasoner konclude -koncludepath ./KoncludeMac -port 9090 -statistic -reasoningtime -tbox ./tbox.owl -abox ./aboxList.txt
+ 
+ (Note that you have to replace KoncludeMac by KoncludeLinux if you are running on a Linux-based machine, e.g. Ubuntu)
+
+*To run Orar with other options, use the following command to see the detailed options.
+ java -jar Orar.jar -help
+ or 
+ java -jar ../Orar.jar -help
+ if you are in the tutorial folder. 
+     
