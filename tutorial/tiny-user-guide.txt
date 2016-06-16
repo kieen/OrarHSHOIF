@@ -33,6 +33,7 @@ This version support the full materialization task of Horn SHOIF ontologies.
 	  downloadable from http://owllink-owlapi.sourceforge.net/download.html
 	+ Apache Maven 3 
 	+ Java  1.7
+	+ Internet connection to download online libraries from Maven repositories.
     
 1.2 Since OWLLink is currently not available in the online Maven repository. We need to 
     install the OWLLink library to the local Maven repository.
