@@ -4,6 +4,6 @@ Orar is a scalable ontology reasoner. Its central technique allows for reducing 
 
 Short tutorials and the executable Orar.jar file
 
-1. used for the paper **Ontology Materialization by Abstraction Refinement in Horn SHOIF** can be downloaded [here](https://www.uni-ulm.de/fileadmin/website_uni_ulm/iui.inst.090/Software/Orar01.zip).
-2. used for the paper **Scalable Reasoning by Abstraction Beyond DL-Lite** can be downloaded [here](https://www.uni-ulm.de/fileadmin/website_uni_ulm/iui.inst.090/Software/Orar02.zip).
+1. for the paper **Ontology Materialization by Abstraction Refinement in Horn SHOIF** can be downloaded [here](https://www.uni-ulm.de/fileadmin/website_uni_ulm/iui.inst.090/Software/Orar01.zip).
+2. for the paper **Scalable Reasoning by Abstraction Beyond DL-Lite** can be downloaded [here](https://www.uni-ulm.de/fileadmin/website_uni_ulm/iui.inst.090/Software/Orar02.zip).
 
