@@ -225,6 +225,12 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		haveTheSameResults(ontologyPath);
 	}
 
+	@Test
+	public void testUOBM_InRelease2() {
+		String ontologyTbox = "/Users/kien/Downloads/Orar01/tutorial/tbox.owl";
+		String aboxList = "/Users/kien/Downloads/Orar01/tutorial/aboxListFullPath.txt";
+		haveTheSameResults(ontologyTbox, aboxList);
+	}
 //	@Test
 //	public void testUOBM_OXSmall4() {
 //		String ontologyPath = "src/test/resources/uobm-ox/u1AboxAndTbox/univ0-small4.owl";
@@ -257,7 +263,7 @@ public class HornSHOIF_Materializer_Hermit_Test {
 		DataForTransferingEntailments.getInstance().clear();
 
 		Configuration.getInstance().addLoginfoLevels(LogInfo.STATISTIC, LogInfo.REASONING_TIME);
-		Configuration.getInstance().addDebugLevels(DebugLevel.ADDING_MARKING_AXIOMS);
+//		Configuration.getInstance().addDebugLevels(DebugLevel.ADDING_MARKING_AXIOMS);
 		System.out.println("Loading ontology for abstraction materializer....");
 		OntologyReader ontoReader = new HornSHOIF_OntologyReader();
 		OrarOntology normalizedOrarOntology = ontoReader.getNormalizedOrarOntology(tbox, aboxList);

@@ -259,14 +259,22 @@ public abstract class MaterializerTemplate implements Materializer {
 		}
 
 		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
-			int numberOfMaterializedConceptAssertions = this.normalizedORAROntology.getNumberOfConceptAssertions();
+			int numberOfMaterializedConceptAssertions = this.normalizedORAROntology
+					.getOWLAPIConceptAssertionsWHITOUTNormalizationSymbols().size();
 			int numberOfMaterializedRoleAssertions = this.normalizedORAROntology.getNumberOfRoleAssertions();
+			int numberOfMaterializedEqualityAssertions = this.normalizedORAROntology.getOWLAPISameasAssertions().size();
 			int numberOfMaterializedAssertions = numberOfMaterializedConceptAssertions
-					+ numberOfMaterializedRoleAssertions;
+					+ numberOfMaterializedRoleAssertions + numberOfMaterializedEqualityAssertions;
 			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_CONCEPTASSERTIONS
 					+ numberOfMaterializedConceptAssertions);
 			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ROLEASSERTIONS + numberOfMaterializedRoleAssertions);
-			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ASSERTIONS + numberOfMaterializedAssertions);
+			logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_EQUALITY_ASSERTIONS
+					+ numberOfMaterializedEqualityAssertions);
+			// logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ASSERTIONS
+			// + numberOfMaterializedAssertions);
+			// logger.info(StatisticVocabulary.NUMBER_OF_MATERIALIZED_ASSERTIONS
+			// + numberOfMaterializedAssertions);
+
 		}
 		// logger.info("Types in Loop3 is equal to Types in Loop4?"+
 		// typesLoop3.equals(typesLoop4));

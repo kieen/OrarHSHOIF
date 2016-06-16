@@ -17,7 +17,8 @@ public class Argument {
 	static final String KONCLUDEPATH = "koncludepath";
 	static final String SPLITTING = "splitting";
 	static final String DL = "dl", DLLITE_R= "dllite_r", HORN_SHOIF = "horn_shoif", DLLITE_HOD="dllite_hod";
-	static final String OUTPUTONTOLOGY = "output";
+	static final String OUTPUTONTOLOGY = "output", OUTPUTABOX="outputabox";
 	static final List<String> reasonerList = new ArrayList<String>(Arrays.asList(KONCLUDE, HERMIT, FACT, PELLET));
+	static final String HELP="help";
 
 }

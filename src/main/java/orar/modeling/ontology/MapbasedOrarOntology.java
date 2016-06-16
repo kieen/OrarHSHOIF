@@ -244,10 +244,10 @@ public class MapbasedOrarOntology implements OrarOntology {
 					for (OWLNamedIndividual ind_c : objects_c) {
 						Set<OWLNamedIndividual> sameasOf_c = this.getSameIndividuals(ind_c);
 						sameasOf_c.add(ind_c);
-						for (OWLNamedIndividual eachSameOfc:sameasOf_c){
-						OWLObjectPropertyAssertionAxiom newAssertion = owlDataFactory
-								.getOWLObjectPropertyAssertionAxiom(role, ind_a, eachSameOfc);
-						resultingRoleAssertions.add(newAssertion);
+						for (OWLNamedIndividual eachSameOfc : sameasOf_c) {
+							OWLObjectPropertyAssertionAxiom newAssertion = owlDataFactory
+									.getOWLObjectPropertyAssertionAxiom(role, ind_a, eachSameOfc);
+							resultingRoleAssertions.add(newAssertion);
 						}
 					}
 				}
@@ -421,7 +421,7 @@ public class MapbasedOrarOntology implements OrarOntology {
 	@Override
 	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getEntailedSameasAssertions() {
 		Set<OWLNamedIndividual> allIndividuals = getIndividualsInSignature();
-//		logger.info("***DEBUG*** all Individuals:"+allIndividuals);
+		// logger.info("***DEBUG*** all Individuals:"+allIndividuals);
 		Map<OWLNamedIndividual, Set<OWLNamedIndividual>> allEntailedSameasMap = new HashMap<OWLNamedIndividual, Set<OWLNamedIndividual>>(
 				getSameasBox().getSameasMap());
 		for (OWLNamedIndividual ind : allIndividuals) {
@@ -438,14 +438,33 @@ public class MapbasedOrarOntology implements OrarOntology {
 
 	@Override
 	public void increaseNumberOfInputConceptAssertions(int addedNumber) {
-		this.numberOfInputConceptAssertions+=addedNumber;
-		
+		this.numberOfInputConceptAssertions += addedNumber;
+
 	}
 
 	@Override
 	public void increaseNumberOfInputRoleAssertions(int addedNumber) {
-		this.numberOfInputRoleAssertions+=addedNumber;
-		
+		this.numberOfInputRoleAssertions += addedNumber;
+
+	}
+
+	@Override
+	public int getNumberOfEqualityAssertions() {
+		return this.getEntailedSameasAssertions().size();
+	}
+
+	@Override
+	public Set<OWLAxiom> getOWLAPIMaterializedAssertions() {
+		Set<OWLAxiom> materializedABox = new HashSet<>();
+		materializedABox.addAll(this.getOWLAPIConceptAssertionsWHITOUTNormalizationSymbols());
+		materializedABox.addAll(this.getOWLAPIRoleAssertionsWITHOUTNormalizationSymbols());
+		materializedABox.addAll(this.getOWLAPISameasAssertions());
+		return materializedABox;
+	}
+
+	@Override
+	public Set<OWLAxiom> getOWLAPISameasAssertions() {
+		return this.sameasBox.getEntailedSameasOWLAxioms();
 	}
 
 }

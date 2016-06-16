@@ -54,10 +54,14 @@ public interface OrarOntology {
 	public int getNumberOfInputConceptAssertions();
 
 	public int getNumberOfConceptAssertions();
+	
+	public int getNumberOfEqualityAssertions();
 
 	public int getNumberOfInputRoleAssertions();
 
 	public int getNumberOfRoleAssertions();
+	
+	public Set<OWLAxiom> getOWLAPIMaterializedAssertions();
 
 	/*
 	 * Number of assertions when the ontology was first created: setters
@@ -242,6 +246,8 @@ public interface OrarOntology {
 	 *         really different equivalent individual, e.g. b.
 	 */
 	public Map<OWLNamedIndividual, Set<OWLNamedIndividual>> getEntailedSameasAssertions();
+	
+	public Set<OWLAxiom> getOWLAPISameasAssertions();
 
 	/**
 	 * @param role

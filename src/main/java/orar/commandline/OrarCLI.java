@@ -1,5 +1,8 @@
 package orar.commandline;
 
+import java.io.File;
+import java.util.Set;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -8,19 +11,23 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+
+import org.semanticweb.owlapi.io.OWLFunctionalSyntaxOntologyFormat;
+import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 import orar.config.Configuration;
 import orar.config.LogInfo;
 import orar.dlfragmentvalidator.DLConstructor;
-import orar.io.ontologyreader.DLLiteHOD_OntologyReader;
-import orar.io.ontologyreader.DLLiteH_OntologyReader;
 import orar.io.ontologyreader.HornSHOIF_OntologyReader;
 import orar.io.ontologyreader.OntologyReader;
 import orar.materializer.Materializer;
-import orar.materializer.DLLite.DLLite_Materializer_Fact;
-import orar.materializer.DLLite.DLLite_Materializer_Hermit;
-import orar.materializer.DLLite.DLLite_Materializer_Konclude;
-import orar.materializer.DLLite.DLLite_Materializer_Pellet;
 import orar.materializer.HornSHIF.HornSHIF_Materializer_Fact;
 import orar.materializer.HornSHIF.HornSHIF_Materializer_Hermit;
 import orar.materializer.HornSHIF.HornSHIF_Materializer_Konclude;
@@ -31,9 +38,9 @@ import orar.materializer.HornSHOIF.HornSHOIF_Materializer_Konclude;
 import orar.materializer.HornSHOIF.HornSHOIF_Materializer_Pellet;
 import orar.modeling.ontology.OrarOntology;
 
-public class OrarCLIV2 {
+public class OrarCLI {
 	private static Configuration config = Configuration.getInstance();
-	private static Logger logger = Logger.getLogger(OrarCLIV2.class);
+	private static Logger logger = Logger.getLogger(OrarCLI.class);
 
 	public static void main(String[] args) {
 		// PropertyConfigurator.configure("src/main/resources/log4j.properties");
@@ -42,22 +49,24 @@ public class OrarCLIV2 {
 		/*
 		 * Boolean options
 		 */
-		Option parsingTime = new Option(Argument.LOADING_TIME, false, "print time for loading ontology");
-		Option runningTime = new Option(Argument.REASONING_TIME, false, "print time for ontology materialization");
+		Option parsingTime = new Option(Argument.LOADING_TIME, false, "print loading time");
+		Option runningTime = new Option(Argument.REASONING_TIME, false, "print time for materialization");
 
 		Option totalTime = new Option(Argument.TOTAL_TIME, false,
 				"print total time of the system,e.g. loading time + materialization time");
 
 		Option statistic = new Option(Argument.STATISTIC, false,
 				"print statistic information of the (materialized) ontology");
+
 		Option help = new Option(Argument.HELP, false, "print help");
 		/*
 		 * Argument options
 		 */
-		Option tbox = new Option(Argument.TBOX, true, "TBox OWL file");
+		Option tbox = new Option(Argument.TBOX, true, "input TBox OWL file in any format supported by OWLAPI");
 		Option aboxes = new Option(Argument.ABOX, true,
-				"a text file containing the list of ABox files, each file in a separated line");
-		Option ontology = new Option(Argument.ONTOLOGY, true, "OWL ontology file containing both TBox and ABox(es)");
+				"an input text file containing the list of ABox files in RDF/XML, N3, or Turtle format; one file per line");
+		Option ontology = new Option(Argument.ONTOLOGY, true,
+				"OWL ontology file containing both TBox and ABox in any format supported by OWLAPI");
 		// Option reasoner = new Option(
 		// REASONER,
 		// true,
@@ -65,45 +74,50 @@ public class OrarCLIV2 {
 		// the path to Konclude reasoner must be provided");
 		//
 		StringBuilder reasonerDescription = new StringBuilder();
-		reasonerDescription.append("the (inner) reasoner used in the system. Choose one of the following reasoners: ");
-		reasonerDescription.append(Argument.KONCLUDE + ", " + Argument.HERMIT + ", " + Argument.PELLET + "\n");
+		reasonerDescription.append("the (inner) reasoner used to materialize the abstractions:");
+		// reasonerDescription.append(
+		// Argument.KONCLUDE + ", " + Argument.HERMIT + ", " + Argument.PELLET +
+		// ", " + Argument.FACT + ".\n");
+		reasonerDescription.append(Argument.KONCLUDE + ", " + Argument.HERMIT + ", " + Argument.PELLET + ".\n");
 		reasonerDescription.append(
-				" If you choose konclude, then the path to konclude reasoner and a port number must be provided as we call Konclude via OWLLink");
+				"If choosing konclude, then the path to the Konclude binary file and the port for the Konclude server must be provided");
+		// Option reasoner =
+		// Option.builder(Argument.REASONER).required().desc(reasonerDescription.toString()).hasArg(true)
+		// .build();
 		Option reasoner = Option.builder(Argument.REASONER).desc(reasonerDescription.toString()).hasArg(true).build();
 
-		Option konclude = new Option(Argument.KONCLUDEPATH, true, "Konclude reasoner file");
+		Option konclude = new Option(Argument.KONCLUDEPATH, true,
+				"Konclude reasoner file; only required when choosing Konclude as an inner reasoner");
 		Option port = new Option(Argument.PORT, true,
-				"port number of Konclude server in case the inner reasoner is Konclude");
-		// Option dl = new Option(DL, true,
-		// "Description Logic fragment, e.g.horn or nonhorn");
+				"port number of the Konclude server in case the inner reasoner is Konclude");
+		Option outputABox = new Option(Argument.OUTPUTABOX, true,
+				"the output file containing all entailed atomic assertions in OWL/XML format");
 
-		Option dl = Option.builder(Argument.DL)
-				.desc("Description Logic fragment. Choose one of the following arguments: dllite_hod, horn_shoif")
-				.hasArg(true).build();
+		// Option dl = Option.builder(Argument.DL).required()
+		// .desc("set the reasoner used in the system. If you choose konclude,
+		// then the path to Konclude reasoner must be provided")
+		// .hasArg(true).build();
 
-		Option split = new Option(Argument.SPLITTING, true,
-				"number of types per abstract ABox. Used as an optimization (experimental feature)");
-		Option task = Option.builder(Argument.TASK)
-				.desc("reasoning task. Choose one of the following arguments: consistency, materialization")
-				.hasArg(true).build();
+		Option split = new Option(Argument.SPLITTING, true, "number of types per abstract ABox; experimental feature");
+
 		/*
 		 * add options
 		 */
 
-		options.addOption(totalTime);
+//		options.addOption(totalTime);
 		options.addOption(parsingTime);
 		options.addOption(runningTime);
 		options.addOption(statistic);
 		options.addOption(tbox);
 		options.addOption(aboxes);
-		options.addOption(ontology);
+		// options.addOption(ontology);
 		options.addOption(reasoner);
 		options.addOption(konclude);
-		options.addOption(dl);
-		options.addOption(split);
+		// options.addOption(split);
 		options.addOption(port);
-		options.addOption(task);
+		options.addOption(outputABox);
 		options.addOption(help);
+
 		// create the parser
 		CommandLineParser parser = new DefaultParser();
 		try {
@@ -111,6 +125,7 @@ public class OrarCLIV2 {
 			 * parse the command line arguments
 			 */
 			CommandLine commandLine = parser.parse(options, args);
+
 			/*
 			 * print help
 			 */
@@ -118,12 +133,13 @@ public class OrarCLIV2 {
 				printHelp(options);
 				return;
 			}
+
 			/*
 			 * Check the validity of the arguments
 			 */
 			if (!argumentsAreValid(commandLine)) {
-				HelpFormatter formatter = new HelpFormatter();
-				formatter.printHelp("orar", options);
+				logger.info("Missing/invalid arguments!");
+				printHelp(options);
 				return;
 			}
 			/*
@@ -140,8 +156,9 @@ public class OrarCLIV2 {
 		} catch (ParseException exp) {
 			// oops, something went wrong
 			System.err.println("Parsing failed.  Reason: " + exp.getMessage());
-			printHelp(options);
 
+			printHelp(options);
+			printExampleRun();
 		}
 	}
 
@@ -154,91 +171,68 @@ public class OrarCLIV2 {
 	private static void printExampleRun() {
 		System.out.println("");
 		System.out.println("Example run with HermiT as an inner reasoner:");
-		System.out.println(
-				"java -jar ../Orar.jar -task materialization -dl dllite_hod -reasoner hermit -statistic -reasoningtime -tbox ./tbox.owl -abox ./aboxList.txt");
+		System.out
+				.println("java -jar -Xmx2G Orar.jar -reasoner hermit -statistic -tbox ./tbox.owl -abox ./aboxList.txt");
 		System.out.println("");
 		System.out.println("Example run with Konclude as an inner reasoner:");
 		System.out.println(
-				"java -jar ../Orar.jar -task materialization -dl dllite_hod -reasoner konclude -koncludepath ./KoncludeMac -port 9090 -statistic -reasoningtime -tbox ./tbox.owl -abox ./aboxList.txt");
+				"java -jar -Xmx2G Orar.jar -reasoner konclude -koncludepath ./Konclude -port 9090 -statistic -tbox ./tbox.owl -abox ./aboxList.txt");
 	}
 
 	private static long runMaterializer(Materializer materializer, CommandLine commandLine) {
-		String reasoningTask = commandLine.getOptionValue(Argument.TASK);
+
 		String reasonerName = commandLine.getOptionValue(Argument.REASONER);
 		logger.info("Runnig Abstraction Refinement Using :" + reasonerName + " ...");
-		if (reasoningTask.equals(Argument.CONSISTENCY)) {
-			// materializer.materialize();
-			boolean consistent = materializer.isOntologyConsistent();
-			logger.info("The ontology is consistent? " + consistent);
+		materializer.materialize();
+		if (commandLine.hasOption(Argument.OUTPUTABOX)) {
+			String aboxFile = commandLine.getOptionValue(Argument.OUTPUTABOX);
+			Set<OWLAxiom> entailedAssertions = materializer.getOrarOntology().getOWLAPIMaterializedAssertions();
+			saveAssertionsToFile(entailedAssertions, aboxFile);
+		}
+		return materializer.getReasoningTimeInSeconds();
 
-			return materializer.getReasoningTimeInSeconds();
-		} else if (reasoningTask.equals(Argument.MATERIALIZATION)) {
-			materializer.materialize();
-			return materializer.getReasoningTimeInSeconds();
-		} else {
-			logger.error("Wrong argument for the <task> option!");
-			return -1;
+	}
+
+	private static void saveAssertionsToFile(Set<OWLAxiom> assertions, String fileName) {
+
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+
+		logger.info("Saving entailed assertions to a file ...");
+		// OWLFunctionalSyntaxOntologyFormat format = new
+		// OWLFunctionalSyntaxOntologyFormat();
+		OWLXMLOntologyFormat format = new OWLXMLOntologyFormat();
+		File file = new File(fileName);
+		IRI iriDocument = IRI.create(file.toURI());
+		try {
+			OWLOntology ontology = manager.createOntology();
+			manager.addAxioms(ontology, assertions);
+			long startSavingTime = System.currentTimeMillis();
+			manager.saveOntology(ontology, format, iriDocument);
+			long endSavingTime = System.currentTimeMillis();
+			long savingTimeInSeconds = (endSavingTime - startSavingTime) / 1000;
+			if (config.getLogInfos().contains(LogInfo.LOADING_TIME)) {
+				logger.info("Time for saving the entailed assertions (in seconds):" + savingTimeInSeconds);
+
+			}
+			logger.info("                                     ...done!");
+		} catch (OWLOntologyCreationException e) {
+
+			e.printStackTrace();
 		}
 
+		catch (OWLOntologyStorageException e) {
+			e.printStackTrace();
+		}
 	}
 
 	static private Materializer getMaterializer(CommandLine commandLine, OrarOntology orarOntology) {
-
+		Materializer materializer;
 		String reasoner = commandLine.getOptionValue(Argument.REASONER);
-		String dlFragment = commandLine.getOptionValue(Argument.DL);
-
-		if (dlFragment.equals(Argument.DLLITE_HOD)) {
-			return getMaterializer_DLLite(commandLine, reasoner, orarOntology);
-
-		}
-
-		if (dlFragment.equals(Argument.HORN_SHOIF)) {
-			return getMaterializer_HornSHOIF(commandLine, reasoner, orarOntology);
-
-		}
-		logger.error("Invalid value of the argument: -dl");
-		return null;
-	}
-
-	static private Materializer getMaterializer_DLLite(CommandLine commandLine, String reasonerName,
-			OrarOntology orarOntology) {
-		Materializer materializer = null;
-		// logger.info("Info: Some DL Constructors in the validated ontology: "
-		// + orarOntology.getActualDLConstructors());
-
-		if (reasonerName.equals(Argument.HERMIT)) {
-
-			materializer = new DLLite_Materializer_Hermit(orarOntology);
-
-		}
-
-		if (reasonerName.equals(Argument.KONCLUDE)) {
-			String koncludePath = commandLine.getOptionValue(Argument.KONCLUDEPATH);
-			config.setKONCLUDE_BINARY_PATH(koncludePath);
-			String port = commandLine.getOptionValue(Argument.PORT);
-			int intPort = Integer.parseInt(port);
-
-			materializer = new DLLite_Materializer_Konclude(orarOntology, intPort);
-
-		}
-
-		if (reasonerName.equals(Argument.FACT)) {
-
-			materializer = new DLLite_Materializer_Fact(orarOntology);
-
-		}
-
-		if (reasonerName.equals(Argument.PELLET)) {
-
-			materializer = new DLLite_Materializer_Pellet(orarOntology);
-
-		}
-
+		materializer = getHornReasoner(commandLine, reasoner, orarOntology);
 		return materializer;
-
 	}
 
-	static private Materializer getMaterializer_HornSHOIF(CommandLine commandLine, String reasonerName,
+	static private Materializer getHornReasoner(CommandLine commandLine, String reasonerName,
 			OrarOntology orarOntology) {
 		Materializer materializer = null;
 		// logger.info("Info: Some DL Constructors in the validated ontology: "
@@ -287,25 +281,12 @@ public class OrarCLIV2 {
 	}
 
 	static private boolean argumentsAreValid(CommandLine commandLine) {
-
-		if (!commandLine.hasOption(Argument.DL)) {
-			System.err.println("DL fragment is not specified.");
-			return false;
+		if (commandLine.hasOption(Argument.HELP)) {
+			return true;
 		}
-
-		if (!commandLine.hasOption(Argument.TASK)) {
-			System.err.println("reasoning task is not specified.");
-			return false;
-		}
-
-		if (!commandLine.hasOption(Argument.REASONER)) {
-			System.err.println("the reasoner task is not specified.");
-			return false;
-		}
-
 		if (commandLine.hasOption(Argument.ONTOLOGY)) {
 			if (commandLine.hasOption(Argument.TBOX) || commandLine.hasOption(Argument.ABOX)) {
-				System.err.println("More than one ways to read the input ontology. Please choose either -"
+				System.err.print("More than one ways to read the input ontology. Please choose either -"
 						+ Argument.ONTOLOGY + " or -" + Argument.TBOX + " -" + Argument.ABOX);
 				return false;
 			}
@@ -313,8 +294,10 @@ public class OrarCLIV2 {
 
 		if (!commandLine.hasOption(Argument.ONTOLOGY)
 				&& !(commandLine.hasOption(Argument.TBOX) && commandLine.hasOption(Argument.ABOX))) {
-			System.err.println("Input ontology arguments are missing. Please choose either -" + Argument.ONTOLOGY
-					+ " or -" + Argument.TBOX + " -" + Argument.ABOX);
+			// System.err.print("Input ontology arguments are missing. Please
+			// choose either -" + Argument.ONTOLOGY
+			// + " or -" + Argument.TBOX + " -" + Argument.ABOX);
+			System.err.print("Input ontology arguments are missing");
 			return false;
 
 		}
@@ -337,6 +320,14 @@ public class OrarCLIV2 {
 				Integer.parseInt(typePerOntString);
 			} catch (NumberFormatException ex) {
 				System.err.print("argument for -splitting is not an integer number");
+				return false;
+			}
+		}
+
+		if (commandLine.hasOption(Argument.OUTPUTABOX)) {
+			String aboxFile = commandLine.getOptionValue(Argument.OUTPUTABOX);
+			if (aboxFile.contains(" ")) {
+				System.err.print("The output ABox file name contains space.");
 				return false;
 			}
 		}
@@ -366,29 +357,10 @@ public class OrarCLIV2 {
 		}
 	}
 
-	static private OntologyReader getOntologyReader(CommandLine commandLine) {
-		String dlFragment = commandLine.getOptionValue(Argument.DL);
-
-		if (dlFragment.equals(Argument.DLLITE_R)) {
-			return new DLLiteH_OntologyReader();
-		}
-
-		if (dlFragment.equals(Argument.DLLITE_HOD)) {
-			return new DLLiteHOD_OntologyReader();
-		}
-
-		if (dlFragment.equals(Argument.HORN_SHOIF)) {
-			return new HornSHOIF_OntologyReader();
-		}
-
-		logger.error("invalid value of the argument: -dl");
-		return null;
-
-	}
-
 	static private OrarOntology getOrarOntology(CommandLine commandLine) {
 		OrarOntology orarOntology;
-		OntologyReader ontReader = getOntologyReader(commandLine);
+
+		OntologyReader ontReader = new HornSHOIF_OntologyReader();
 
 		if (commandLine.hasOption(Argument.ONTOLOGY)) {
 			String owlFilePath = commandLine.getOptionValue(Argument.ONTOLOGY);

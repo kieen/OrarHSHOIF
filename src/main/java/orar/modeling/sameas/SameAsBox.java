@@ -3,6 +3,7 @@ package orar.modeling.sameas;
 import java.util.Map;
 import java.util.Set;
 
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 public interface SameAsBox {
@@ -44,4 +45,5 @@ public interface SameAsBox {
 	 * @return a copy of sameas map.
 	 */
 	public Map<OWLNamedIndividual,Set<OWLNamedIndividual>> getSameasMap();
+	public Set<OWLAxiom> getEntailedSameasOWLAxioms();
 }
