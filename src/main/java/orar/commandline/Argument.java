@@ -20,5 +20,6 @@ public class Argument {
 	static final String OUTPUTONTOLOGY = "output", OUTPUTABOX="outputabox";
 	static final List<String> reasonerList = new ArrayList<String>(Arrays.asList(KONCLUDE, HERMIT, FACT, PELLET));
 	static final String HELP="help";
+	static final String ABSTRACT_DEBUG="abstract_debug";
 
 }

@@ -14,6 +14,7 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 
 import orar.data.MetaDataOfOntology;
 import orar.modeling.ontology.OrarOntology;
+import orar.refinement.abstractroleassertion.RoleAssertionList;
 import orar.util.Pause;
 
 public class SubRoleRuleExecutor implements RuleExecutor {
@@ -23,11 +24,15 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 	private final MetaDataOfOntology metaDataOfOntology;
 	private final OWLDataFactory dataFactory;
 	private boolean isABoxExtended;
+	private RoleAssertionList entailedRoleAssertionFromRoleHierarchy;
 
 	public SubRoleRuleExecutor(OrarOntology orarOntology) {
 		this.orarOntology = orarOntology;
 		this.newRoleAssertions = new HashSet<OWLObjectPropertyAssertionAxiom>();
+		this.entailedRoleAssertionFromRoleHierarchy = new RoleAssertionList();
+
 		this.metaDataOfOntology = MetaDataOfOntology.getInstance();
+
 		this.dataFactory = OWLManager.getOWLDataFactory();
 		this.isABoxExtended = false;
 	}
@@ -36,11 +41,11 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 	public void materialize() {
 		Set<OWLObjectProperty> allRolesHavingSuperRoles = this.metaDataOfOntology.getSubRoleMap().keySet();
 		for (OWLObjectProperty R : allRolesHavingSuperRoles) {
-//			logger.info("***DEBUG*** R "+ R);
-//			Pause.pause();
+			// logger.info("***DEBUG*** R "+ R);
+			// Pause.pause();
 			Set<OWLNamedIndividual> allSubjectsOf_R = this.orarOntology.getSubjectsInRoleAssertions(R);
-//			logger.info("***DEBUG***allSubjectsOf_R "+ allSubjectsOf_R);
-//			Pause.pause();
+			// logger.info("***DEBUG***allSubjectsOf_R "+ allSubjectsOf_R);
+			// Pause.pause();
 			for (OWLNamedIndividual eachSubjectOf_R : allSubjectsOf_R) {
 				Set<OWLNamedIndividual> allObjectsOf_R = this.orarOntology.getSuccessors(eachSubjectOf_R, R);
 				Set<? extends OWLObjectPropertyExpression> allSuperRolesOf_R = this.metaDataOfOntology.getSubRoleMap()
@@ -50,16 +55,24 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 					if (eachSuperRoleOf_R instanceof OWLObjectProperty) {
 						OWLObjectProperty eacAtomicSuperRoleOf_R = eachSuperRoleOf_R.asOWLObjectProperty();
 						for (OWLNamedIndividual eachObjectOf_R : allObjectsOf_R) {
-							addRoleAssertion(eachSubjectOf_R, eacAtomicSuperRoleOf_R, eachObjectOf_R);
-//							logger.info("***DEBUG***add "+ eachSubjectOf_R+ ","+ eacAtomicSuperRoleOf_R+ ","+ eachObjectOf_R);
-//							Pause.pause();
+							// addRoleAssertion(eachSubjectOf_R,
+							// eacAtomicSuperRoleOf_R, eachObjectOf_R);
+							entailedRoleAssertionFromRoleHierarchy.addRoleAssertion(eachSubjectOf_R,
+									eacAtomicSuperRoleOf_R, eachObjectOf_R);
+							// logger.info("***DEBUG***add "+ eachSubjectOf_R+
+							// ","+ eacAtomicSuperRoleOf_R+ ","+
+							// eachObjectOf_R);
+							// Pause.pause();
 						}
 					}
 					// case of inverse role
 					if (eachSuperRoleOf_R instanceof OWLObjectInverseOf) {
 						OWLObjectProperty inverseOfEacSuperRoleOf_R = eachSuperRoleOf_R.getNamedProperty();
 						for (OWLNamedIndividual eachObjectOf_R : allObjectsOf_R) {
-							addRoleAssertion(eachObjectOf_R, inverseOfEacSuperRoleOf_R, eachSubjectOf_R);
+							// addRoleAssertion(eachObjectOf_R,
+							// inverseOfEacSuperRoleOf_R, eachSubjectOf_R);
+							entailedRoleAssertionFromRoleHierarchy.addRoleAssertion(eachObjectOf_R,
+									inverseOfEacSuperRoleOf_R, eachSubjectOf_R);
 						}
 					}
 
@@ -67,6 +80,14 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 			}
 		}
 
+		/*
+		 * Add entailed role assertions got from role hierarchy to the ontology
+		 */
+		for (int i = 0; i < entailedRoleAssertionFromRoleHierarchy.getSize(); i++) {
+			addRoleAssertion(entailedRoleAssertionFromRoleHierarchy.getSubject(i),
+					entailedRoleAssertionFromRoleHierarchy.getRole(i),
+					entailedRoleAssertionFromRoleHierarchy.getObject(i));
+		}
 	}
 
 	private void addRoleAssertion(OWLNamedIndividual eachSubjectOf_R, OWLObjectProperty eacAtomicSuperRoleOf_R,
@@ -85,8 +106,7 @@ public class SubRoleRuleExecutor implements RuleExecutor {
 	private boolean isTranOrCountingOrInverseRole(OWLObjectProperty role) {
 		return (this.metaDataOfOntology.getTransitiveRoles().contains(role)
 				|| this.metaDataOfOntology.getFunctionalRoles().contains(role)
-				|| this.metaDataOfOntology.getInverseFunctionalRoles().contains(role)
-				);
+				|| this.metaDataOfOntology.getInverseFunctionalRoles().contains(role));
 
 	}
 

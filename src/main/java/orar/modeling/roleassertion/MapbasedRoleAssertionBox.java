@@ -63,9 +63,11 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 	public boolean addRoleAssertion(OWLNamedIndividual subject, OWLObjectProperty role, OWLNamedIndividual object) {
 		boolean hasNewElement = addRoleAssertionToMapWithIndividualAsKey(subject, role, object,
 				this.roleAssertionMapWithSubjectAsKey);
-		addRoleAssertionToMapWithIndividualAsKey(object, role, subject, this.roleAssertionMapWithObjectAsKey);
-		addRoleAssertionToMapWithRoleAsKey(role, subject, this.roleAssertionMapWithRoleAsKeyAndSubjectAsValue);
-		addRoleAssertionToMapWithRoleAsKey(role, object, this.roleAssertionMapWithRoleAsKeyAndObjectAsValue);
+		if (hasNewElement) {
+			addRoleAssertionToMapWithIndividualAsKey(object, role, subject, this.roleAssertionMapWithObjectAsKey);
+			addRoleAssertionToMapWithRoleAsKey(role, subject, this.roleAssertionMapWithRoleAsKeyAndSubjectAsValue);
+			addRoleAssertionToMapWithRoleAsKey(role, object, this.roleAssertionMapWithRoleAsKeyAndObjectAsValue);
+		}
 		return hasNewElement;
 
 	}
@@ -187,7 +189,7 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 			OWLNamedIndividual subjectIndividual) {
 		Map<OWLObjectProperty, Set<OWLNamedIndividual>> successorAssertionsAsMap = this.roleAssertionMapWithSubjectAsKey
 				.get(subjectIndividual);
-		if (successorAssertionsAsMap==null) {
+		if (successorAssertionsAsMap == null) {
 			successorAssertionsAsMap = new HashMap<OWLObjectProperty, Set<OWLNamedIndividual>>();
 		}
 		return successorAssertionsAsMap;
@@ -198,18 +200,20 @@ public class MapbasedRoleAssertionBox implements RoleAssertionBox {
 			OWLNamedIndividual objectIndividual) {
 		Map<OWLObjectProperty, Set<OWLNamedIndividual>> predecessorAssertionsAsMap = this.roleAssertionMapWithObjectAsKey
 				.get(objectIndividual);
-		if (predecessorAssertionsAsMap==null) {
+		if (predecessorAssertionsAsMap == null) {
 			predecessorAssertionsAsMap = new HashMap<OWLObjectProperty, Set<OWLNamedIndividual>>();
 		}
 		return predecessorAssertionsAsMap;
 	}
 
-//	@Override
-//	public Set<OWLObjectPropertyAssertionAxiom> getOWLAPIRoleAssertions(OWLNamedIndividual subject) {
-//		Map<OWLObjectProperty, Set<OWLNamedIndividual>> sucessorMap = this.roleAssertionMapWithSubjectAsKey.get(subject);
-//		Set<OWLObjectPropertyAssertionAxiom> roleAssertions;
-//		if(sucessorMap ==null)
-//		return null;
-//	}
+	// @Override
+	// public Set<OWLObjectPropertyAssertionAxiom>
+	// getOWLAPIRoleAssertions(OWLNamedIndividual subject) {
+	// Map<OWLObjectProperty, Set<OWLNamedIndividual>> sucessorMap =
+	// this.roleAssertionMapWithSubjectAsKey.get(subject);
+	// Set<OWLObjectPropertyAssertionAxiom> roleAssertions;
+	// if(sucessorMap ==null)
+	// return null;
+	// }
 
 }

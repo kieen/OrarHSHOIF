@@ -4,7 +4,6 @@
 <!DOCTYPE rdf:RDF [
     <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
     <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
-    <!ENTITY xml "http://www.w3.org/XML/1998/namespace" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
 ]>
@@ -15,8 +14,7 @@
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:xml="http://www.w3.org/XML/1998/namespace">
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <Ontology rdf:about="http://www.test.org/af"/>
     
 
@@ -67,15 +65,9 @@
     <!-- http://www.test.org/af#a -->
 
     <NamedIndividual rdf:about="http://www.test.org/af#a">
+        <rdf:type rdf:resource="http://www.test.org/af#A"/>
+        <rdf:type rdf:resource="http://www.test.org/af#B"/>
         <rdf:type rdf:resource="http://www.test.org/af#C"/>
-        <rdf:type>
-            <Class>
-                <intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.test.org/af#A"/>
-                    <rdf:Description rdf:about="http://www.test.org/af#B"/>
-                </intersectionOf>
-            </Class>
-        </rdf:type>
     </NamedIndividual>
 </rdf:RDF>
 

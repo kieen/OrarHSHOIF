@@ -21,14 +21,14 @@
 			<artifactId>jena-core</artifactId>
 			<!-- <version>2.12.1</version> updated made on 17 April 2016: changed 
 				to new jena -->
-			<version>2.13.0</version>
+			<version>2.11.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-arq</artifactId>
 			<!-- <version>2.12.1</version> updated made on 17 April 2016: changed 
 				to new jena -->
-			<version>2.13.0</version>
+			<version>2.11.2</version>
 		</dependency>
 
 
@@ -102,7 +102,6 @@
 			<groupId>net.sourceforge.owlapi</groupId>
 			<artifactId>jfact</artifactId>
 			<version>1.2.2</version>
-<!-- 			<version>5.0.0</version> -->
 		</dependency>
 		<!-- Pellet -->
 		<dependency>
@@ -176,9 +175,8 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-<!-- 							<mainClass>orar.commandline.OrarDebuggerCLI</mainClass> -->
-<!-- 							<mainClass>orar.commandline.DLReasonerCLI</mainClass> -->
-							<mainClass>orar.commandline.OrarCLI</mainClass>
+						<!-- 	<mainClass>orar.commandline.OrarCLI</mainClass>  -->
+							<mainClass>orar.commandline.DLLiteReasonerCLI</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>.</Class-Path>

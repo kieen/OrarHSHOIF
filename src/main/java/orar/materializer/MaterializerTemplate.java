@@ -259,8 +259,10 @@ public abstract class MaterializerTemplate implements Materializer {
 		}
 
 		if (config.getLogInfos().contains(LogInfo.STATISTIC)) {
+//			int numberOfMaterializedConceptAssertions = this.normalizedORAROntology
+//					.getOWLAPIConceptAssertionsWHITOUTNormalizationSymbols().size();
 			int numberOfMaterializedConceptAssertions = this.normalizedORAROntology
-					.getOWLAPIConceptAssertionsWHITOUTNormalizationSymbols().size();
+					.getOWLAPIConceptAssertionsWithNormalizationSymbols().size();
 			int numberOfMaterializedRoleAssertions = this.normalizedORAROntology.getNumberOfRoleAssertions();
 			int numberOfMaterializedEqualityAssertions = this.normalizedORAROntology.getOWLAPISameasAssertions().size();
 			int numberOfMaterializedAssertions = numberOfMaterializedConceptAssertions

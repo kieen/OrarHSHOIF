@@ -12,7 +12,7 @@ public class RunOntologyConverter {
 	static final Logger logger =Logger.getLogger(MaterializeNPD.class);
 	public static void main(String[] args) throws OWLOntologyCreationException {
 			OWLOntologyConverter ontologyConverter= new DLLiteHOD_OWLOntologyConverter();
-			ontologyConverter.convert(tboxFileName, aboxListFileName, "npd.dlliteHOD.functionalsyntax.owl");
+			ontologyConverter.convertToAllInOneOWLFunctionalSynxtax(tboxFileName, aboxListFileName, "npd.dlliteHOD.functionalsyntax.owl");
 		
 
 	}

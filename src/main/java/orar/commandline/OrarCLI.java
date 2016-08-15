@@ -110,7 +110,7 @@ public class OrarCLI {
 		options.addOption(statistic);
 		options.addOption(tbox);
 		options.addOption(aboxes);
-		// options.addOption(ontology);
+		 options.addOption(ontology);
 		options.addOption(reasoner);
 		options.addOption(konclude);
 		// options.addOption(split);

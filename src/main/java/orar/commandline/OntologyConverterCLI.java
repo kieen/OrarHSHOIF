@@ -59,7 +59,7 @@ public class OntologyConverterCLI {
 			String tboxFilePath = commandLine.getOptionValue(Argument.TBOX);
 			String aboxListPath = commandLine.getOptionValue(Argument.ABOX);
 			String outputOntologyPath = commandLine.getOptionValue(Argument.OUTPUTONTOLOGY);
-			ontologyConverter.convert(tboxFilePath, aboxListPath, outputOntologyPath);
+			ontologyConverter.convertToAllInOneOWLFunctionalSynxtax(tboxFilePath, aboxListPath, outputOntologyPath);
 
 		} catch (ParseException exp) {
 			// oops, something went wrong
