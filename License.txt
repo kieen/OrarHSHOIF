@@ -1,0 +1,13 @@
+
+LICENCE
+
+Orar (the "Software"), The University of Ulm (the "University")
+
+Orar remains the property of the University of Ulm and all rights served to the University.
+
+Orar is distributed "as is" under this license for private use only. The core approach underlying Orar is patented (US Patent 9.483,521). If you are interested in using the approach commercially, please contact info@derivo.de
+
+No part of the software may be modified, reproduced, or distributed in any form or by any means. In particular the Licensee agrees not sublicense the Software. Furthermore, the University disclaims all responsibility for the use of the Software or outcomes arising from using it. The Licensee furthermore discharges the University form any claims, damages and liabilities from whomsoever which arise directly or indirectly from the use of the Software.
+
+The Licensee is not permitted to use this Software or any derivative for any commercial purpose including research with the aim of developing products or to provide any service even if no payment is received.
+
